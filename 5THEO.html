@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>5 Théophile Leducq - Marge à la revente</title>
+<title>🏡 5 Théophile Leducq - Marge à la revente</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -86,6 +86,20 @@ input[type=range]{
  text-align:right;
 }
 
+.price-label{
+ font-size:13px;
+ color:var(--muted);
+ margin-left:8px;
+ font-weight:500;
+}
+
+.price-sub{
+ font-size:13px;
+ color:var(--muted);
+ text-align:right;
+ line-height:1.5;
+}
+
 .buttons{
  display:flex;
  gap:10px;
@@ -164,7 +178,13 @@ Frais de notaire : 27 357 €<br>
 
 <div class="controls">
 <input type="range" id="prixSlider" min="250000" max="600000" step="1000">
-<div class="range-value"><span id="prixValue"></span> €</div>
+
+<div class="range-value">
+<span id="prixValue"></span> €
+<span class="price-label">Prix net vendeur</span>
+</div>
+
+<div class="price-sub" id="priceSub"></div>
 </div>
 
 <div class="buttons">
@@ -192,6 +212,8 @@ Frais de notaire : 27 357 €<br>
 <script>
 const FRAIS_NOTAIRE=27357;
 const COUT_TOTAL=446590;
+const TAUX_AGENCE=0.045;
+const SURFACE=54;
 
 const data=[
 ["Fév 26",353645.66],["Mar 26",352290.24],["Avr 26",350933.07],
@@ -211,6 +233,7 @@ const data=[
 
 const slider=prixSlider;
 const prixValue=document.getElementById("prixValue");
+const priceSub=document.getElementById("priceSub");
 const tbody=document.getElementById("tableBody");
 const boxN=document.getElementById("seuilNotaire");
 const boxT=document.getElementById("seuilTotal");
@@ -230,6 +253,15 @@ function render(v){
  prixValue.textContent=prix.toLocaleString("fr-FR");
  slider.value=prix;
  saveURL(prix);
+
+ const prixFAI = prix/(1-TAUX_AGENCE);
+ const fraisAgence = prixFAI-prix;
+ const prixM2 = prix/SURFACE;
+
+ priceSub.innerHTML = `
+ Prix FAI : ${prixFAI.toLocaleString("fr-FR",{maximumFractionDigits:0})} €<br>
+ Frais d’agence (4,5%) : ${fraisAgence.toLocaleString("fr-FR",{maximumFractionDigits:0})} €<br>
+ Prix au m² : ${prixM2.toLocaleString("fr-FR",{maximumFractionDigits:0})} €/m²`;
 
  tbody.innerHTML="";
  let seuil=null;
