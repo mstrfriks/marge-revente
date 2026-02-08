@@ -115,12 +115,42 @@ const COUT_TOTAL=446590;
 const TAUX_AGENCE=0.045;
 const SURFACE=54;
 
+/* dates + capitaux */
 const data=[
-["Fév 26",353645.66],["Mar 26",352290.24],["Avr 26",350933.07],
-["Mai 26",349574.15],["Juin 26",348213.47],["Juil 26",346851.04],
-["Aoû 26",345486.84],["Sep 26",344120.89],["Oct 26",342753.17],
-["Nov 26",341383.69],["Déc 26",340012.43]
+["2026-02-05",353645.66],["2026-03-05",352290.24],
+["2026-04-05",350933.07],["2026-05-05",349574.15],
+["2026-06-05",348213.47],["2026-07-05",346851.04],
+["2026-08-05",345486.84],["2026-09-05",344120.89],
+["2026-10-05",342753.17],["2026-11-05",341383.69],
+["2026-12-05",340012.43],["2027-01-05",338639.41],
+["2027-02-05",337264.61],["2027-03-05",335888.03],
+["2027-04-05",334509.67],["2027-05-05",333129.54],
+["2027-06-05",331747.63],["2027-07-05",330363.93],
+["2027-08-05",328978.44],["2027-09-05",327591.16],
+["2027-10-05",326202.09],["2027-11-05",324811.23],
+["2027-12-05",323418.57],["2028-01-05",322024.10],
+["2028-02-05",320627.83],["2028-03-05",319229.76],
+["2028-04-05",317829.89],["2028-05-05",316428.21],
+["2028-06-05",315024.72],["2028-07-05",313619.42],
+["2028-08-05",312212.30],["2028-09-05",310803.37],
+["2028-10-05",309392.61],["2028-11-05",307980.04],
+["2028-12-05",306565.64],["2029-01-05",305149.41],
+["2029-02-05",303731.36],["2029-03-05",302311.47],
+["2029-04-05",300889.75]
 ];
+
+function formatMois(d){
+ return d.toLocaleDateString("fr-FR",{month:"short",year:"2-digit"});
+}
+
+function filtre3Ans(d){
+ const now=new Date();
+ const end=new Date(); end.setMonth(end.getMonth()+36);
+ return d.filter(([ds])=>{
+  const dt=new Date(ds);
+  return dt>=now && dt<=end;
+ });
+}
 
 const slider=prixSlider;
 const prixValue=document.getElementById("prixValue");
@@ -148,7 +178,8 @@ function render(v){
  tbody.innerHTML="";
  let seuil=null;
 
- data.forEach(([m,c])=>{
+ filtre3Ans(data).forEach(([ds,c])=>{
+  const m=formatMois(new Date(ds));
   const brute=prix-c;
   const nette=brute-FRAIS_NOTAIRE;
   const ok=nette>=0;
@@ -160,7 +191,7 @@ function render(v){
   <td class="num">${c.toLocaleString("fr-FR",{minimumFractionDigits:2})}</td>
   <td class="num">${brute.toLocaleString("fr-FR",{minimumFractionDigits:2})}</td>
   <td class="num ${ok?"pos":"neg"}">
-    ${nette.toLocaleString("fr-FR",{minimumFractionDigits:2})}
+  ${nette.toLocaleString("fr-FR",{minimumFractionDigits:2})}
   </td></tr>`;
  });
 
