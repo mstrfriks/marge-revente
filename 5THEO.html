@@ -23,7 +23,7 @@
 body{margin:0;background:var(--bg);
 font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial;
 color:var(--text);}
-.wrapper{max-width:920px;margin:40px auto;padding:12px;}
+.wrapper{max-width:980px;margin:40px auto;padding:12px;}
 .card{background:var(--card);border-radius:18px;padding:28px;
 box-shadow:0 8px 30px rgba(0,0,0,.08);}
 h1{font-size:26px;margin-bottom:18px;}
@@ -46,8 +46,8 @@ td{padding:12px 6px;border-bottom:1px solid var(--line);}
 td.num{text-align:right;}
 .row-ok{background:var(--okbg);}
 .row-low{background:var(--lowbg);}
-.marge-ok{color:#34c759;font-weight:600;}
-.marge-low{color:#ff453a;font-weight:600;}
+.pos{color:#34c759;font-weight:600;}
+.neg{color:#ff453a;font-weight:600;}
 .badge{padding:4px 10px;border-radius:999px;font-size:12px;
 background:#34c75922;color:#34c759;}
 @media print{
@@ -96,7 +96,12 @@ Frais de notaire : 27 357 €<br>
 
 <table>
 <thead>
-<tr><th>Mois</th><th class="num">Capital restant</th><th class="num">Marge</th></tr>
+<tr>
+<th>Mois</th>
+<th class="num">Capital restant</th>
+<th class="num">Marge brute</th>
+<th class="num">Marge nette (− notaire)</th>
+</tr>
 </thead>
 <tbody id="tableBody"></tbody>
 </table>
@@ -114,16 +119,7 @@ const data=[
 ["Fév 26",353645.66],["Mar 26",352290.24],["Avr 26",350933.07],
 ["Mai 26",349574.15],["Juin 26",348213.47],["Juil 26",346851.04],
 ["Aoû 26",345486.84],["Sep 26",344120.89],["Oct 26",342753.17],
-["Nov 26",341383.69],["Déc 26",340012.43],["Jan 27",338639.41],
-["Fév 27",337264.61],["Mar 27",335888.03],["Avr 27",334509.67],
-["Mai 27",333129.54],["Juin 27",331747.63],["Juil 27",330363.93],
-["Aoû 27",328978.44],["Sep 27",327591.16],["Oct 27",326202.09],
-["Nov 27",324811.23],["Déc 27",323418.57],["Jan 28",322024.10],
-["Fév 28",320627.83],["Mar 28",319229.76],["Avr 28",317829.89],
-["Mai 28",316428.21],["Juin 28",315024.72],["Juil 28",313619.42],
-["Aoû 28",312212.30],["Sep 28",310803.37],["Oct 28",309392.61],
-["Nov 28",307980.04],["Déc 28",306565.64],["Jan 29",305149.41],
-["Fév 29",303731.36],["Mar 29",302311.47],["Avr 29",300889.75]
+["Nov 26",341383.69],["Déc 26",340012.43]
 ];
 
 const slider=prixSlider;
@@ -133,20 +129,12 @@ const tbody=document.getElementById("tableBody");
 const boxN=document.getElementById("seuilNotaire");
 const boxT=document.getElementById("seuilTotal");
 
-const params=new URLSearchParams(location.search);
-const start=params.get("prix")||370000;
+const start=new URLSearchParams(location.search).get("prix")||370000;
 slider.value=start;
-
-function saveURL(v){
- const u=new URL(location);
- u.searchParams.set("prix",v);
- history.replaceState(null,"",u);
-}
 
 function render(v){
  const prix=+v;
  prixValue.textContent=prix.toLocaleString("fr-FR");
- saveURL(prix);
 
  const prixFAI=prix/(1-TAUX_AGENCE);
  const fraisAgence=prixFAI-prix;
@@ -161,20 +149,22 @@ function render(v){
  let seuil=null;
 
  data.forEach(([m,c])=>{
-  const marge=prix-c;
-  const ok=marge>=FRAIS_NOTAIRE;
+  const brute=prix-c;
+  const nette=brute-FRAIS_NOTAIRE;
+  const ok=nette>=0;
   if(ok&&!seuil) seuil=m;
 
   tbody.innerHTML+=`
   <tr class="${ok?"row-ok":"row-low"}">
   <td>${m}</td>
   <td class="num">${c.toLocaleString("fr-FR",{minimumFractionDigits:2})}</td>
-  <td class="num ${ok?"marge-ok":"marge-low"}">
-  ${marge.toLocaleString("fr-FR",{minimumFractionDigits:2})}
+  <td class="num">${brute.toLocaleString("fr-FR",{minimumFractionDigits:2})}</td>
+  <td class="num ${ok?"pos":"neg"}">
+    ${nette.toLocaleString("fr-FR",{minimumFractionDigits:2})}
   </td></tr>`;
  });
 
- boxN.innerHTML=seuil?`Seuil frais de notaire : <b>${seuil}</b>`:"";
+ boxN.innerHTML=seuil?`Notaire couvert : <b>${seuil}</b>`:"";
  boxT.innerHTML=prix>=COUT_TOTAL?`Prix ≥ coût total <span class="badge">Profit complet</span>`:"";
 }
 
