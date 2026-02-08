@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>5 Théophile Leducq - Marge à la revente</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+ --bg:#f5f5f7;
+ --card:#ffffff;
+ --text:#1d1d1f;
+ --muted:#6e6e73;
+ --line:#e5e5e7;
+ --okbg:#f3fbf4;
+ --lowbg:#fff5f5;
+}
+
+@media (prefers-color-scheme: dark){
+ :root{
+  --bg:#000;
+  --card:#1c1c1e;
+  --text:#f5f5f7;
+  --muted:#a1a1a6;
+  --line:#2c2c2e;
+  --okbg:#0f2e16;
+  --lowbg:#2a1414;
+ }
+}
+
+body{
+ margin:0;
+ background:var(--bg);
+ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+ color:var(--text);
+}
+
+.wrapper{
+ max-width:920px;
+ margin:40px auto;
+ padding:12px;
+}
+
+.card{
+ background:var(--card);
+ border-radius:18px;
+ padding:28px;
+ box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+h1{
+ font-size:26px;
+ font-weight:600;
+ margin-bottom:18px;
+}
+
+.section-title{
+ font-size:12px;
+ text-transform:uppercase;
+ letter-spacing:.08em;
+ color:var(--muted);
+ margin:18px 0 8px;
+}
+
+.acquisition{
+ background:rgba(127,127,127,.08);
+ border-radius:12px;
+ padding:16px;
+ font-size:14px;
+ line-height:1.6;
+}
+
+.controls{
+ display:grid;
+ gap:10px;
+}
+
+input[type=range]{
+ width:100%;
+}
+
+.range-value{
+ font-size:22px;
+ font-weight:600;
+ text-align:right;
+}
+
+.buttons{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin:14px 0;
+}
+
+button{
+ border:1px solid var(--line);
+ background:transparent;
+ padding:10px 14px;
+ border-radius:999px;
+ font-size:14px;
+ cursor:pointer;
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ font-size:14px;
+}
+
+th{
+ text-align:left;
+ color:var(--muted);
+ border-bottom:1px solid var(--line);
+ padding:10px 6px;
+}
+
+td{
+ padding:12px 6px;
+ border-bottom:1px solid var(--line);
+}
+
+td.num{text-align:right;}
+
+.row-ok{background:var(--okbg);}
+.row-low{background:var(--lowbg);}
+
+.marge-ok{color:#34c759;font-weight:600;}
+.marge-low{color:#ff453a;font-weight:600;}
+
+.badge{
+ padding:4px 10px;
+ border-radius:999px;
+ font-size:12px;
+ font-weight:600;
+ background:#34c75922;
+ color:#34c759;
+}
+
+@media print{
+ body{background:white}
+ .buttons, input, .section-title{display:none}
+ .card{box-shadow:none}
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+<div class="card">
+
+<h1>🏡 5 Théophile Leducq — Marge à la revente</h1>
+
+<div class="section-title">Données d’acquisition</div>
+<div class="acquisition">
+Prix d’achat : 341 964 €<br>
+Travaux : 77 268 €<br>
+Prix total : 419 233 €<br>
+Frais de notaire : 27 357 €<br>
+<strong>Coût total : 446 590 €</strong>
+</div>
+
+<div class="section-title">Prix net vendeur</div>
+
+<div class="controls">
+<input type="range" id="prixSlider" min="250000" max="600000" step="1000">
+<div class="range-value"><span id="prixValue"></span> €</div>
+</div>
+
+<div class="buttons">
+<button onclick="window.print()">🖨️ Imprimer version propre</button>
+<button onclick="exportPDF()">📄 Exporter PDF</button>
+</div>
+
+<div id="seuilNotaire"></div>
+<div id="seuilTotal"></div>
+
+<table>
+<thead>
+<tr>
+<th>Mois</th>
+<th class="num">Capital restant</th>
+<th class="num">Marge</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+</div>
+</div>
+
+<script>
+const FRAIS_NOTAIRE=27357;
+const COUT_TOTAL=446590;
+
+const data=[
+["Fév 26",353645.66],["Mar 26",352290.24],["Avr 26",350933.07],
+["Mai 26",349574.15],["Juin 26",348213.47],["Juil 26",346851.04],
+["Aoû 26",345486.84],["Sep 26",344120.89],["Oct 26",342753.17],
+["Nov 26",341383.69],["Déc 26",340012.43],["Jan 27",338639.41],
+["Fév 27",337264.61],["Mar 27",335888.03],["Avr 27",334509.67],
+["Mai 27",333129.54],["Juin 27",331747.63],["Juil 27",330363.93],
+["Aoû 27",328978.44],["Sep 27",327591.16],["Oct 27",326202.09],
+["Nov 27",324811.23],["Déc 27",323418.57],["Jan 28",322024.10],
+["Fév 28",320627.83],["Mar 28",319229.76],["Avr 28",317829.89],
+["Mai 28",316428.21],["Juin 28",315024.72],["Juil 28",313619.42],
+["Aoû 28",312212.30],["Sep 28",310803.37],["Oct 28",309392.61],
+["Nov 28",307980.04],["Déc 28",306565.64],["Jan 29",305149.41],
+["Fév 29",303731.36],["Mar 29",302311.47],["Avr 29",300889.75]
+];
+
+const slider=prixSlider;
+const prixValue=document.getElementById("prixValue");
+const tbody=document.getElementById("tableBody");
+const boxN=document.getElementById("seuilNotaire");
+const boxT=document.getElementById("seuilTotal");
+
+const params=new URLSearchParams(location.search);
+const start=params.get("prix")||370000;
+slider.value=start;
+
+function saveURL(v){
+ const u=new URL(location);
+ u.searchParams.set("prix",v);
+ history.replaceState(null,"",u);
+}
+
+function render(v){
+ const prix=+v;
+ prixValue.textContent=prix.toLocaleString("fr-FR");
+ slider.value=prix;
+ saveURL(prix);
+
+ tbody.innerHTML="";
+ let seuil=null;
+
+ data.forEach(([m,c])=>{
+  const marge=prix-c;
+  const ok=marge>=FRAIS_NOTAIRE;
+  if(ok && !seuil) seuil=m;
+
+  const tr=document.createElement("tr");
+  tr.className=ok?"row-ok":"row-low";
+  tr.innerHTML=`
+   <td>${m}</td>
+   <td class="num">${c.toLocaleString("fr-FR",{minimumFractionDigits:2})}</td>
+   <td class="num ${ok?"marge-ok":"marge-low"}">
+     ${marge.toLocaleString("fr-FR",{minimumFractionDigits:2})}
+   </td>`;
+  tbody.appendChild(tr);
+ });
+
+ boxN.innerHTML=seuil?`Seuil frais de notaire : <b>${seuil}</b>`:"";
+ boxT.innerHTML=prix>=COUT_TOTAL?`Prix ≥ coût total <span class="badge">Profit complet</span>`:"";
+}
+
+slider.oninput=e=>render(e.target.value);
+render(start);
+
+function exportPDF(){ window.print(); }
+</script>
+
+</body>
+</html>
