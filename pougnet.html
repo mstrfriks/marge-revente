@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>🏡 36 rue Pougnet — Talence — Marge à la revente</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏡</text></svg>">
+
+<style>
+:root{
+ --bg:#f5f5f7; --card:#ffffff; --text:#1d1d1f;
+ --muted:#6e6e73; --line:#e5e5e7;
+ --okbg:#f3fbf4; --lowbg:#fff5f5;
+}
+@media (prefers-color-scheme: dark){
+ :root{
+  --bg:#000; --card:#1c1c1e; --text:#f5f5f7;
+  --muted:#a1a1a6; --line:#2c2c2e;
+  --okbg:#0f2e16; --lowbg:#2a1414;
+ }
+}
+body{margin:0;background:var(--bg);
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial;
+color:var(--text);}
+.wrapper{max-width:980px;margin:40px auto;padding:12px;}
+.card{background:var(--card);border-radius:18px;padding:28px;
+box-shadow:0 8px 30px rgba(0,0,0,.08);}
+h1{font-size:26px;margin-bottom:18px;}
+.section-title{font-size:12px;text-transform:uppercase;
+letter-spacing:.08em;color:var(--muted);margin:18px 0 8px;}
+.block{background:rgba(127,127,127,.08);
+border-radius:12px;padding:16px;font-size:14px;line-height:1.6;}
+.controls{display:grid;gap:10px;}
+input[type=range]{width:100%;}
+.range-value{font-size:22px;font-weight:600;text-align:right;}
+.price-label{font-size:13px;color:var(--muted);margin-left:8px;}
+.price-sub{font-size:13px;color:var(--muted);
+text-align:right;line-height:1.5;}
+.buttons{display:flex;gap:10px;margin:14px 0;}
+button{border:1px solid var(--line);background:transparent;
+padding:10px 14px;border-radius:999px;cursor:pointer;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th{color:var(--muted);border-bottom:1px solid var(--line);padding:10px 6px;}
+td{padding:12px 6px;border-bottom:1px solid var(--line);}
+td.num{text-align:right;}
+.row-ok{background:var(--okbg);}
+.row-low{background:var(--lowbg);}
+.pos{color:#34c759;font-weight:600;}
+.neg{color:#ff453a;font-weight:600;}
+.badge{padding:4px 10px;border-radius:999px;font-size:12px;
+background:#34c75922;color:#34c759;}
+@media print{
+ body{background:white}
+ .buttons,input,.section-title{display:none}
+ .card{box-shadow:none}
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+<div class="card">
+
+<h1>🏡 36 rue Pougnet — Talence — Marge à la revente</h1>
+
+<div class="section-title">Données d’acquisition</div>
+<div class="block">
+Prix d’achat : 460 000 €<br>
+Frais de notaire : 35 000 €<br>
+<strong>Coût total : 495 000 €</strong><br><br>
+Crédits restants dus :<br>
+— Prêt 1 : 245 073 €<br>
+— Prêt 2 : 102 328 €<br>
+<strong>Total restant : 347 402 €</strong>
+</div>
+
+<div class="section-title">Prix net vendeur</div>
+
+<div class="controls">
+<input type="range" id="prixSlider" min="300000" max="800000" step="1000">
+
+<div class="range-value">
+<span id="prixValue"></span> €
+<span class="price-label">Prix net vendeur</span>
+</div>
+
+<div class="price-sub" id="priceSub"></div>
+</div>
+
+<div class="buttons">
+<button onclick="window.print()">🖨️ Imprimer</button>
+<button onclick="window.print()">📄 Export PDF</button>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Mois</th>
+<th class="num">Capital estimé</th>
+<th class="num">Marge brute</th>
+<th class="num">Marge nette</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+</div>
+</div>
+
+<script>
+const CAPITAL_ACTUEL = 347401.81;
+const MENSUALITE_CAPITAL = 1800; // approx amortissement mensuel
+const FRAIS_NOTAIRE = 35000;
+const TAUX_AGENCE = 0.045;
+const SURFACE = 100; // ⚠️ dis-moi la vraie surface
+
+function formatMois(d){
+ return d.toLocaleDateString("fr-FR",{month:"short",year:"2-digit"});
+}
+
+function build36Mois(){
+ const arr=[];
+ let cap=CAPITAL_ACTUEL;
+ const d=new Date();
+ for(let i=0;i<36;i++){
+  arr.push([new Date(d),cap]);
+  d.setMonth(d.getMonth()+1);
+  cap -= MENSUALITE_CAPITAL;
+ }
+ return arr;
+}
+
+const data = build36Mois();
+
+const slider=prixSlider;
+const prixValue=document.getElementById("prixValue");
+const priceSub=document.getElementById("priceSub");
+const tbody=document.getElementById("tableBody");
+
+slider.value=550000;
+
+function render(v){
+ const prix=+v;
+ prixValue.textContent=prix.toLocaleString("fr-FR");
+
+ const prixFAI=prix/(1-TAUX_AGENCE);
+ const fraisAgence=prixFAI-prix;
+ const prixM2=prixFAI/SURFACE;
+
+ priceSub.innerHTML=`
+ Prix FAI : ${prixFAI.toLocaleString("fr-FR",{maximumFractionDigits:0})} €<br>
+ Frais agence : ${fraisAgence.toLocaleString("fr-FR",{maximumFractionDigits:0})} €<br>
+ Prix m² (FAI) : ${prixM2.toLocaleString("fr-FR",{maximumFractionDigits:0})} €/m²`;
+
+ tbody.innerHTML="";
+
+ data.forEach(([d,c])=>{
+  const brute=prix-c;
+  const nette=brute-FRAIS_NOTAIRE;
+  const ok=nette>=0;
+
+  tbody.innerHTML+=`
+  <tr class="${ok?"row-ok":"row-low"}">
+  <td>${formatMois(d)}</td>
+  <td class="num">${c.toLocaleString("fr-FR",{maximumFractionDigits:0})}</td>
+  <td class="num">${brute.toLocaleString("fr-FR",{maximumFractionDigits:0})}</td>
+  <td class="num ${ok?"pos":"neg"}">
+  ${nette.toLocaleString("fr-FR",{maximumFractionDigits:0})}
+  </td></tr>`;
+ });
+}
+
+slider.oninput=e=>render(e.target.value);
+render(slider.value);
+</script>
+
+</body>
+</html>
