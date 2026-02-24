@@ -143,9 +143,15 @@ function formatMois(d){
  return d.toLocaleDateString("fr-FR",{month:"short",year:"2-digit"});
 }
 
+/* ✅ CORRECTION ICI */
 function filtre3Ans(d){
  const now=new Date();
- const end=new Date(); end.setMonth(end.getMonth()+36);
+ now.setDate(1);
+ now.setHours(0,0,0,0); // 🔥 normalisation
+
+ const end=new Date(now);
+ end.setMonth(end.getMonth()+36);
+
  return d.filter(([ds])=>{
   const dt=new Date(ds);
   return dt>=now && dt<=end;
