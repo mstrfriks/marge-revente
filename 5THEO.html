@@ -2,212 +2,744 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>🏡 5 Théophile Leducq - Marge à la revente</title>
+<title>5 Théophile Leducq — Analyse de revente</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏡</text></svg>">
 
 <style>
-:root{
- --bg:#f5f5f7; --card:#ffffff; --text:#1d1d1f;
- --muted:#6e6e73; --line:#e5e5e7;
- --okbg:#f3fbf4; --lowbg:#fff5f5;
+/* ── Variables ─────────────────────────────────────── */
+:root {
+  --ink:    #0d0d0d;
+  --paper:  #f7f4ef;
+  --cream:  #ede9e1;
+  --gold:   #b8924a;
+  --gold2:  #d4a85c;
+  --green:  #2d6a4f;
+  --green-bg: #edf7f2;
+  --red:    #8b2929;
+  --red-bg: #fdf0f0;
+  --muted:  #7a7468;
+  --line:   #ddd8cf;
+  --card:   #ffffff;
+  --radius: 4px;
+  --shadow: 0 2px 20px rgba(13,13,13,.06);
 }
-@media (prefers-color-scheme: dark){
- :root{
-  --bg:#000; --card:#1c1c1e; --text:#f5f5f7;
-  --muted:#a1a1a6; --line:#2c2c2e;
-  --okbg:#0f2e16; --lowbg:#2a1414;
- }
+
+/* ── Reset ─────────────────────────────────────────── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; -webkit-font-smoothing:antialiased; }
+body {
+  background: var(--paper);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(184,146,74,.07) 0%, transparent 70%);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
 }
-body{margin:0;background:var(--bg);
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial;
-color:var(--text);}
-.wrapper{max-width:980px;margin:40px auto;padding:12px;}
-.card{background:var(--card);border-radius:18px;padding:28px;
-box-shadow:0 8px 30px rgba(0,0,0,.08);}
-h1{font-size:26px;margin-bottom:18px;}
-.section-title{font-size:12px;text-transform:uppercase;
-letter-spacing:.08em;color:var(--muted);margin:18px 0 8px;}
-.acquisition{background:rgba(127,127,127,.08);
-border-radius:12px;padding:16px;font-size:14px;line-height:1.6;}
-.controls{display:grid;gap:10px;}
-input[type=range]{width:100%;}
-.range-value{font-size:22px;font-weight:600;text-align:right;}
-.price-label{font-size:13px;color:var(--muted);margin-left:8px;}
-.price-sub{font-size:13px;color:var(--muted);
-text-align:right;line-height:1.5;}
-.buttons{display:flex;gap:10px;margin:14px 0;}
-button{border:1px solid var(--line);background:transparent;
-padding:10px 14px;border-radius:999px;cursor:pointer;}
-table{width:100%;border-collapse:collapse;font-size:14px;}
-th{color:var(--muted);border-bottom:1px solid var(--line);padding:10px 6px;}
-td{padding:12px 6px;border-bottom:1px solid var(--line);}
-td.num{text-align:right;}
-.row-ok{background:var(--okbg);}
-.row-low{background:var(--lowbg);}
-.pos{color:#34c759;font-weight:600;}
-.neg{color:#ff453a;font-weight:600;}
-.badge{padding:4px 10px;border-radius:999px;font-size:12px;
-background:#34c75922;color:#34c759;}
-@media print{
- body{background:white}
- .buttons,input,.section-title{display:none}
- .card{box-shadow:none}
+
+/* ── Layout ─────────────────────────────────────────── */
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
 }
+
+/* ── Header ─────────────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+}
+.header-left {}
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+.title em { font-style: italic; color: var(--gold); }
+.subtitle {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.5;
+}
+.header-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.badge-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.badge-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--ink);
+  line-height: 1;
+}
+.badge-sub {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Acquisition card ───────────────────────────────── */
+.acq-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+.acq-cell {
+  background: var(--card);
+  padding: 18px 20px;
+}
+.acq-cell.accent { background: var(--cream); }
+.acq-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.acq-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink);
+}
+.acq-cell.accent .acq-value { color: var(--gold); }
+
+/* ── Slider section ─────────────────────────────────── */
+.slider-section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.slider-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+}
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.slider-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.slider-display {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.slider-amount {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42px;
+  line-height: 1;
+  color: var(--ink);
+  transition: color .2s;
+}
+.slider-currency {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--muted);
+}
+
+/* Custom range input */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  background: var(--line);
+  border-radius: 1px;
+  outline: none;
+  cursor: pointer;
+  margin: 8px 0 20px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--ink), 0 2px 8px rgba(0,0,0,.2);
+  cursor: grab;
+  transition: transform .1s;
+}
+input[type=range]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.2); }
+input[type=range]::-moz-range-thumb {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--ink);
+  cursor: grab;
+}
+.range-bounds {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: -12px;
+  margin-bottom: 24px;
+}
+
+/* Derived stats */
+.derived {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.derived-item {}
+.derived-item .d-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.derived-item .d-val {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ── Presets ────────────────────────────────────────── */
+.presets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.preset-btn {
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 8px 16px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  transition: all .15s;
+  letter-spacing: .05em;
+}
+.preset-btn:hover { border-color: var(--gold); color: var(--gold); }
+.preset-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ── Status banners ─────────────────────────────────── */
+.status-banners {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.banner {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: .35;
+  transition: opacity .3s, background .3s, border-color .3s;
+}
+.banner.active { opacity: 1; }
+.banner.ok.active { background: var(--green-bg); border-color: #a8d5be; }
+.banner.warn.active { background: #fff8ed; border-color: #e6c97a; }
+.banner-icon { font-size: 22px; line-height: 1; }
+.banner-text { font-size: 13px; line-height: 1.5; }
+.banner-text strong { display: block; font-weight: 500; font-size: 14px; color: var(--ink); }
+.banner-text span { color: var(--muted); }
+
+/* ── Table ──────────────────────────────────────────── */
+.table-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.table-wrap {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+thead th {
+  background: var(--cream);
+  padding: 12px 16px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 400;
+  border-bottom: 1px solid var(--line);
+}
+thead th.r { text-align: right; }
+tbody tr { border-bottom: 1px solid var(--line); transition: background .1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(184,146,74,.04); }
+tbody td { padding: 11px 16px; }
+tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13px; }
+.row-ok td { background: rgba(45,106,79,.035); }
+.row-low td { background: rgba(139,41,41,.03); }
+.val-pos { color: var(--green); font-weight: 500; }
+.val-neg { color: var(--red); }
+.month-col {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+.month-marker {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-right: 8px;
+  vertical-align: middle;
+  opacity: 0;
+}
+.row-threshold .month-marker { opacity: 1; }
+
+/* ── Actions ────────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--card);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink);
+  text-decoration: none;
+  transition: all .15s;
+}
+.btn:hover { border-color: var(--ink); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn.primary:hover { background: #333; }
+.btn svg { width: 15px; height: 15px; }
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-note {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.5;
+}
+.footer-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Print ───────────────────────────────────────────── */
+@media print {
+  body { background: white; }
+  .slider-section, .presets, .actions, .footer { display: none !important; }
+  .page { padding: 20px; }
+  .table-wrap { border: 1px solid #ccc; }
+  .status-banners { break-inside: avoid; }
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  .acq-grid { grid-template-columns: 1fr 1fr; }
+  .derived { grid-template-columns: 1fr 1fr; }
+  .status-banners { grid-template-columns: 1fr; }
+  .header { flex-direction: column; }
+  .header-badge { align-items: flex-start; }
+}
+
+/* ── Animations ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page > * {
+  animation: fadeUp .5s ease both;
+}
+.page > *:nth-child(1) { animation-delay: 0s; }
+.page > *:nth-child(2) { animation-delay: .07s; }
+.page > *:nth-child(3) { animation-delay: .14s; }
+.page > *:nth-child(4) { animation-delay: .18s; }
+.page > *:nth-child(5) { animation-delay: .22s; }
+.page > *:nth-child(6) { animation-delay: .26s; }
+.page > *:nth-child(7) { animation-delay: .30s; }
 </style>
 </head>
 
 <body>
-<div class="wrapper">
-<div class="card">
+<div class="page">
 
-<h1>🏡 5 Théophile Leducq — Marge à la revente</h1>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="eyebrow">Analyse de revente · Simulation</div>
+      <h1 class="title">5 Théophile<br><em>Leducq</em></h1>
+      <p class="subtitle">54 m² — Calcul de marge sur 36 mois glissants</p>
+    </div>
+    <div class="header-badge">
+      <span class="badge-tag">Coût total</span>
+      <span class="badge-val">446 590 €</span>
+      <span class="badge-sub">achat + travaux + notaire</span>
+    </div>
+  </header>
 
-<div class="section-title">Données d’acquisition</div>
-<div class="acquisition">
-Prix d’achat : 341 964 €<br>
-Travaux : 77 268 €<br>
-Prix total : 419 233 €<br>
-Frais de notaire : 27 357 €<br>
-<strong>Coût total : 446 590 €</strong>
-</div>
+  <!-- Acquisition -->
+  <div class="acq-grid">
+    <div class="acq-cell">
+      <div class="acq-label">Prix d'achat</div>
+      <div class="acq-value">341 964 €</div>
+    </div>
+    <div class="acq-cell">
+      <div class="acq-label">Travaux</div>
+      <div class="acq-value">77 268 €</div>
+    </div>
+    <div class="acq-cell">
+      <div class="acq-label">Frais de notaire</div>
+      <div class="acq-value">27 357 €</div>
+    </div>
+    <div class="acq-cell accent">
+      <div class="acq-label">Coût total</div>
+      <div class="acq-value">446 590 €</div>
+    </div>
+  </div>
 
-<div class="section-title">Prix net vendeur</div>
+  <!-- Slider -->
+  <div class="slider-section">
+    <div class="slider-header">
+      <span class="slider-label">Prix net vendeur</span>
+      <div class="slider-display">
+        <span class="slider-amount" id="prixValue">370 000</span>
+        <span class="slider-currency">€</span>
+      </div>
+    </div>
+    <input type="range" id="prixSlider" min="250000" max="600000" step="1000" value="370000">
+    <div class="range-bounds"><span>250 000 €</span><span>600 000 €</span></div>
+    <div class="derived">
+      <div class="derived-item">
+        <div class="d-label">Prix FAI (+ 4,5 %)</div>
+        <div class="d-val" id="prixFAI">—</div>
+      </div>
+      <div class="derived-item">
+        <div class="d-label">Frais d'agence</div>
+        <div class="d-val" id="fraisAgence">—</div>
+      </div>
+      <div class="derived-item">
+        <div class="d-label">Prix au m² (FAI)</div>
+        <div class="d-val" id="prixM2">—</div>
+      </div>
+    </div>
+  </div>
 
-<div class="controls">
-<input type="range" id="prixSlider" min="250000" max="600000" step="1000">
+  <!-- Presets -->
+  <div class="presets" id="presetsContainer"></div>
 
-<div class="range-value">
-<span id="prixValue"></span> €
-<span class="price-label">Prix net vendeur</span>
-</div>
+  <!-- Status banners -->
+  <div class="status-banners">
+    <div class="banner ok" id="bannerNotaire">
+      <div class="banner-icon">✓</div>
+      <div class="banner-text">
+        <strong id="bannerNotaireTxt">—</strong>
+        <span>Notaire couvert dès ce mois</span>
+      </div>
+    </div>
+    <div class="banner warn" id="bannerProfit">
+      <div class="banner-icon">◈</div>
+      <div class="banner-text">
+        <strong>Profit complet</strong>
+        <span>Prix ≥ coût total d'acquisition</span>
+      </div>
+    </div>
+  </div>
 
-<div class="price-sub" id="priceSub"></div>
-</div>
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn primary" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+      Imprimer / PDF
+    </button>
+    <button class="btn" onclick="copyLink()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.7"/></svg>
+      Copier le lien
+    </button>
+    <button class="btn" onclick="exportCSV()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Exporter CSV
+    </button>
+  </div>
 
-<div class="buttons">
-<button onclick="window.print()">🖨️ Imprimer</button>
-<button onclick="window.print()">📄 Export PDF</button>
-</div>
+  <!-- Table -->
+  <div class="table-title">Tableau de marge — 36 mois glissants</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Mois</th>
+          <th class="r">Capital restant dû</th>
+          <th class="r">Marge brute</th>
+          <th class="r">Marge nette (− notaire)</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
 
-<div id="seuilNotaire"></div>
-<div id="seuilTotal"></div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-note">
+      Marge nette = Prix net vendeur − Capital restant − Frais de notaire (27 357 €).<br>
+      Frais d'agence calculés à 4,5 % du prix FAI pour information uniquement.
+    </div>
+    <div class="footer-date" id="footerDate"></div>
+  </footer>
 
-<table>
-<thead>
-<tr>
-<th>Mois</th>
-<th class="num">Capital restant</th>
-<th class="num">Marge brute</th>
-<th class="num">Marge nette (− notaire)</th>
-</tr>
-</thead>
-<tbody id="tableBody"></tbody>
-</table>
-
-</div>
 </div>
 
 <script>
-const FRAIS_NOTAIRE=27357;
-const COUT_TOTAL=446590;
-const TAUX_AGENCE=0.045;
-const SURFACE=54;
+/* ── Constantes ───────────────────────────────────── */
+const FRAIS_NOTAIRE = 27357;
+const COUT_TOTAL    = 446590;
+const TAUX_AGENCE   = 0.045;
+const SURFACE       = 54;
 
-/* dates + capitaux */
-const data=[
-["2026-02-05",353645.66],["2026-03-05",352290.24],
-["2026-04-05",350933.07],["2026-05-05",349574.15],
-["2026-06-05",348213.47],["2026-07-05",346851.04],
-["2026-08-05",345486.84],["2026-09-05",344120.89],
-["2026-10-05",342753.17],["2026-11-05",341383.69],
-["2026-12-05",340012.43],["2027-01-05",338639.41],
-["2027-02-05",337264.61],["2027-03-05",335888.03],
-["2027-04-05",334509.67],["2027-05-05",333129.54],
-["2027-06-05",331747.63],["2027-07-05",330363.93],
-["2027-08-05",328978.44],["2027-09-05",327591.16],
-["2027-10-05",326202.09],["2027-11-05",324811.23],
-["2027-12-05",323418.57],["2028-01-05",322024.10],
-["2028-02-05",320627.83],["2028-03-05",319229.76],
-["2028-04-05",317829.89],["2028-05-05",316428.21],
-["2028-06-05",315024.72],["2028-07-05",313619.42],
-["2028-08-05",312212.30],["2028-09-05",310803.37],
-["2028-10-05",309392.61],["2028-11-05",307980.04],
-["2028-12-05",306565.64],["2029-01-05",305149.41],
-["2029-02-05",303731.36],["2029-03-05",302311.47],
-["2029-04-05",300889.75]
+const DATA = [
+  ["2026-02-05",353645.66],["2026-03-05",352290.24],
+  ["2026-04-05",350933.07],["2026-05-05",349574.15],
+  ["2026-06-05",348213.47],["2026-07-05",346851.04],
+  ["2026-08-05",345486.84],["2026-09-05",344120.89],
+  ["2026-10-05",342753.17],["2026-11-05",341383.69],
+  ["2026-12-05",340012.43],["2027-01-05",338639.41],
+  ["2027-02-05",337264.61],["2027-03-05",335888.03],
+  ["2027-04-05",334509.67],["2027-05-05",333129.54],
+  ["2027-06-05",331747.63],["2027-07-05",330363.93],
+  ["2027-08-05",328978.44],["2027-09-05",327591.16],
+  ["2027-10-05",326202.09],["2027-11-05",324811.23],
+  ["2027-12-05",323418.57],["2028-01-05",322024.10],
+  ["2028-02-05",320627.83],["2028-03-05",319229.76],
+  ["2028-04-05",317829.89],["2028-05-05",316428.21],
+  ["2028-06-05",315024.72],["2028-07-05",313619.42],
+  ["2028-08-05",312212.30],["2028-09-05",310803.37],
+  ["2028-10-05",309392.61],["2028-11-05",307980.04],
+  ["2028-12-05",306565.64],["2029-01-05",305149.41],
+  ["2029-02-05",303731.36],["2029-03-05",302311.47],
+  ["2029-04-05",300889.75]
 ];
 
-function formatMois(d){
- return d.toLocaleDateString("fr-FR",{month:"short",year:"2-digit"});
+const PRESETS = [
+  { label:"320 k", val:320000 },
+  { label:"350 k", val:350000 },
+  { label:"370 k", val:370000 },
+  { label:"400 k", val:400000 },
+  { label:"420 k", val:420000 },
+  { label:"450 k", val:450000 },
+];
+
+/* ── Helpers ──────────────────────────────────────── */
+const fmt = (n, dec=0) => n.toLocaleString("fr-FR",{minimumFractionDigits:dec,maximumFractionDigits:dec});
+const fmtDate = ds => {
+  const d = new Date(ds);
+  return d.toLocaleDateString("fr-FR",{month:"short",year:"2-digit"});
+};
+
+function filtre3Ans(d) {
+  const now = new Date(); now.setDate(1); now.setHours(0,0,0,0);
+  const end = new Date(now); end.setMonth(end.getMonth()+36);
+  return d.filter(([ds]) => { const dt=new Date(ds); return dt>=now && dt<=end; });
 }
 
-/* ✅ CORRECTION ICI */
-function filtre3Ans(d){
- const now=new Date();
- now.setDate(1);
- now.setHours(0,0,0,0); // 🔥 normalisation
+/* ── Refs DOM ─────────────────────────────────────── */
+const slider      = document.getElementById("prixSlider");
+const elPrix      = document.getElementById("prixValue");
+const elFAI       = document.getElementById("prixFAI");
+const elAgence    = document.getElementById("fraisAgence");
+const elM2        = document.getElementById("prixM2");
+const tbody       = document.getElementById("tableBody");
+const bannerN     = document.getElementById("bannerNotaire");
+const bannerNTxt  = document.getElementById("bannerNotaireTxt");
+const bannerP     = document.getElementById("bannerProfit");
 
- const end=new Date(now);
- end.setMonth(end.getMonth()+36);
+/* ── Presets ──────────────────────────────────────── */
+const presetsEl = document.getElementById("presetsContainer");
+PRESETS.forEach(p => {
+  const b = document.createElement("button");
+  b.className = "preset-btn";
+  b.textContent = p.label;
+  b.onclick = () => { slider.value = p.val; render(p.val); };
+  presetsEl.appendChild(b);
+});
 
- return d.filter(([ds])=>{
-  const dt=new Date(ds);
-  return dt>=now && dt<=end;
- });
+function updatePresets(v) {
+  presetsEl.querySelectorAll(".preset-btn").forEach((b,i) => {
+    b.classList.toggle("active", PRESETS[i].val === +v);
+  });
 }
 
-const slider=prixSlider;
-const prixValue=document.getElementById("prixValue");
-const priceSub=document.getElementById("priceSub");
-const tbody=document.getElementById("tableBody");
-const boxN=document.getElementById("seuilNotaire");
-const boxT=document.getElementById("seuilTotal");
+/* ── Render ───────────────────────────────────────── */
+function render(v) {
+  const prix = +v;
+  const prixFAI    = prix / (1 - TAUX_AGENCE);
+  const fraisAg    = prixFAI - prix;
+  const m2         = prixFAI / SURFACE;
 
-const start=new URLSearchParams(location.search).get("prix")||370000;
-slider.value=start;
+  elPrix.textContent   = fmt(prix);
+  elFAI.textContent    = fmt(prixFAI) + " €";
+  elAgence.textContent = fmt(fraisAg) + " €";
+  elM2.textContent     = fmt(m2) + " €/m²";
 
-function render(v){
- const prix=+v;
- prixValue.textContent=prix.toLocaleString("fr-FR");
+  updatePresets(prix);
 
- const prixFAI=prix/(1-TAUX_AGENCE);
- const fraisAgence=prixFAI-prix;
- const prixM2=prixFAI/SURFACE;
+  /* table */
+  const rows = filtre3Ans(DATA);
+  let html = "";
+  let seuilMois = null;
+  let isFirstPos = true;
 
- priceSub.innerHTML=`
- Prix FAI : ${prixFAI.toLocaleString("fr-FR",{maximumFractionDigits:0})} €<br>
- Frais d’agence (4,5%) : ${fraisAgence.toLocaleString("fr-FR",{maximumFractionDigits:0})} €<br>
- Prix au m² (FAI) : ${prixM2.toLocaleString("fr-FR",{maximumFractionDigits:0})} €/m²`;
+  rows.forEach(([ds, cap]) => {
+    const brute = prix - cap;
+    const nette  = brute - FRAIS_NOTAIRE;
+    const ok     = nette >= 0;
 
- tbody.innerHTML="";
- let seuil=null;
+    let thresholdClass = "";
+    if (ok && isFirstPos) { isFirstPos = false; seuilMois = fmtDate(ds); thresholdClass = " row-threshold"; }
 
- filtre3Ans(data).forEach(([ds,c])=>{
-  const m=formatMois(new Date(ds));
-  const brute=prix-c;
-  const nette=brute-FRAIS_NOTAIRE;
-  const ok=nette>=0;
-  if(ok&&!seuil) seuil=m;
+    html += `<tr class="${ok?"row-ok":"row-low"}${thresholdClass}">
+      <td class="month-col"><span class="month-marker">●</span>${fmtDate(ds)}</td>
+      <td class="r">${fmt(cap,2)} €</td>
+      <td class="r">${fmt(brute,2)} €</td>
+      <td class="r ${ok?"val-pos":"val-neg"}">${ok?"+":""}${fmt(nette,2)} €</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
 
-  tbody.innerHTML+=`
-  <tr class="${ok?"row-ok":"row-low"}">
-  <td>${m}</td>
-  <td class="num">${c.toLocaleString("fr-FR",{minimumFractionDigits:2})}</td>
-  <td class="num">${brute.toLocaleString("fr-FR",{minimumFractionDigits:2})}</td>
-  <td class="num ${ok?"pos":"neg"}">
-  ${nette.toLocaleString("fr-FR",{minimumFractionDigits:2})}
-  </td></tr>`;
- });
-
- boxN.innerHTML=seuil?`Notaire couvert : <b>${seuil}</b>`:"";
- boxT.innerHTML=prix>=COUT_TOTAL?`Prix ≥ coût total <span class="badge">Profit complet</span>`:"";
+  /* banners */
+  if (seuilMois) {
+    bannerN.classList.add("active");
+    bannerNTxt.textContent = seuilMois;
+  } else {
+    bannerN.classList.remove("active");
+    bannerNTxt.textContent = "—";
+  }
+  bannerP.classList.toggle("active", prix >= COUT_TOTAL);
 }
 
-slider.oninput=e=>render(e.target.value);
-render(start);
+/* ── Slider event ─────────────────────────────────── */
+slider.addEventListener("input", e => render(e.target.value));
+
+/* ── Export CSV ───────────────────────────────────── */
+function exportCSV() {
+  const prix = +slider.value;
+  const rows = filtre3Ans(DATA);
+  let csv = "Mois;Capital restant;Marge brute;Marge nette\n";
+  rows.forEach(([ds, cap]) => {
+    const brute = prix - cap;
+    const nette  = brute - FRAIS_NOTAIRE;
+    csv += `${fmtDate(ds)};${cap.toFixed(2)};${brute.toFixed(2)};${nette.toFixed(2)}\n`;
+  });
+  const blob = new Blob([csv], { type:"text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url; a.download = "marge-leducq.csv"; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ── Copy link ────────────────────────────────────── */
+function copyLink() {
+  const url = new URL(location.href);
+  url.searchParams.set("prix", slider.value);
+  navigator.clipboard.writeText(url.toString()).then(() => {
+    const btn = document.querySelector('.actions .btn:nth-child(2)');
+    const old = btn.textContent;
+    btn.textContent = "✓ Lien copié !";
+    setTimeout(() => btn.textContent = old, 2000);
+  });
+}
+
+/* ── URL param ────────────────────────────────────── */
+const startPrix = new URLSearchParams(location.search).get("prix") || 370000;
+slider.value = startPrix;
+render(startPrix);
+
+/* ── Footer date ──────────────────────────────────── */
+document.getElementById("footerDate").textContent =
+  "Simulateur mis à jour le " + new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
 </script>
-
 </body>
 </html>
