@@ -350,6 +350,53 @@ input[type=range]::-moz-range-thumb {
 }
 .chart-tooltip strong { font-weight: 500; color: var(--gold2); }
 
+/* ── Sensitivity grid ───────────────────────────────── */
+.grid-section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+}
+.grid-section .slider-label { margin-bottom: 16px; display: block; }
+.grid-wrap { overflow-x: auto; }
+.sens-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.sens-table th, .sens-table td {
+  padding: 8px 10px;
+  text-align: right;
+  white-space: nowrap;
+  border: 1px solid var(--line);
+}
+.sens-table thead th {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  color: var(--muted);
+  background: var(--cream);
+  font-weight: 400;
+}
+.sens-table thead th.now { color: var(--gold); }
+.sens-table tbody th {
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--cream);
+  cursor: pointer;
+}
+.sens-table tbody th:hover { color: var(--gold); }
+.sens-table tbody th.active-row { color: var(--gold); }
+.sens-table td {
+  font-family: 'DM Mono', monospace;
+  cursor: pointer;
+  transition: outline .1s;
+}
+.sens-table td:hover { outline: 1.5px solid var(--gold); outline-offset: -1.5px; }
+.sens-table td.val-pos { color: var(--green); }
+.sens-table td.val-neg { color: var(--red); }
+.grid-note { margin-top: 12px; font-size: 11px; color: var(--muted); }
+
 /* ── Presets ────────────────────────────────────────── */
 .presets {
   display: flex;
@@ -637,6 +684,15 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
     </div>
   </div>
 
+  <!-- Sensitivity grid -->
+  <div class="grid-section">
+    <span class="slider-label">Grille de sensibilité — prix × mois de sortie</span>
+    <div class="grid-wrap">
+      <table class="sens-table" id="sensTable"></table>
+    </div>
+    <div class="grid-note">Marge nette (€) pour chaque combinaison. Clique une cellule pour charger ce prix dans le simulateur.</div>
+  </div>
+
   <!-- Status banners -->
   <div class="status-banners">
     <div class="banner ok" id="bannerNotaire">
@@ -691,7 +747,8 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
   <footer class="footer">
     <div class="footer-note">
       Marge nette = Prix net vendeur − Capital restant − Frais de notaire (27 357 €).<br>
-      Frais d'agence calculés à 4,5 % du prix FAI pour information uniquement.
+      Frais d'agence calculés à 4,5 % du prix FAI pour information uniquement.<br>
+      Hypothèse : résidence principale au moment de la revente → plus-value exonérée d'impôt (art. 150 U du CGI). Si ce n'est pas le cas à la vente, une fiscalité sur la plus-value s'ajoutera en déduction de ces montants — à vérifier auprès du notaire.
     </div>
     <div class="footer-date" id="footerDate"></div>
   </footer>
@@ -763,6 +820,7 @@ const chartTitle  = document.getElementById("chartTitle");
 const chartWrap   = document.getElementById("chartWrap");
 const chartSvg    = document.getElementById("marginChart");
 const chartTooltip= document.getElementById("chartTooltip");
+const sensTable   = document.getElementById("sensTable");
 const bannerN     = document.getElementById("bannerNotaire");
 const bannerNTxt  = document.getElementById("bannerNotaireTxt");
 const bannerP     = document.getElementById("bannerProfit");
@@ -838,6 +896,50 @@ function render(v) {
   bannerP.classList.toggle("active", prix >= COUT_TOTAL);
 
   renderChart(prix, rows);
+  renderSensitivityGrid(rows);
+}
+
+/* ── Sensitivity grid (price × exit month) ─────────── */
+function renderSensitivityGrid(rows) {
+  if (!rows.length) { sensTable.innerHTML = ""; return; }
+  const n = rows.length;
+  const step = Math.max(1, Math.ceil(n / 6));
+  const colIdxs = [];
+  for (let i = 0; i < n; i += step) colIdxs.push(i);
+  if (colIdxs[colIdxs.length - 1] !== n - 1) colIdxs.push(n - 1);
+
+  const priceGrid = PRESETS.map(p => p.val);
+  const values = priceGrid.map(price => colIdxs.map(ci => (price - rows[ci][1]) - FRAIS_NOTAIRE));
+  const maxAbs = Math.max(...values.flat().map(Math.abs), 1);
+  const currentPrix = +slider.value;
+
+  let html = "<thead><tr><th>Prix / Mois</th>";
+  colIdxs.forEach((ci, idx) => {
+    html += `<th class="${idx === 0 ? "now" : ""}">${fmtDate(rows[ci][0])}</th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  priceGrid.forEach((price, ri) => {
+    html += `<tr><th class="${price === currentPrix ? "active-row" : ""}" data-price="${price}">${fmt(price)} €</th>`;
+    colIdxs.forEach((ci, ci2) => {
+      const v = values[ri][ci2];
+      const ok = v >= 0;
+      const alpha = (0.06 + 0.22 * Math.min(1, Math.abs(v) / maxAbs)).toFixed(2);
+      const bg = ok ? `rgba(45,106,79,${alpha})` : `rgba(139,41,41,${alpha})`;
+      html += `<td class="${ok ? "val-pos" : "val-neg"}" style="background:${bg}" data-price="${price}">${ok ? "+" : ""}${fmt(v, 0)}</td>`;
+    });
+    html += "</tr>";
+  });
+  html += "</tbody>";
+  sensTable.innerHTML = html;
+
+  sensTable.querySelectorAll("[data-price]").forEach(el => {
+    el.addEventListener("click", () => {
+      const v = +el.dataset.price;
+      slider.value = v;
+      render(v);
+    });
+  });
 }
 
 /* ── Chart ────────────────────────────────────────── */
