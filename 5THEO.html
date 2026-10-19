@@ -304,6 +304,59 @@ input[type=range]::-moz-range-thumb {
   color: var(--ink);
 }
 
+/* ── Timeline ───────────────────────────────────────── */
+.timeline-section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 28px 40px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+}
+.timeline-track { position: relative; height: 54px; margin-top: 18px; }
+.timeline-line { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--line); }
+.timeline-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
+.timeline-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink); border: 2px solid var(--card);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.timeline-marker.ok .timeline-dot { background: var(--green); box-shadow: 0 0 0 1px var(--green); }
+.timeline-marker.neutral .timeline-dot { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.timeline-label {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
+  white-space: nowrap; text-align: center;
+}
+.timeline-label.above { bottom: 14px; }
+.timeline-label.below { top: 14px; }
+.timeline-label strong { display: block; font-size: 11px; font-weight: 500; color: var(--ink); margin-bottom: 1px; }
+.timeline-note { font-size: 11px; color: var(--muted); text-align: right; }
+
+/* ── Waterfall & gauge ──────────────────────────────── */
+.wf-section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+}
+.wf-chart svg { display: block; width: 100%; height: auto; }
+.wf-gauge { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
+.wf-gauge-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.wf-gauge-head span:first-child {
+  font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.wf-gauge-head span:last-child { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; color: var(--ink); }
+.wf-gauge-track { height: 10px; border-radius: 10px; background: var(--cream); overflow: hidden; }
+.wf-gauge-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 10px; transition: width .3s ease, background .2s; }
+.wf-gauge-fill.full { background: var(--green); }
+.wf-gauge-sub { margin-top: 8px; font-size: 12px; }
+.wf-gauge-sub.val-pos { color: var(--green); font-weight: 500; }
+.wf-gauge-sub.val-neg { color: var(--red); }
+
 /* ── Chart ──────────────────────────────────────────── */
 .chart-section {
   background: var(--card);
@@ -643,6 +696,15 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
     </div>
   </div>
 
+  <!-- Timeline -->
+  <div class="timeline-section">
+    <div class="chart-header">
+      <span class="slider-label">Chronologie</span>
+      <span class="timeline-note" id="timelineNote"></span>
+    </div>
+    <div class="timeline-track" id="timelineTrack"></div>
+  </div>
+
   <!-- Slider -->
   <div class="slider-section">
     <div class="slider-header">
@@ -672,6 +734,24 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
         <div class="d-label">Prix au m² (FAI)</div>
         <div class="d-val" id="prixM2">—</div>
       </div>
+    </div>
+  </div>
+
+  <!-- Waterfall + gauge -->
+  <div class="wf-section">
+    <div class="chart-header">
+      <span class="slider-label" id="wfTitle">Décomposition</span>
+    </div>
+    <div class="wf-chart">
+      <svg id="wfSvg" viewBox="0 0 760 260" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="wf-gauge">
+      <div class="wf-gauge-head">
+        <span>Apport récupéré (frais de notaire)</span>
+        <span id="gaugePct">—</span>
+      </div>
+      <div class="wf-gauge-track"><div class="wf-gauge-fill" id="gaugeFill"></div></div>
+      <div class="wf-gauge-sub" id="gaugeSub">—</div>
     </div>
   </div>
 
@@ -830,6 +910,13 @@ const chartWrap   = document.getElementById("chartWrap");
 const chartSvg    = document.getElementById("marginChart");
 const chartTooltip= document.getElementById("chartTooltip");
 const sensTable   = document.getElementById("sensTable");
+const timelineTrack = document.getElementById("timelineTrack");
+const timelineNote  = document.getElementById("timelineNote");
+const wfSvg       = document.getElementById("wfSvg");
+const wfTitle     = document.getElementById("wfTitle");
+const gaugeFill   = document.getElementById("gaugeFill");
+const gaugePct    = document.getElementById("gaugePct");
+const gaugeSub    = document.getElementById("gaugeSub");
 const bannerN     = document.getElementById("bannerNotaire");
 const bannerNTxt  = document.getElementById("bannerNotaireTxt");
 const bannerP     = document.getElementById("bannerProfit");
@@ -869,6 +956,7 @@ function render(v) {
   const rows = filtre3Ans(DATA);
   let html = "";
   let seuilMois = null;
+  let seuilDate = null;
   let isFirstPos = true;
 
   rows.forEach(([ds, cap]) => {
@@ -877,7 +965,7 @@ function render(v) {
     const ok     = nette >= 0;
 
     let thresholdClass = "";
-    if (ok && isFirstPos) { isFirstPos = false; seuilMois = fmtDate(ds); thresholdClass = " row-threshold"; }
+    if (ok && isFirstPos) { isFirstPos = false; seuilMois = fmtDate(ds); seuilDate = ds; thresholdClass = " row-threshold"; }
 
     html += `<tr class="${ok?"row-ok":"row-low"}${thresholdClass}">
       <td class="month-col"><span class="month-marker">●</span>${fmtDate(ds)}</td>
@@ -906,6 +994,130 @@ function render(v) {
 
   renderChart(prix, rows);
   renderSensitivityGrid(rows);
+  renderTimeline(rows, seuilDate);
+  if (rows.length) {
+    const capToday = rows[0][1];
+    wfTitle.textContent = "Décomposition — " + fmtDate(rows[0][0]);
+    renderWaterfall(prix, capToday);
+    renderGauge(prix - capToday);
+  }
+}
+
+/* ── Timeline ─────────────────────────────────────── */
+function renderTimeline(rows, seuilDate) {
+  timelineTrack.innerHTML = "";
+  if (rows.length < 2) { timelineNote.textContent = ""; return; }
+
+  const start = new Date(rows[0][0]).getTime();
+  const end   = new Date(rows[rows.length - 1][0]).getTime();
+  const span  = end - start;
+  const pct = ds => span ? ((new Date(ds).getTime() - start) / span) * 100 : 0;
+
+  const line = document.createElement("div");
+  line.className = "timeline-line";
+  timelineTrack.appendChild(line);
+
+  function addMarker(ds, label, cls, pos) {
+    const m = document.createElement("div");
+    m.className = "timeline-marker" + (cls ? " " + cls : "");
+    m.style.left = Math.max(0, Math.min(100, pct(ds))) + "%";
+    m.innerHTML = `<div class="timeline-dot"></div>`;
+    const l = document.createElement("div");
+    l.className = "timeline-label " + pos;
+    l.innerHTML = `<strong>${label}</strong>${fmtDate(ds)}`;
+    m.appendChild(l);
+    timelineTrack.appendChild(m);
+  }
+
+  addMarker(rows[0][0], "Aujourd'hui", "neutral", "below");
+  addMarker(rows[rows.length - 1][0], "Fin simulation", "", "below");
+  if (seuilDate) {
+    addMarker(seuilDate, "Seuil de rentabilité", "ok", "above");
+    timelineNote.textContent = "";
+  } else {
+    timelineNote.textContent = "Seuil non atteint sur la période";
+  }
+}
+
+/* ── Waterfall ────────────────────────────────────── */
+const WF_W = 760, WF_H = 260;
+const WF_PAD = { l: 54, r: 20, t: 28, b: 40 };
+const WF_PW = WF_W - WF_PAD.l - WF_PAD.r;
+const WF_PH = WF_H - WF_PAD.t - WF_PAD.b;
+
+function renderWaterfall(prix, capToday) {
+  wfSvg.innerHTML = "";
+  const brute = prix - capToday;
+  const nette = brute - FRAIS_NOTAIRE;
+
+  const steps = [
+    { label: "Prix vente",      v0: 0,     v1: prix,  type: "total" },
+    { label: "Capital restant", v0: brute, v1: prix,  type: "sub" },
+    { label: "Frais notaire",   v0: nette, v1: brute, type: "sub" },
+    { label: "Marge nette",     v0: 0,     v1: nette, type: nette >= 0 ? "pos" : "neg" }
+  ];
+
+  let minV = Math.min(0, prix, brute, nette), maxV = Math.max(0, prix, brute, nette);
+  const pad = (maxV - minV) * 0.12 || 1000;
+  minV -= pad; maxV += pad;
+  const yAt = v => WF_PAD.t + (maxV - v) / (maxV - minV) * WF_PH;
+
+  const n = steps.length;
+  const slot = WF_PW / n;
+  const barW = slot * 0.46;
+
+  const y0 = yAt(0);
+  wfSvg.appendChild(svgEl("line", { x1: WF_PAD.l, x2: WF_PAD.l + WF_PW, y1: y0, y2: y0, stroke: "var(--line)", "stroke-width": 1 }));
+
+  steps.forEach((s, i) => {
+    const cx = WF_PAD.l + slot * i + slot / 2;
+    const top = Math.max(s.v0, s.v1), bot = Math.min(s.v0, s.v1);
+    const yTop = yAt(top), yBot = yAt(bot);
+    const h = Math.max(2, yBot - yTop);
+    let fill = "var(--muted)";
+    if (s.type === "total") fill = "var(--ink)";
+    else if (s.type === "pos") fill = "var(--green)";
+    else if (s.type === "neg") fill = "var(--red)";
+    wfSvg.appendChild(svgEl("rect", { x: cx - barW / 2, y: yTop, width: barW, height: h, fill, rx: 3 }));
+
+    if (i < n - 1) {
+      const nextCx = WF_PAD.l + slot * (i + 1) + slot / 2;
+      const connY = yAt(s.v1);
+      wfSvg.appendChild(svgEl("line", { x1: cx + barW / 2, x2: nextCx - barW / 2, y1: connY, y2: connY, stroke: "var(--line)", "stroke-width": 1, "stroke-dasharray": "2 3" }));
+    }
+
+    const magnitude = s.type === "sub" ? -(s.v1 - s.v0) : s.v1;
+    const vt = svgEl("text", {
+      x: cx, y: yTop - 8, "text-anchor": "middle",
+      "font-family": "DM Mono, monospace", "font-size": "11", "font-weight": "500",
+      fill: s.type === "pos" ? "var(--green)" : s.type === "neg" ? "var(--red)" : "var(--ink)"
+    });
+    vt.textContent = (s.type === "pos" ? "+" : "") + fmt(magnitude, 0) + " €";
+    wfSvg.appendChild(vt);
+
+    const lt = svgEl("text", {
+      x: cx, y: WF_H - 14, "text-anchor": "middle",
+      "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--muted)"
+    });
+    lt.textContent = s.label;
+    wfSvg.appendChild(lt);
+  });
+}
+
+/* ── Gauge ────────────────────────────────────────── */
+function renderGauge(brute) {
+  const pct = Math.max(0, Math.min(100, (brute / FRAIS_NOTAIRE) * 100));
+  gaugeFill.style.width = pct + "%";
+  const full = brute >= FRAIS_NOTAIRE;
+  gaugeFill.classList.toggle("full", full);
+  gaugePct.textContent = (full ? 100 : Math.min(99, Math.round(pct))) + "%";
+  if (full) {
+    gaugeSub.textContent = `Apport entièrement récupéré — +${fmt(brute - FRAIS_NOTAIRE, 0)} € de marge au-delà`;
+    gaugeSub.className = "wf-gauge-sub val-pos";
+  } else {
+    gaugeSub.textContent = `Reste ${fmt(FRAIS_NOTAIRE - Math.max(0, brute), 0)} € à récupérer`;
+    gaugeSub.className = "wf-gauge-sub val-neg";
+  }
 }
 
 /* ── Sensitivity grid (price × exit month) ─────────── */
