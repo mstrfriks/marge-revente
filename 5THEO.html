@@ -27,8 +27,8 @@
   --ink:    #0d0d0d;
   --paper:  #ebedf0;
   --cream:  #e2e4e8;
-  --accent:   #45484f;
-  --accent2:  #8a8d94;
+  --accent:   #2a4d8f;
+  --accent2:  #5b7fc4;
   --green:  #2d6a4f;
   --green-bg: #edf7f2;
   --red:    #8b2929;
@@ -315,6 +315,7 @@ input[type=range]::-moz-range-thumb {
 }
 .timeline-track { position: relative; height: 54px; margin-top: 18px; }
 .timeline-line { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--line); }
+.timeline-fill { position: absolute; left: 0; top: 50%; height: 2px; background: var(--green); z-index: 1; }
 .timeline-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
 .timeline-dot {
   width: 10px; height: 10px; border-radius: 50%;
@@ -1008,19 +1009,17 @@ function renderTimeline(rows, seuilDate) {
   timelineTrack.innerHTML = "";
   if (rows.length < 2) { timelineNote.textContent = ""; return; }
 
-  const start = new Date(rows[0][0]).getTime();
-  const end   = new Date(rows[rows.length - 1][0]).getTime();
-  const span  = end - start;
-  const pct = ds => span ? ((new Date(ds).getTime() - start) / span) * 100 : 0;
+  const today = rows[0][0];
+  const end   = rows[rows.length - 1][0];
 
   const line = document.createElement("div");
   line.className = "timeline-line";
   timelineTrack.appendChild(line);
 
-  function addMarker(ds, label, cls, pos) {
+  function addMarker(ds, label, cls, pos, leftPct) {
     const m = document.createElement("div");
     m.className = "timeline-marker" + (cls ? " " + cls : "");
-    m.style.left = Math.max(0, Math.min(100, pct(ds))) + "%";
+    m.style.left = leftPct + "%";
     m.innerHTML = `<div class="timeline-dot"></div>`;
     const l = document.createElement("div");
     l.className = "timeline-label " + pos;
@@ -1029,12 +1028,22 @@ function renderTimeline(rows, seuilDate) {
     timelineTrack.appendChild(m);
   }
 
-  addMarker(rows[0][0], "Aujourd'hui", "neutral", "below");
-  addMarker(rows[rows.length - 1][0], "Fin simulation", "", "below");
+  // Étapes espacées régulièrement (façon stepper), pas proportionnelles aux
+  // dates réelles : évite que "fin simulation" (~30 mois plus tard) écrase
+  // "aujourd'hui" et "seuil" l'un contre l'autre.
   if (seuilDate) {
-    addMarker(seuilDate, "Seuil de rentabilité", "ok", "above");
+    const fill = document.createElement("div");
+    fill.className = "timeline-fill";
+    fill.style.width = "50%";
+    timelineTrack.appendChild(fill);
+
+    addMarker(today, "Aujourd'hui", "neutral", "below", 0);
+    addMarker(seuilDate, "Seuil de rentabilité", "ok", "above", 50);
+    addMarker(end, "Fin simulation", "", "below", 100);
     timelineNote.textContent = "";
   } else {
+    addMarker(today, "Aujourd'hui", "neutral", "below", 0);
+    addMarker(end, "Fin simulation", "", "below", 100);
     timelineNote.textContent = "Seuil non atteint sur la période";
   }
 }
