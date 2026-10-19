@@ -25,19 +25,19 @@
 /* ── Variables ─────────────────────────────────────── */
 :root {
   --ink:    #0d0d0d;
-  --paper:  #f7f4ef;
-  --cream:  #ede9e1;
+  --paper:  #ebedf0;
+  --cream:  #e2e4e8;
   --gold:   #b8924a;
   --gold2:  #d4a85c;
   --green:  #2d6a4f;
   --green-bg: #edf7f2;
   --red:    #8b2929;
   --red-bg: #fdf0f0;
-  --muted:  #7a7468;
-  --line:   #ddd8cf;
+  --muted:  #767a82;
+  --line:   #dfe1e5;
   --card:   #ffffff;
-  --radius: 4px;
-  --shadow: 0 2px 20px rgba(13,13,13,.06);
+  --radius: 8px;
+  --shadow: 0 2px 24px rgba(13,13,13,.05);
 }
 
 /* ── Reset ─────────────────────────────────────────── */
@@ -46,7 +46,7 @@ html { font-size:16px; -webkit-font-smoothing:antialiased; }
 body {
   background: var(--paper);
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(184,146,74,.07) 0%, transparent 70%);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(13,13,13,.025) 0%, transparent 70%);
   color: var(--ink);
   font-family: 'DM Sans', sans-serif;
   font-weight: 300;
@@ -109,8 +109,10 @@ body {
   color: var(--muted);
 }
 .badge-val {
-  font-family: 'DM Serif Display', serif;
-  font-size: 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -.01em;
   color: var(--ink);
   line-height: 1;
 }
@@ -144,8 +146,10 @@ body {
   margin-bottom: 8px;
 }
 .acq-value {
-  font-family: 'DM Serif Display', serif;
-  font-size: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 19px;
+  letter-spacing: -.01em;
   line-height: 1;
   color: var(--ink);
 }
@@ -190,15 +194,18 @@ body {
   gap: 6px;
 }
 .slider-amount {
-  font-family: 'DM Serif Display', serif;
-  font-size: 42px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  letter-spacing: -.01em;
   line-height: 1;
   color: var(--ink);
   transition: color .2s;
 }
 .slider-currency {
-  font-family: 'DM Serif Display', serif;
-  font-size: 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
   color: var(--muted);
 }
 
@@ -263,7 +270,7 @@ input[type=range]::-moz-range-thumb {
   appearance: textfield;
   width: 120px;
   border: 1px solid var(--line);
-  border-radius: 2px;
+  border-radius: 6px;
   background: var(--paper);
   padding: 6px 10px;
   font-family: 'DM Mono', monospace;
@@ -408,7 +415,7 @@ input[type=range]::-moz-range-thumb {
   border: 1px solid var(--line);
   background: var(--card);
   padding: 8px 16px;
-  border-radius: 2px;
+  border-radius: 6px;
   cursor: pointer;
   font-family: 'DM Mono', monospace;
   font-size: 12px;
