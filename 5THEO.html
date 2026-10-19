@@ -27,8 +27,8 @@
   --ink:    #0d0d0d;
   --paper:  #ebedf0;
   --cream:  #e2e4e8;
-  --gold:   #b8924a;
-  --gold2:  #d4a85c;
+  --accent:   #45484f;
+  --accent2:  #8a8d94;
   --green:  #2d6a4f;
   --green-bg: #edf7f2;
   --red:    #8b2929;
@@ -76,17 +76,18 @@ body {
   font-size: 10px;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 10px;
 }
 .title {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(28px, 5vw, 44px);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 4.6vw, 40px);
   line-height: 1.1;
   letter-spacing: -.02em;
   color: var(--ink);
 }
-.title em { font-style: italic; color: var(--gold); }
+.title em { font-style: normal; font-weight: 400; color: var(--muted); }
 .subtitle {
   margin-top: 10px;
   font-size: 14px;
@@ -153,7 +154,7 @@ body {
   line-height: 1;
   color: var(--ink);
 }
-.acq-cell.accent .acq-value { color: var(--gold); }
+.acq-cell.accent .acq-value { color: var(--accent); }
 
 /* ── Slider section ─────────────────────────────────── */
 .slider-section {
@@ -171,7 +172,7 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
 }
 .slider-header {
   display: flex;
@@ -277,7 +278,7 @@ input[type=range]::-moz-range-thumb {
   font-size: 13px;
   color: var(--ink);
 }
-.exact-input-row input:focus { outline: none; border-color: var(--gold); }
+.exact-input-row input:focus { outline: none; border-color: var(--accent); }
 .exact-input-row span { font-size: 12px; color: var(--muted); }
 
 /* Derived stats */
@@ -355,7 +356,7 @@ input[type=range]::-moz-range-thumb {
   transform: translate(-50%, -100%);
   z-index: 5;
 }
-.chart-tooltip strong { font-weight: 500; color: var(--gold2); }
+.chart-tooltip strong { font-weight: 500; color: var(--accent2); }
 
 /* ── Sensitivity grid ───────────────────────────────── */
 .grid-section {
@@ -383,23 +384,24 @@ input[type=range]::-moz-range-thumb {
   background: var(--cream);
   font-weight: 400;
 }
-.sens-table thead th.now { color: var(--gold); }
+.sens-table thead th.now { color: var(--accent); }
 .sens-table tbody th {
   text-align: left;
   font-family: 'DM Mono', monospace;
   font-size: 12px;
+  font-weight: 500;
   color: var(--ink);
   background: var(--cream);
   cursor: pointer;
 }
-.sens-table tbody th:hover { color: var(--gold); }
-.sens-table tbody th.active-row { color: var(--gold); }
+.sens-table tbody th:hover { color: var(--accent); }
+.sens-table tbody th.active-row { color: var(--accent); }
 .sens-table td {
   font-family: 'DM Mono', monospace;
   cursor: pointer;
   transition: outline .1s;
 }
-.sens-table td:hover { outline: 1.5px solid var(--gold); outline-offset: -1.5px; }
+.sens-table td:hover { outline: 1.5px solid var(--accent); outline-offset: -1.5px; }
 .sens-table td.val-pos { color: var(--green); }
 .sens-table td.val-neg { color: var(--red); }
 .grid-note { margin-top: 12px; font-size: 11px; color: var(--muted); }
@@ -423,7 +425,7 @@ input[type=range]::-moz-range-thumb {
   transition: all .15s;
   letter-spacing: .05em;
 }
-.preset-btn:hover { border-color: var(--gold); color: var(--gold); }
+.preset-btn:hover { border-color: var(--accent); color: var(--accent); }
 .preset-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
 /* ── Status banners ─────────────────────────────────── */
@@ -507,7 +509,7 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
   display: inline-block;
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--accent);
   margin-right: 8px;
   vertical-align: middle;
   opacity: 0;
@@ -1061,10 +1063,10 @@ function renderChart(prix, rows) {
   /* breakeven marker */
   const bIdx = nette.findIndex(v => v >= 0);
   if (bIdx >= 0) {
-    chartSvg.appendChild(svgEl("circle", { cx: xAt(bIdx), cy: yAt(nette[bIdx]), r: 4.5, fill: "var(--gold)", stroke: "var(--card)", "stroke-width": 1.5 }));
+    chartSvg.appendChild(svgEl("circle", { cx: xAt(bIdx), cy: yAt(nette[bIdx]), r: 4.5, fill: "var(--accent)", stroke: "var(--card)", "stroke-width": 1.5 }));
     const t = svgEl("text", {
       x: xAt(bIdx), y: yAt(nette[bIdx]) - 11, "text-anchor": "middle",
-      "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--gold)", "font-weight": "500"
+      "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--accent)", "font-weight": "500"
     });
     t.textContent = fmtDate(months[bIdx]);
     chartSvg.appendChild(t);
@@ -1081,7 +1083,7 @@ function renderChart(prix, rows) {
   chartSvg.appendChild(lt);
 
   /* hover layer: crosshair + dots + hit area */
-  const crosshair = svgEl("line", { x1: 0, x2: 0, y1: PAD.t, y2: PAD.t + PLOT_H, stroke: "var(--gold)", "stroke-width": 1, opacity: 0 });
+  const crosshair = svgEl("line", { x1: 0, x2: 0, y1: PAD.t, y2: PAD.t + PLOT_H, stroke: "var(--accent)", "stroke-width": 1, opacity: 0 });
   const dotNette = svgEl("circle", { r: 4, fill: "var(--ink)", stroke: "var(--card)", "stroke-width": 1.5, opacity: 0 });
   const dotBrute = svgEl("circle", { r: 4, fill: "var(--muted)", stroke: "var(--card)", "stroke-width": 1.5, opacity: 0 });
   chartSvg.appendChild(crosshair);
