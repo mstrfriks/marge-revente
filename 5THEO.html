@@ -5,7 +5,7 @@
 <title>5 Théophile Leducq — Analyse de revente</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <!-- Favicon standard -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏡</text></svg>">
 
@@ -24,20 +24,20 @@
 <style>
 /* ── Variables ─────────────────────────────────────── */
 :root {
-  --ink:    #0d0d0d;
-  --paper:  #ebedf0;
-  --cream:  #e2e4e8;
-  --accent:   #2a4d8f;
-  --accent2:  #5b7fc4;
-  --green:  #2d6a4f;
-  --green-bg: #edf7f2;
-  --red:    #8b2929;
-  --red-bg: #fdf0f0;
-  --muted:  #767a82;
-  --line:   #dfe1e5;
+  --ink:    #15151a;
+  --paper:  #ffffff;
+  --cream:  #f7f7f8;
+  --accent:   #15151a;
+  --accent2:  #6e6e76;
+  --green:  #1f6b45;
+  --green-bg: #eaf3ee;
+  --red:    #9c3a3a;
+  --red-bg: #f7ecec;
+  --muted:  #6e6e76;
+  --line:   #d9d9dd;
   --card:   #ffffff;
-  --radius: 8px;
-  --shadow: 0 2px 24px rgba(13,13,13,.05);
+  --radius: 2px;
+  --shadow: none;
 }
 
 /* ── Reset ─────────────────────────────────────────── */
@@ -45,11 +45,9 @@
 html { font-size:16px; -webkit-font-smoothing:antialiased; }
 body {
   background: var(--paper);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(13,13,13,.025) 0%, transparent 70%);
   color: var(--ink);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
+  font-family: 'Source Serif 4', serif;
+  font-weight: 400;
   min-height: 100vh;
 }
 
@@ -67,12 +65,12 @@ body {
   align-items: flex-start;
   gap: 24px;
   margin-bottom: 48px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid var(--line);
+  padding-bottom: 20px;
+  border-bottom: 2px double var(--ink);
 }
 .header-left {}
 .eyebrow {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .18em;
   text-transform: uppercase;
@@ -80,8 +78,8 @@ body {
   margin-bottom: 10px;
 }
 .title {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700;
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
   font-size: clamp(26px, 4.6vw, 40px);
   line-height: 1.1;
   letter-spacing: -.02em;
@@ -92,7 +90,7 @@ body {
   margin-top: 10px;
   font-size: 14px;
   color: var(--muted);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.5;
 }
 .header-badge {
@@ -103,16 +101,16 @@ body {
   flex-shrink: 0;
 }
 .badge-tag {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--muted);
 }
 .badge-val {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'IBM Plex Mono', monospace;
   font-weight: 600;
-  font-size: 26px;
+  font-size: 24px;
   letter-spacing: -.01em;
   color: var(--ink);
   line-height: 1;
@@ -139,7 +137,7 @@ body {
 }
 .acq-cell.accent { background: var(--cream); }
 .acq-label {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -147,14 +145,14 @@ body {
   margin-bottom: 8px;
 }
 .acq-value {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'IBM Plex Mono', monospace;
   font-weight: 500;
-  font-size: 19px;
+  font-size: 17px;
   letter-spacing: -.01em;
   line-height: 1;
   color: var(--ink);
 }
-.acq-cell.accent .acq-value { color: var(--accent); }
+.acq-cell.accent .acq-value { font-weight: 600; }
 
 /* ── Slider section ─────────────────────────────────── */
 .slider-section {
@@ -165,14 +163,6 @@ body {
   margin-bottom: 32px;
   box-shadow: var(--shadow);
   position: relative;
-  overflow: hidden;
-}
-.slider-section::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
 }
 .slider-header {
   display: flex;
@@ -183,7 +173,7 @@ body {
   gap: 8px;
 }
 .slider-label {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .15em;
   text-transform: uppercase;
@@ -195,18 +185,18 @@ body {
   gap: 6px;
 }
 .slider-amount {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'IBM Plex Mono', monospace;
   font-weight: 600;
-  font-size: 40px;
+  font-size: 38px;
   letter-spacing: -.01em;
   line-height: 1;
   color: var(--ink);
   transition: color .2s;
 }
 .slider-currency {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'IBM Plex Mono', monospace;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 19px;
   color: var(--muted);
 }
 
@@ -245,7 +235,7 @@ input[type=range]::-moz-range-thumb {
 .range-bounds {
   display: flex;
   justify-content: space-between;
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   color: var(--muted);
   margin-top: -12px;
@@ -260,7 +250,7 @@ input[type=range]::-moz-range-thumb {
   margin-bottom: 24px;
 }
 .exact-input-row label {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -271,10 +261,10 @@ input[type=range]::-moz-range-thumb {
   appearance: textfield;
   width: 120px;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 2px;
   background: var(--paper);
   padding: 6px 10px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 13px;
   color: var(--ink);
 }
@@ -291,7 +281,7 @@ input[type=range]::-moz-range-thumb {
 }
 .derived-item {}
 .derived-item .d-label {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -299,7 +289,8 @@ input[type=range]::-moz-range-thumb {
   margin-bottom: 6px;
 }
 .derived-item .d-val {
-  font-size: 18px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
   font-weight: 500;
   color: var(--ink);
 }
@@ -326,7 +317,7 @@ input[type=range]::-moz-range-thumb {
 .timeline-marker.neutral .timeline-dot { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .timeline-label {
   position: absolute; left: 50%; transform: translateX(-50%);
-  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted);
   white-space: nowrap; text-align: center;
 }
 .timeline-label.above { bottom: 14px; }
@@ -347,12 +338,12 @@ input[type=range]::-moz-range-thumb {
 .wf-gauge { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
 .wf-gauge-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
 .wf-gauge-head span:first-child {
-  font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .1em;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em;
   text-transform: uppercase; color: var(--muted);
 }
-.wf-gauge-head span:last-child { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; color: var(--ink); }
-.wf-gauge-track { height: 10px; border-radius: 10px; background: var(--cream); overflow: hidden; }
-.wf-gauge-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 10px; transition: width .3s ease, background .2s; }
+.wf-gauge-head span:last-child { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 500; color: var(--ink); }
+.wf-gauge-track { height: 10px; border-radius: 2px; background: var(--cream); overflow: hidden; }
+.wf-gauge-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 2px; transition: width .3s ease, background .2s; }
 .wf-gauge-fill.full { background: var(--green); }
 .wf-gauge-sub { margin-top: 8px; font-size: 12px; }
 .wf-gauge-sub.val-pos { color: var(--green); font-weight: 500; }
@@ -378,7 +369,7 @@ input[type=range]::-moz-range-thumb {
 .chart-legend {
   display: flex;
   gap: 16px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   color: var(--muted);
 }
@@ -431,7 +422,7 @@ input[type=range]::-moz-range-thumb {
   border: 1px solid var(--line);
 }
 .sens-table thead th {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .06em;
   color: var(--muted);
@@ -441,7 +432,7 @@ input[type=range]::-moz-range-thumb {
 .sens-table thead th.now { color: var(--accent); }
 .sens-table tbody th {
   text-align: left;
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   font-weight: 500;
   color: var(--ink);
@@ -451,7 +442,7 @@ input[type=range]::-moz-range-thumb {
 .sens-table tbody th:hover { color: var(--accent); }
 .sens-table tbody th.active-row { color: var(--accent); }
 .sens-table td {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   cursor: pointer;
   transition: outline .1s;
 }
@@ -471,9 +462,9 @@ input[type=range]::-moz-range-thumb {
   border: 1px solid var(--line);
   background: var(--card);
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   color: var(--muted);
   transition: all .15s;
@@ -509,7 +500,7 @@ input[type=range]::-moz-range-thumb {
 
 /* ── Table ──────────────────────────────────────────── */
 .table-title {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .15em;
   text-transform: uppercase;
@@ -535,7 +526,7 @@ thead th {
   background: var(--cream);
   padding: 12px 16px;
   text-align: left;
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -549,13 +540,13 @@ tbody tr { border-bottom: 1px solid var(--line); transition: background .1s; }
 tbody tr:last-child { border-bottom: none; }
 tbody tr:hover { background: rgba(184,146,74,.04); }
 tbody td { padding: 11px 16px; }
-tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13px; }
+tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
 .row-ok td { background: rgba(45,106,79,.035); }
 .row-low td { background: rgba(139,41,41,.03); }
 .val-pos { color: var(--green); font-weight: 500; }
 .val-neg { color: var(--red); }
 .month-col {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   color: var(--muted);
 }
@@ -586,8 +577,8 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
   border: 1px solid var(--line);
   background: var(--card);
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
+  font-family: 'Source Serif 4', serif;
+  font-size: 13.5px;
   font-weight: 400;
   color: var(--ink);
   text-decoration: none;
@@ -616,7 +607,7 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
   line-height: 1.5;
 }
 .footer-date {
-  font-family: 'DM Mono', monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   color: var(--muted);
 }
@@ -847,6 +838,7 @@ tbody td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13
 
 <script>
 /* ── Constantes ───────────────────────────────────── */
+const PRIX_ACHAT    = 341964;
 const FRAIS_NOTAIRE = 27357;
 const COUT_TOTAL    = 446590;
 const TAUX_AGENCE   = 0.045;
@@ -1016,34 +1008,39 @@ function renderTimeline(rows, seuilDate) {
   line.className = "timeline-line";
   timelineTrack.appendChild(line);
 
-  function addMarker(ds, label, cls, pos, leftPct) {
+  function addMarker(sub, label, cls, pos, leftPct) {
     const m = document.createElement("div");
     m.className = "timeline-marker" + (cls ? " " + cls : "");
     m.style.left = leftPct + "%";
     m.innerHTML = `<div class="timeline-dot"></div>`;
     const l = document.createElement("div");
     l.className = "timeline-label " + pos;
-    l.innerHTML = `<strong>${label}</strong>${fmtDate(ds)}`;
+    l.innerHTML = `<strong>${label}</strong>${sub}`;
     m.appendChild(l);
     timelineTrack.appendChild(m);
   }
 
   // Étapes espacées régulièrement (façon stepper), pas proportionnelles aux
   // dates réelles : évite que "fin simulation" (~30 mois plus tard) écrase
-  // "aujourd'hui" et "seuil" l'un contre l'autre.
+  // les autres repères l'un contre l'autre. "Achat" n'a pas de date connue,
+  // on affiche le prix d'achat à la place.
+  const achatLabel = fmt(PRIX_ACHAT, 0) + " €";
   if (seuilDate) {
     const fill = document.createElement("div");
     fill.className = "timeline-fill";
-    fill.style.width = "50%";
+    fill.style.left = "33.33%";
+    fill.style.width = "33.33%";
     timelineTrack.appendChild(fill);
 
-    addMarker(today, "Aujourd'hui", "neutral", "below", 0);
-    addMarker(seuilDate, "Seuil de rentabilité", "ok", "above", 50);
-    addMarker(end, "Fin simulation", "", "below", 100);
+    addMarker(achatLabel, "Achat", "", "below", 0);
+    addMarker(fmtDate(today), "Aujourd'hui", "neutral", "above", 33.33);
+    addMarker(fmtDate(seuilDate), "Seuil de rentabilité", "ok", "below", 66.66);
+    addMarker(fmtDate(end), "Fin simulation", "", "above", 100);
     timelineNote.textContent = "";
   } else {
-    addMarker(today, "Aujourd'hui", "neutral", "below", 0);
-    addMarker(end, "Fin simulation", "", "below", 100);
+    addMarker(achatLabel, "Achat", "", "below", 0);
+    addMarker(fmtDate(today), "Aujourd'hui", "neutral", "above", 50);
+    addMarker(fmtDate(end), "Fin simulation", "", "below", 100);
     timelineNote.textContent = "Seuil non atteint sur la période";
   }
 }
@@ -1098,7 +1095,7 @@ function renderWaterfall(prix, capToday) {
     const magnitude = s.type === "sub" ? -(s.v1 - s.v0) : s.v1;
     const vt = svgEl("text", {
       x: cx, y: yTop - 8, "text-anchor": "middle",
-      "font-family": "DM Mono, monospace", "font-size": "11", "font-weight": "500",
+      "font-family": "IBM Plex Mono, monospace", "font-size": "11", "font-weight": "500",
       fill: s.type === "pos" ? "var(--green)" : s.type === "neg" ? "var(--red)" : "var(--ink)"
     });
     vt.textContent = (s.type === "pos" ? "+" : "") + fmt(magnitude, 0) + " €";
@@ -1106,7 +1103,7 @@ function renderWaterfall(prix, capToday) {
 
     const lt = svgEl("text", {
       x: cx, y: WF_H - 14, "text-anchor": "middle",
-      "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--muted)"
+      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
     });
     lt.textContent = s.label;
     wfSvg.appendChild(lt);
@@ -1236,14 +1233,14 @@ function renderChart(prix, rows) {
   }));
   chartSvg.appendChild(svgEl("text", {
     x: PAD.l + PLOT_W, y: y0 - 5, "text-anchor": "end",
-    "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--muted)"
+    "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
   })).textContent = "seuil 0 €";
 
   /* y-axis labels (max / 0 / min) */
   [maxV, minV].forEach(v => {
     const y = yAt(v);
     chartSvg.appendChild(svgEl("line", { x1: PAD.l, x2: PAD.l + PLOT_W, y1: y, y2: y, stroke: "var(--line)", "stroke-width": 1 }));
-    const t = svgEl("text", { x: 4, y: y + 3, "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--muted)" });
+    const t = svgEl("text", { x: 4, y: y + 3, "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)" });
     t.textContent = fmt(v, 0);
     chartSvg.appendChild(t);
   });
@@ -1253,7 +1250,7 @@ function renderChart(prix, rows) {
   for (let i = 0; i < n; i += step) {
     const t = svgEl("text", {
       x: xAt(i), y: CHART_H - 6, "text-anchor": "middle",
-      "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--muted)"
+      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
     });
     t.textContent = fmtDate(months[i]);
     chartSvg.appendChild(t);
@@ -1261,7 +1258,7 @@ function renderChart(prix, rows) {
   if ((n - 1) % step !== 0) {
     const t = svgEl("text", {
       x: xAt(n - 1), y: CHART_H - 6, "text-anchor": "middle",
-      "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--muted)"
+      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
     });
     t.textContent = fmtDate(months[n - 1]);
     chartSvg.appendChild(t);
@@ -1287,7 +1284,7 @@ function renderChart(prix, rows) {
     chartSvg.appendChild(svgEl("circle", { cx: xAt(bIdx), cy: yAt(nette[bIdx]), r: 4.5, fill: "var(--accent)", stroke: "var(--card)", "stroke-width": 1.5 }));
     const t = svgEl("text", {
       x: xAt(bIdx), y: yAt(nette[bIdx]) - 11, "text-anchor": "middle",
-      "font-family": "DM Mono, monospace", "font-size": "10", fill: "var(--accent)", "font-weight": "500"
+      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--accent)", "font-weight": "500"
     });
     t.textContent = fmtDate(months[bIdx]);
     chartSvg.appendChild(t);
@@ -1297,7 +1294,7 @@ function renderChart(prix, rows) {
   const lastV = nette[n - 1];
   const lt = svgEl("text", {
     x: xAt(n - 1) - 4, y: yAt(lastV) + (lastV >= 0 ? -10 : 16), "text-anchor": "end",
-    "font-family": "DM Mono, monospace", "font-size": "11", "font-weight": "500",
+    "font-family": "IBM Plex Mono, monospace", "font-size": "11", "font-weight": "500",
     fill: lastV >= 0 ? "var(--green)" : "var(--red)"
   });
   lt.textContent = (lastV >= 0 ? "+" : "") + fmt(lastV, 0) + " €";
