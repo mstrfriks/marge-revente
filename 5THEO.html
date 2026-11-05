@@ -362,6 +362,34 @@ input[type=range]::-moz-range-thumb {
 .wf-result-item.secondary .wf-result-val { font-size: 18px; color: var(--muted); }
 .wf-result-val.val-pos { color: var(--green); }
 .wf-result-val.val-neg { color: var(--red); }
+.wf-explainer {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.wf-explainer-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.wf-explainer p { margin-bottom: 8px; }
+.wf-explainer p:last-child { margin-bottom: 0; }
+.wf-explainer strong { color: var(--ink); font-weight: 600; }
+.wf-explainer code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--ink);
+  background: var(--cream);
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+.wf-explainer-warn { color: var(--red); }
 .wf-gauge { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
 .wf-gauge-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
 .wf-gauge-head span:first-child {
@@ -780,6 +808,15 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
         <span class="wf-result-note">bien secondaire/locatif → plus-value 36,2 % (19 % IR + 17,2 % PS), travaux inclus (facture entreprise), sans abattement (détention &lt; 6 ans)</span>
       </div>
     </div>
+
+    <div class="wf-explainer">
+      <div class="wf-explainer-title">Comment lire ces deux colonnes</div>
+      <p>Le fisc ne regarde pas ton prêt : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €), pas à ton capital restant dû.</p>
+      <p><code>Plus-value imposable = max(0, Prix de vente − 446 590 €)</code><br><code>Taxe = Plus-value imposable × 36,2 %</code></p>
+      <p>Tant que le prix net vendeur reste <strong>sous 446 590 €</strong>, la plus-value imposable est nulle → aucune taxe, en résidence principale comme en location. Ce seuil fiscal est différent du seuil de rentabilité réel (capital restant dû + frais de notaire) : on peut être en profit cash et non imposable en même temps, ou l'inverse.</p>
+      <p class="wf-explainer-warn">⚠️ Ce seuil de 446 590 € suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), et jamais déjà déduits de revenus fonciers. Si une partie est retoquée en contrôle, le seuil baisse d'autant.</p>
+    </div>
+
     <div class="wf-gauge">
       <div class="wf-gauge-head">
         <span>Apport récupéré (frais de notaire)</span>
@@ -872,7 +909,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
     <div class="footer-note">
       Marge nette = Prix net vendeur − Capital restant − Frais de notaire (27 357 €).<br>
       Frais d'agence calculés à 4,5 % du prix FAI pour information uniquement.<br>
-      Hypothèse : résidence principale au moment de la revente → plus-value exonérée d'impôt (art. 150 U du CGI). Si ce n'est pas le cas à la vente, une fiscalité sur la plus-value s'ajoutera en déduction de ces montants — à vérifier auprès du notaire.
+      Fiscalité de la plus-value (résidence principale vs location) détaillée dans la section Décomposition ci-dessus — à vérifier auprès du notaire.
     </div>
     <div class="footer-date" id="footerDate"></div>
   </footer>
