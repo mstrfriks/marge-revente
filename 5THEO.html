@@ -340,9 +340,11 @@ input[type=range]::-moz-range-thumb {
   padding-top: 20px;
   border-top: 1px solid var(--line);
   display: flex;
-  gap: 40px;
+  flex-wrap: wrap;
+  gap: 24px 40px;
 }
 .wf-result-item { display: flex; flex-direction: column; gap: 6px; }
+.wf-result-note { font-size: 11px; color: var(--muted); }
 .wf-result-label {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -771,6 +773,11 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
         <span class="wf-result-label">Marge nette</span>
         <span class="wf-result-val" id="wfResultVal">—</span>
       </div>
+      <div class="wf-result-item">
+        <span class="wf-result-label">Marge nette · bien secondaire</span>
+        <span class="wf-result-val" id="wfResultSecondaire">—</span>
+        <span class="wf-result-note">après plus-value 36,2 % (sans travaux)</span>
+      </div>
     </div>
     <div class="wf-gauge">
       <div class="wf-gauge-head">
@@ -878,6 +885,7 @@ const FRAIS_NOTAIRE = 27357;
 const COUT_TOTAL    = 446590;
 const TAUX_AGENCE   = 0.045;
 const SURFACE       = 54;
+const TAUX_PLUSVALUE = 0.362; // 19% IR + 17.2% prélèvements sociaux, résidence secondaire, sans abattement (détention <6 ans)
 
 const DATA = [
   ["2026-02-05",353645.66],["2026-03-05",352290.24],
@@ -944,6 +952,7 @@ const wfSvg       = document.getElementById("wfSvg");
 const wfTitle     = document.getElementById("wfTitle");
 const wfResultVal = document.getElementById("wfResultVal");
 const wfResultBrute = document.getElementById("wfResultBrute");
+const wfResultSecondaire = document.getElementById("wfResultSecondaire");
 const gaugeFill   = document.getElementById("gaugeFill");
 const gaugePct    = document.getElementById("gaugePct");
 const gaugeSub    = document.getElementById("gaugeSub");
@@ -1103,6 +1112,12 @@ function renderWaterfall(prix, capToday) {
 
   wfResultVal.textContent = (nette >= 0 ? "+" : "") + fmt(nette, 0) + " €";
   wfResultVal.className = "wf-result-val " + (nette >= 0 ? "val-pos" : "val-neg");
+
+  const plusValueImposable = Math.max(0, prix - (PRIX_ACHAT + FRAIS_NOTAIRE));
+  const taxePlusValue = plusValueImposable * TAUX_PLUSVALUE;
+  const netteSecondaire = nette - taxePlusValue;
+  wfResultSecondaire.textContent = (netteSecondaire >= 0 ? "+" : "") + fmt(netteSecondaire, 0) + " €";
+  wfResultSecondaire.className = "wf-result-val " + (netteSecondaire >= 0 ? "val-pos" : "val-neg");
 
   let minV = Math.min(0, prix, nette), maxV = Math.max(0, prix, nette);
   const pad = (maxV - minV) * 0.12 || 1000;
