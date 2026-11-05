@@ -36,7 +36,7 @@
   --muted:  #6e6e76;
   --line:   #d9d9dd;
   --card:   #ffffff;
-  --radius: 2px;
+  --radius: 3px;
   --shadow: none;
 }
 
@@ -44,7 +44,7 @@
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html { font-size:16px; -webkit-font-smoothing:antialiased; }
 body {
-  background: var(--paper);
+  background: var(--cream);
   color: var(--ink);
   font-family: 'Source Serif 4', serif;
   font-weight: 400;
@@ -53,7 +53,7 @@ body {
 
 /* ── Layout ─────────────────────────────────────────── */
 .page {
-  max-width: 900px;
+  max-width: 760px;
   margin: 0 auto;
   padding: 48px 20px 80px;
 }
@@ -133,7 +133,7 @@ body {
 }
 .acq-cell {
   background: var(--card);
-  padding: 18px 20px;
+  padding: 22px 24px;
 }
 .acq-cell.accent { background: var(--cream); }
 .acq-label {
@@ -341,7 +341,7 @@ input[type=range]::-moz-range-thumb {
   background: var(--ink);
   color: var(--paper);
   border-radius: var(--radius);
-  padding: 32px;
+  padding: 48px;
   margin-bottom: 32px;
   text-align: center;
 }
@@ -379,7 +379,7 @@ input[type=range]::-moz-range-thumb {
 .hero-value {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 600;
-  font-size: clamp(36px, 7vw, 56px);
+  font-size: clamp(36px, 7vw, 60px);
   letter-spacing: -.01em;
   line-height: 1;
 }
@@ -427,7 +427,34 @@ input[type=range]::-moz-range-thumb {
   margin-bottom: 32px;
   box-shadow: var(--shadow);
 }
-.wf-chart svg { display: block; width: 100%; height: auto; }
+.wf-bar {
+  display: flex;
+  height: 30px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--line);
+}
+.wf-bar-debt, .wf-bar-margin {
+  display: flex;
+  align-items: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: width .3s ease;
+}
+.wf-bar-debt {
+  background: var(--line);
+  color: var(--muted);
+  padding-left: 12px;
+}
+.wf-bar-margin {
+  background: var(--green);
+  color: var(--paper);
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+.wf-bar-margin.deficit { background: var(--red); justify-content: center; padding: 0; }
 .wf-result {
   margin-top: 20px;
   padding-top: 20px;
@@ -497,19 +524,6 @@ input[type=range]::-moz-range-thumb {
   border-radius: 2px;
 }
 .disclosure-warn { color: var(--red); }
-.wf-gauge { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
-.wf-gauge-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-.wf-gauge-head span:first-child {
-  font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted);
-}
-.wf-gauge-head span:last-child { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 500; color: var(--ink); }
-.wf-gauge-track { height: 10px; border-radius: 2px; background: var(--cream); overflow: hidden; }
-.wf-gauge-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 2px; transition: width .3s ease, background .2s; }
-.wf-gauge-fill.full { background: var(--green); }
-.wf-gauge-sub { margin-top: 8px; font-size: 12px; }
-.wf-gauge-sub.val-pos { color: var(--green); font-weight: 500; }
-.wf-gauge-sub.val-neg { color: var(--red); }
 
 /* ── Chart ──────────────────────────────────────────── */
 .chart-section {
@@ -767,6 +781,8 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   .table-wrap { max-height: 420px; }
   table { min-width: 480px; }
   .chart-section { padding: 20px 16px 12px; }
+  .hero-result { padding: 32px 24px; }
+  .acq-cell { padding: 16px 14px; }
 }
 
 /* ── Animations ─────────────────────────────────────── */
@@ -809,7 +825,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   </header>
 
   <!-- 1 · Le bien -->
-  <div class="section-eyebrow">1 · Le bien</div>
+  <div class="section-eyebrow">01 — Le bien</div>
   <div class="acq-grid">
     <div class="acq-cell">
       <div class="acq-label">Prix d'achat</div>
@@ -830,7 +846,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   </div>
 
   <!-- 2 · Prix de vente -->
-  <div class="section-eyebrow">2 · À quel prix le vendre ?</div>
+  <div class="section-eyebrow">02 — À quel prix le vendre ?</div>
   <div class="slider-section">
     <div class="slider-header">
       <span class="slider-label">Prix net vendeur</span>
@@ -869,7 +885,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   </div>
 
   <!-- 3 · Résultat -->
-  <div class="section-eyebrow">3 · Ce que vous récupérez</div>
+  <div class="section-eyebrow">03 — Ce que vous récupérez</div>
   <div class="hero-result">
     <div class="hero-toggle" role="group" aria-label="Scénario">
       <button type="button" class="hero-toggle-btn active" data-scenario="habite">J'habite dedans</button>
@@ -881,7 +897,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   </div>
 
   <!-- 4 · Quand -->
-  <div class="section-eyebrow">4 · Dans combien de temps</div>
+  <div class="section-eyebrow">04 — Dans combien de temps</div>
   <div class="timeline-section">
     <div class="chart-header">
       <span class="slider-label">Chronologie</span>
@@ -891,13 +907,14 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   </div>
 
   <!-- 5 · Décomposition -->
-  <div class="section-eyebrow">5 · Le détail du calcul</div>
+  <div class="section-eyebrow">05 — Le détail du calcul</div>
   <div class="wf-section">
     <div class="chart-header">
       <span class="slider-label" id="wfTitle">Décomposition</span>
     </div>
-    <div class="wf-chart">
-      <svg id="wfSvg" viewBox="0 0 760 260" preserveAspectRatio="none"></svg>
+    <div class="wf-bar">
+      <div class="wf-bar-debt" id="wfBarDebt"></div>
+      <div class="wf-bar-margin" id="wfBarMargin"></div>
     </div>
     <div class="wf-result">
       <div class="wf-result-item secondary">
@@ -926,18 +943,10 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
       </div>
     </details>
 
-    <div class="wf-gauge">
-      <div class="wf-gauge-head">
-        <span>Apport récupéré (frais de notaire)</span>
-        <span id="gaugePct">—</span>
-      </div>
-      <div class="wf-gauge-track"><div class="wf-gauge-fill" id="gaugeFill"></div></div>
-      <div class="wf-gauge-sub" id="gaugeSub">—</div>
-    </div>
   </div>
 
   <!-- 6 · Évolution -->
-  <div class="section-eyebrow">6 · Évolution sur 36 mois</div>
+  <div class="section-eyebrow">06 — Évolution sur 36 mois</div>
   <div class="chart-section">
     <div class="chart-header">
       <span class="slider-label" id="chartTitle">Évolution de la marge</span>
@@ -953,7 +962,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   </div>
 
   <!-- 7 · Sensibilité -->
-  <div class="section-eyebrow">7 · Et si le prix change ?</div>
+  <div class="section-eyebrow">07 — Et si le prix change ?</div>
   <div class="grid-section">
     <span class="slider-label">Grille de sensibilité — prix × mois de sortie</span>
     <div class="grid-wrap">
@@ -963,7 +972,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   </div>
 
   <!-- 8 · Tableau -->
-  <div class="section-eyebrow">8 · Mois par mois</div>
+  <div class="section-eyebrow">08 — Mois par mois</div>
   <div class="table-title" id="tableTitle">Tableau de marge</div>
   <p class="table-subnote">Indépendant du scénario fiscal (habiter/louer) — suit le cash pur (prix − capital restant − frais de notaire). Pour l'effet de la taxe sur la plus-value, voir la Décomposition ci-dessus.</p>
   <div class="table-wrap">
@@ -1078,7 +1087,8 @@ const chartTooltip= document.getElementById("chartTooltip");
 const sensTable   = document.getElementById("sensTable");
 const timelineTrack = document.getElementById("timelineTrack");
 const timelineNote  = document.getElementById("timelineNote");
-const wfSvg       = document.getElementById("wfSvg");
+const wfBarDebt   = document.getElementById("wfBarDebt");
+const wfBarMargin = document.getElementById("wfBarMargin");
 const wfTitle     = document.getElementById("wfTitle");
 const wfResultVal = document.getElementById("wfResultVal");
 const wfResultBrute = document.getElementById("wfResultBrute");
@@ -1090,9 +1100,6 @@ const stickyBar   = document.getElementById("stickyBar");
 const stickyValue = document.getElementById("stickyValue");
 const legendNetteLabel = document.getElementById("legendNetteLabel");
 const gridNote    = document.getElementById("gridNote");
-const gaugeFill   = document.getElementById("gaugeFill");
-const gaugePct    = document.getElementById("gaugePct");
-const gaugeSub    = document.getElementById("gaugeSub");
 
 /* ── Bandeau collant (vue mobile, quand le Hero sort de l'écran) ───── */
 const heroResultEl = document.querySelector(".hero-result");
@@ -1173,7 +1180,6 @@ function render(v) {
     const capToday = rows[0][1];
     wfTitle.textContent = "Décomposition — " + fmtDate(rows[0][0]);
     renderWaterfall(prix, capToday);
-    renderGauge(prix - capToday);
     updateHero(prix, capToday);
   }
 }
@@ -1241,12 +1247,7 @@ function renderTimeline(rows, seuilBrutDate, seuilNetDate) {
   else timelineNote.textContent = "Seuil non atteint sur la période";
 }
 
-/* ── Waterfall ────────────────────────────────────── */
-const WF_W = 760, WF_H = 260;
-const WF_PAD = { l: 54, r: 20, t: 28, b: 40 };
-const WF_PW = WF_W - WF_PAD.l - WF_PAD.r;
-const WF_PH = WF_H - WF_PAD.t - WF_PAD.b;
-
+/* ── Décomposition ──────────────────────────────────── */
 function computeMarges(prix, capToday) {
   const brute = prix - capToday;
   const nette = brute - FRAIS_NOTAIRE;
@@ -1288,13 +1289,28 @@ heroToggleBtns.forEach(btn => {
 });
 
 function renderWaterfall(prix, capToday) {
-  wfSvg.innerHTML = "";
   const { brute, nette, netteSecondaire } = computeMarges(prix, capToday);
+  const debt = capToday + FRAIS_NOTAIRE;
+  const positive = nette >= 0;
 
-  const steps = [
-    { label: "Prix vente",              v0: 0,     v1: prix, type: "total" },
-    { label: "Capital restant + frais", v0: nette, v1: prix, type: "sub" }
-  ];
+  if (positive) {
+    const debtPct = Math.max(0, Math.min(100, (debt / prix) * 100));
+    const marginPct = Math.max(0, 100 - debtPct);
+    wfBarDebt.style.width = debtPct + "%";
+    wfBarMargin.style.width = marginPct + "%";
+    wfBarDebt.textContent = `Capital restant + frais — ${fmt(debt, 0)} €`;
+    wfBarMargin.textContent = `Marge — ${fmt(nette, 0)} €`;
+    wfBarMargin.classList.remove("deficit");
+  } else {
+    wfBarDebt.style.width = "100%";
+    wfBarMargin.style.width = "0%";
+    wfBarDebt.textContent = "";
+    wfBarMargin.textContent = `Manque ${fmt(Math.abs(nette), 0)} €`;
+    wfBarMargin.classList.add("deficit");
+    wfBarMargin.style.width = "34%";
+    wfBarDebt.style.width = "66%";
+    wfBarDebt.textContent = `Capital restant + frais — ${fmt(debt, 0)} €`;
+  }
 
   wfResultBrute.textContent = (brute >= 0 ? "+" : "") + fmt(brute, 0) + " €";
   wfResultBrute.className = "wf-result-val " + (brute >= 0 ? "val-pos" : "val-neg");
@@ -1304,68 +1320,6 @@ function renderWaterfall(prix, capToday) {
 
   wfResultSecondaire.textContent = (netteSecondaire >= 0 ? "+" : "") + fmt(netteSecondaire, 0) + " €";
   wfResultSecondaire.className = "wf-result-val " + (netteSecondaire >= 0 ? "val-pos" : "val-neg");
-
-  let minV = Math.min(0, prix, nette), maxV = Math.max(0, prix, nette);
-  const pad = (maxV - minV) * 0.12 || 1000;
-  minV -= pad; maxV += pad;
-  const yAt = v => WF_PAD.t + (maxV - v) / (maxV - minV) * WF_PH;
-
-  const n = steps.length;
-  const slot = WF_PW / n;
-  const barW = slot * 0.46;
-
-  const y0 = yAt(0);
-  wfSvg.appendChild(svgEl("line", { x1: WF_PAD.l, x2: WF_PAD.l + WF_PW, y1: y0, y2: y0, stroke: "var(--line)", "stroke-width": 1 }));
-
-  steps.forEach((s, i) => {
-    const cx = WF_PAD.l + slot * i + slot / 2;
-    const top = Math.max(s.v0, s.v1), bot = Math.min(s.v0, s.v1);
-    const yTop = yAt(top), yBot = yAt(bot);
-    const h = Math.max(2, yBot - yTop);
-    let fill = "var(--muted)";
-    if (s.type === "total") fill = "var(--ink)";
-    else if (s.type === "pos") fill = "var(--green)";
-    else if (s.type === "neg") fill = "var(--red)";
-    wfSvg.appendChild(svgEl("rect", { x: cx - barW / 2, y: yTop, width: barW, height: h, fill, rx: 3 }));
-
-    if (i < n - 1) {
-      const nextCx = WF_PAD.l + slot * (i + 1) + slot / 2;
-      const connY = yAt(s.v1);
-      wfSvg.appendChild(svgEl("line", { x1: cx + barW / 2, x2: nextCx - barW / 2, y1: connY, y2: connY, stroke: "var(--line)", "stroke-width": 1, "stroke-dasharray": "2 3" }));
-    }
-
-    const magnitude = s.type === "sub" ? -(s.v1 - s.v0) : s.v1;
-    const vt = svgEl("text", {
-      x: cx, y: yTop - 8, "text-anchor": "middle",
-      "font-family": "IBM Plex Mono, monospace", "font-size": "11", "font-weight": "500",
-      fill: s.type === "pos" ? "var(--green)" : s.type === "neg" ? "var(--red)" : "var(--ink)"
-    });
-    vt.textContent = (s.type === "pos" ? "+" : "") + fmt(magnitude, 0) + " €";
-    wfSvg.appendChild(vt);
-
-    const lt = svgEl("text", {
-      x: cx, y: WF_H - 14, "text-anchor": "middle",
-      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
-    });
-    lt.textContent = s.label;
-    wfSvg.appendChild(lt);
-  });
-}
-
-/* ── Gauge ────────────────────────────────────────── */
-function renderGauge(brute) {
-  const pct = Math.max(0, Math.min(100, (brute / FRAIS_NOTAIRE) * 100));
-  gaugeFill.style.width = pct + "%";
-  const full = brute >= FRAIS_NOTAIRE;
-  gaugeFill.classList.toggle("full", full);
-  gaugePct.textContent = (full ? 100 : Math.min(99, Math.round(pct))) + "%";
-  if (full) {
-    gaugeSub.textContent = `Apport entièrement récupéré — +${fmt(brute - FRAIS_NOTAIRE, 0)} € de marge au-delà`;
-    gaugeSub.className = "wf-gauge-sub val-pos";
-  } else {
-    gaugeSub.textContent = `Reste ${fmt(FRAIS_NOTAIRE - Math.max(0, brute), 0)} € à récupérer`;
-    gaugeSub.className = "wf-gauge-sub val-neg";
-  }
 }
 
 /* ── Sensitivity grid (price × exit month) ─────────── */
