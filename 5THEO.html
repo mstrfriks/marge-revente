@@ -776,7 +776,7 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
       <div class="wf-result-item">
         <span class="wf-result-label">Marge nette · bien secondaire</span>
         <span class="wf-result-val" id="wfResultSecondaire">—</span>
-        <span class="wf-result-note">après plus-value 36,2 % (sans travaux)</span>
+        <span class="wf-result-note">après plus-value 36,2 % (travaux inclus, facturés entreprise)</span>
       </div>
     </div>
     <div class="wf-gauge">
@@ -1113,7 +1113,7 @@ function renderWaterfall(prix, capToday) {
   wfResultVal.textContent = (nette >= 0 ? "+" : "") + fmt(nette, 0) + " €";
   wfResultVal.className = "wf-result-val " + (nette >= 0 ? "val-pos" : "val-neg");
 
-  const plusValueImposable = Math.max(0, prix - (PRIX_ACHAT + FRAIS_NOTAIRE));
+  const plusValueImposable = Math.max(0, prix - COUT_TOTAL);
   const taxePlusValue = plusValueImposable * TAUX_PLUSVALUE;
   const netteSecondaire = nette - taxePlusValue;
   wfResultSecondaire.textContent = (netteSecondaire >= 0 ? "+" : "") + fmt(netteSecondaire, 0) + " €";
