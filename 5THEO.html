@@ -315,6 +315,7 @@ input[type=range]::-moz-range-thumb {
 }
 .timeline-marker.ok .timeline-dot { background: var(--green); box-shadow: 0 0 0 1px var(--green); }
 .timeline-marker.neutral .timeline-dot { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.timeline-marker.mid .timeline-dot { background: rgb(184,146,74); box-shadow: 0 0 0 1px rgb(184,146,74); }
 .timeline-label {
   position: absolute; left: 50%; transform: translateX(-50%);
   font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted);
@@ -1034,12 +1035,16 @@ function render(v) {
   let html = "";
   let seuilMois = null;
   let seuilDate = null;
+  let seuilBrutDate = null;
   let isFirstPos = true;
+  let isFirstPosBrut = true;
 
   rows.forEach(([ds, cap]) => {
     const brute = prix - cap;
     const nette  = brute - FRAIS_NOTAIRE;
     const ok     = nette >= 0;
+
+    if (brute >= 0 && isFirstPosBrut) { isFirstPosBrut = false; seuilBrutDate = ds; }
 
     let thresholdClass = "";
     if (ok && isFirstPos) { isFirstPos = false; seuilMois = fmtDate(ds); seuilDate = ds; thresholdClass = " row-threshold"; }
@@ -1071,7 +1076,7 @@ function render(v) {
 
   renderChart(prix, rows);
   renderSensitivityGrid(rows);
-  renderTimeline(rows, seuilDate);
+  renderTimeline(rows, seuilBrutDate, seuilDate);
   if (rows.length) {
     const capToday = rows[0][1];
     wfTitle.textContent = "Décomposition — " + fmtDate(rows[0][0]);
@@ -1081,7 +1086,7 @@ function render(v) {
 }
 
 /* ── Timeline ─────────────────────────────────────── */
-function renderTimeline(rows, seuilDate) {
+function renderTimeline(rows, seuilBrutDate, seuilNetDate) {
   timelineTrack.innerHTML = "";
   if (rows.length < 2) { timelineNote.textContent = ""; return; }
 
@@ -1107,26 +1112,40 @@ function renderTimeline(rows, seuilDate) {
   // Étapes espacées régulièrement (façon stepper), pas proportionnelles aux
   // dates réelles : évite que "fin simulation" (~30 mois plus tard) écrase
   // les autres repères l'un contre l'autre. "Achat" n'a pas de date connue,
-  // on affiche le prix d'achat à la place.
+  // on affiche le prix d'achat à la place. Nombre d'étapes variable selon
+  // les seuils atteints (brut / net) sur la période affichée.
   const achatLabel = fmt(PRIX_ACHAT, 0) + " €";
-  if (seuilDate) {
+
+  const events = [
+    { label: "Achat", sub: achatLabel, cls: "" },
+    { label: "Aujourd'hui", sub: fmtDate(today), cls: "neutral" }
+  ];
+  if (seuilBrutDate) events.push({ label: "Seuil de renta. brut", sub: fmtDate(seuilBrutDate), cls: "mid" });
+  if (seuilNetDate)  events.push({ label: "Seuil de renta. net",  sub: fmtDate(seuilNetDate),  cls: "ok" });
+  events.push({ label: "Fin simulation", sub: fmtDate(end), cls: "" });
+
+  const n = events.length;
+  events.forEach((e, i) => {
+    addMarker(e.sub, e.label, e.cls, i % 2 === 0 ? "below" : "above", i / (n - 1) * 100);
+  });
+
+  const todayIdx = 1;
+  const lastReachedIdx = seuilNetDate ? events.findIndex(e => e.label === "Seuil de renta. net")
+                        : seuilBrutDate ? events.findIndex(e => e.label === "Seuil de renta. brut")
+                        : -1;
+  if (lastReachedIdx > -1) {
+    const fromPct = todayIdx / (n - 1) * 100;
+    const toPct = lastReachedIdx / (n - 1) * 100;
     const fill = document.createElement("div");
     fill.className = "timeline-fill";
-    fill.style.left = "33.33%";
-    fill.style.width = "33.33%";
+    fill.style.left = fromPct + "%";
+    fill.style.width = (toPct - fromPct) + "%";
     timelineTrack.appendChild(fill);
-
-    addMarker(achatLabel, "Achat", "", "below", 0);
-    addMarker(fmtDate(today), "Aujourd'hui", "neutral", "above", 33.33);
-    addMarker(fmtDate(seuilDate), "Seuil de rentabilité", "ok", "below", 66.66);
-    addMarker(fmtDate(end), "Fin simulation", "", "above", 100);
-    timelineNote.textContent = "";
-  } else {
-    addMarker(achatLabel, "Achat", "", "below", 0);
-    addMarker(fmtDate(today), "Aujourd'hui", "neutral", "above", 50);
-    addMarker(fmtDate(end), "Fin simulation", "", "below", 100);
-    timelineNote.textContent = "Seuil non atteint sur la période";
   }
+
+  if (seuilNetDate) timelineNote.textContent = "";
+  else if (seuilBrutDate) timelineNote.textContent = "Seuil net non atteint sur la période";
+  else timelineNote.textContent = "Seuil non atteint sur la période";
 }
 
 /* ── Waterfall ────────────────────────────────────── */
