@@ -340,9 +340,9 @@ input[type=range]::-moz-range-thumb {
   padding-top: 20px;
   border-top: 1px solid var(--line);
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  gap: 40px;
 }
+.wf-result-item { display: flex; flex-direction: column; gap: 6px; }
 .wf-result-label {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -357,6 +357,7 @@ input[type=range]::-moz-range-thumb {
   letter-spacing: -.01em;
   color: var(--ink);
 }
+.wf-result-item.secondary .wf-result-val { font-size: 18px; color: var(--muted); }
 .wf-result-val.val-pos { color: var(--green); }
 .wf-result-val.val-neg { color: var(--red); }
 .wf-gauge { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
@@ -762,8 +763,14 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
       <svg id="wfSvg" viewBox="0 0 760 260" preserveAspectRatio="none"></svg>
     </div>
     <div class="wf-result">
-      <span class="wf-result-label">Marge nette</span>
-      <span class="wf-result-val" id="wfResultVal">—</span>
+      <div class="wf-result-item secondary">
+        <span class="wf-result-label">Marge brute</span>
+        <span class="wf-result-val" id="wfResultBrute">—</span>
+      </div>
+      <div class="wf-result-item">
+        <span class="wf-result-label">Marge nette</span>
+        <span class="wf-result-val" id="wfResultVal">—</span>
+      </div>
     </div>
     <div class="wf-gauge">
       <div class="wf-gauge-head">
@@ -936,6 +943,7 @@ const timelineNote  = document.getElementById("timelineNote");
 const wfSvg       = document.getElementById("wfSvg");
 const wfTitle     = document.getElementById("wfTitle");
 const wfResultVal = document.getElementById("wfResultVal");
+const wfResultBrute = document.getElementById("wfResultBrute");
 const gaugeFill   = document.getElementById("gaugeFill");
 const gaugePct    = document.getElementById("gaugePct");
 const gaugeSub    = document.getElementById("gaugeSub");
@@ -1089,6 +1097,9 @@ function renderWaterfall(prix, capToday) {
     { label: "Prix vente",              v0: 0,     v1: prix, type: "total" },
     { label: "Capital restant + frais", v0: nette, v1: prix, type: "sub" }
   ];
+
+  wfResultBrute.textContent = (brute >= 0 ? "+" : "") + fmt(brute, 0) + " €";
+  wfResultBrute.className = "wf-result-val " + (brute >= 0 ? "val-pos" : "val-neg");
 
   wfResultVal.textContent = (nette >= 0 ? "+" : "") + fmt(nette, 0) + " €";
   wfResultVal.className = "wf-result-val " + (nette >= 0 ? "val-pos" : "val-neg");
