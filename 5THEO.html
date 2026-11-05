@@ -2,15 +2,15 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>5 Théophile Leducq — Analyse de revente</title>
+<title>Quand et à quel prix vendre Leducq</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@500;700;800&family=Sofia+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <!-- Favicon standard -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏡</text></svg>">
 
 <!-- iOS : icône sur l'écran d'accueil -->
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230d0d0d'/><text x='90' y='125' font-size='100' text-anchor='middle'>🏡</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230F2A2E'/><text x='90' y='125' font-size='100' text-anchor='middle'>🏡</text></svg>">
 
 <!-- iOS : titre affiché sous l'icône -->
 <meta name="apple-mobile-web-app-title" content="Leducq">
@@ -22,1003 +22,282 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
-/* ── Variables ─────────────────────────────────────── */
-:root {
-  --ink:    #15151a;
-  --paper:  #ffffff;
-  --cream:  #f7f7f8;
-  --accent:   #15151a;
-  --accent2:  #6e6e76;
-  --green:  #1f6b45;
-  --green-bg: #eaf3ee;
-  --red:    #9c3a3a;
-  --red-bg: #f7ecec;
-  --muted:  #6e6e76;
-  --line:   #d9d9dd;
-  --card:   #ffffff;
-  --radius: 3px;
-  --shadow: none;
+/* ── Variables (palette + typographie de la maquette) ─────────────── */
+:root{
+  --ground:#0F2A2E; --panel:#163A3F; --text:#E6EFEC; --muted:#9DB5B0; --line:#2A5056;
+  --butter:#F2D27A; --coral:#FFB3A1; --mint:#8FD0C2; --mid:#4E7479;
+  --radius: 10px;
 }
-
-/* ── Reset ─────────────────────────────────────────── */
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { font-size:16px; -webkit-font-smoothing:antialiased; }
-body {
-  background: var(--cream);
-  color: var(--ink);
-  font-family: 'Source Serif 4', serif;
-  font-weight: 400;
-  min-height: 100vh;
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:16px}
+body{
+  margin:0; background:var(--ground); color:var(--text);
+  font-family:'Sofia Sans',system-ui,sans-serif; font-size:15px; line-height:1.5;
+  font-variant-numeric:tabular-nums;
 }
-
-/* ── Layout ─────────────────────────────────────────── */
-.page {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 48px 20px 80px;
-}
+a{color:var(--butter)} a:hover{color:var(--text)}
+button,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+h1,h2{font-family:'Sofia Sans Condensed',sans-serif; margin:0}
+h2{font-size:24px; font-weight:700; line-height:1.1}
+.cond{font-family:'Sofia Sans Condensed',sans-serif}
+.wrap{max-width:1240px; margin:0 auto; padding:40px 32px 88px; display:flex; flex-direction:column; gap:48px}
+.panel{background:var(--panel); border-radius:var(--radius)}
+.muted{color:var(--muted)}
 
 /* ── Header ─────────────────────────────────────────── */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-  margin-bottom: 48px;
-  padding-bottom: 20px;
-  border-bottom: 2px double var(--ink);
-}
-.header-left {}
-.eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 10px;
-}
-.title {
-  font-family: 'Source Serif 4', serif;
-  font-weight: 600;
-  font-size: clamp(26px, 4.6vw, 40px);
-  line-height: 1.1;
-  letter-spacing: -.02em;
-  color: var(--ink);
-}
-.title em { font-style: normal; font-weight: 400; color: var(--muted); }
-.subtitle {
-  margin-top: 10px;
-  font-size: 14px;
-  color: var(--muted);
-  font-weight: 400;
-  line-height: 1.5;
-}
-.header-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  flex-shrink: 0;
-}
-.badge-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.badge-val {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 600;
-  font-size: 24px;
-  letter-spacing: -.01em;
-  color: var(--ink);
-  line-height: 1;
-}
-.badge-sub {
-  font-size: 11px;
-  color: var(--muted);
-}
+header.top{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:16px 24px}
+header.top h1{font-size:clamp(28px,4vw,44px); font-weight:800; line-height:1.05}
+header.top p{margin:8px 0 0; color:var(--muted)}
+.ghost{background:transparent; border:1px solid var(--line); border-radius:8px; padding:10px 16px; min-height:44px; cursor:pointer; font-family:'Sofia Sans',sans-serif; font-size:14px}
+.ghost:hover{border-color:var(--text)}
 
-/* ── Acquisition card ───────────────────────────────── */
-.acq-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  margin-bottom: 40px;
+/* ── Controls panel ─────────────────────────────────── */
+.controls{display:flex; flex-wrap:wrap; align-items:flex-end; gap:20px 32px; padding:20px 24px}
+input[type=range]{width:100%; accent-color:var(--butter); height:32px; margin:0}
+.chip{border:1px solid var(--line); border-radius:8px; padding:10px 14px; min-height:44px; cursor:pointer; background:transparent; color:var(--text)}
+.chip.active{background:var(--butter); color:var(--ground); border-color:var(--butter)}
+.exact-group{display:flex; align-items:center; gap:10px}
+.exact-group input{
+  width:130px; min-height:44px; padding:8px 12px; border:1px solid var(--line);
+  border-radius:8px; background:var(--ground); color:var(--text);
+  -moz-appearance:textfield; appearance:textfield;
 }
-.acq-cell {
-  background: var(--card);
-  padding: 22px 24px;
-}
-.acq-cell.accent { background: var(--cream); }
-.acq-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-.acq-value {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 500;
-  font-size: 17px;
-  letter-spacing: -.01em;
-  line-height: 1;
-  color: var(--ink);
-}
-.acq-cell.accent .acq-value { font-weight: 600; }
+.toggle2{display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
+.toggle2 button{border:0; padding:10px 18px; min-height:44px; cursor:pointer; background:transparent; color:var(--text)}
+.toggle2 button.active{background:var(--butter); color:var(--ground)}
+.disclosure-inline{font-size:13px; color:var(--muted); width:100%}
+.disclosure-inline summary{cursor:pointer; list-style:none}
+.disclosure-inline summary::-webkit-details-marker{display:none}
+.disclosure-inline .d-body{display:flex; flex-wrap:wrap; gap:16px 32px; margin-top:12px}
+.disclosure-inline .d-item .d-label{font-size:12px; color:var(--muted); margin:0 0 4px}
+.disclosure-inline .d-item .d-val{font-family:'Sofia Sans Condensed',sans-serif; font-size:16px; font-weight:700; margin:0}
 
-/* ── Slider section ─────────────────────────────────── */
-.slider-section {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 32px;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
-  position: relative;
-}
-.slider-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.slider-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.section-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-.slider-display {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-}
-.slider-amount {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 600;
-  font-size: 38px;
-  letter-spacing: -.01em;
-  line-height: 1;
-  color: var(--ink);
-  transition: color .2s;
-}
-.slider-currency {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 400;
-  font-size: 19px;
-  color: var(--muted);
-}
+/* ── Grille + panneau latéral ────────────────────────── */
+.layout{display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start}
+.gridbox{flex:999 1 620px; min-width:0; overflow-x:auto}
+.side{flex:1 1 300px; min-width:0; padding:24px}
+.heat{border-collapse:separate; border-spacing:4px; width:100%; min-width:600px}
+.heat th{font-weight:500; color:var(--muted); font-size:13px; padding:4px 6px; text-align:center}
+.heat th[scope=row]{text-align:right; white-space:nowrap; padding-right:10px; cursor:pointer; background:none; border:0}
+.heat th[scope=row]:hover{color:var(--text)}
+.cell{width:100%; min-height:48px; border:0; border-radius:6px; cursor:pointer; font-size:15px; font-family:'Sofia Sans Condensed',sans-serif}
+.cell:hover{box-shadow:inset 0 0 0 2px var(--text)}
+.heat-legend{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:14px; font-size:13px; color:var(--muted)}
+.heat-legend .sw{display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-1px; margin-right:6px}
+.side p{margin:0}
+.side .hero{margin:6px 0 0; font-size:clamp(52px,7vw,80px); font-weight:800; line-height:.9}
+.side .versus{margin:10px 0 0; color:var(--muted)}
+.side dl{margin:22px 0 0; display:flex; flex-direction:column}
+.side dl > div{display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--line)}
+.side dt{color:var(--muted)}
+.side dd{margin:0; font-weight:600}
+.side .taxnote{margin:16px 0 0; font-size:13px; color:var(--muted)}
 
-/* Custom range input */
-input[type=range] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 2px;
-  background: var(--line);
-  border-radius: 1px;
-  outline: none;
-  cursor: pointer;
-  margin: 8px 0 20px;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--ink);
-  border: 3px solid var(--paper);
-  box-shadow: 0 0 0 1px var(--ink), 0 2px 8px rgba(0,0,0,.2);
-  cursor: grab;
-  transition: transform .1s;
-}
-input[type=range]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.2); }
-input[type=range]::-moz-range-thumb {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--ink);
-  border: 3px solid var(--paper);
-  box-shadow: 0 0 0 1px var(--ink);
-  cursor: grab;
-}
-.range-bounds {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: -12px;
-  margin-bottom: 24px;
-}
+/* ── Cascade ─────────────────────────────────────────── */
+.cascade-head{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 20px}
+.cascade-panel{padding:28px 24px 20px}
+.cascade{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:14px; align-items:end}
+.ccol{position:relative; height:280px}
+.ccol .bar{position:absolute; left:0; right:0; border-radius:6px}
+.ccol .val{position:absolute; left:0; right:0; margin:0; text-align:center; font-weight:700; font-size:18px; white-space:nowrap}
+.cascade-labels{margin-top:12px; border-top:1px solid var(--line); padding-top:12px}
+.cascade-labels p{margin:0; text-align:center; font-size:14px; color:var(--muted)}
 
-/* Exact price input */
-.exact-input-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-.exact-input-row label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.exact-input-row input {
-  -moz-appearance: textfield;
-  appearance: textfield;
-  width: 120px;
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  background: var(--paper);
-  padding: 6px 10px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  color: var(--ink);
-}
-.exact-input-row input:focus { outline: none; border-color: var(--accent); }
-.exact-input-row span { font-size: 12px; color: var(--muted); }
-
-/* Derived stats */
-.derived {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
-.derived-item {}
-.derived-item .d-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-.derived-item .d-val {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--ink);
-}
-
-/* ── Sticky bar (vue mobile, apparaît quand le Hero sort de l'écran) ── */
-.sticky-bar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 50;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.15);
-  transform: translateY(-100%);
-  transition: transform .25s ease;
-}
-.sticky-bar.visible { transform: translateY(0); }
-.sticky-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  opacity: .6;
-}
-.sticky-value {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 600;
-  font-size: 15px;
-}
-.sticky-value.val-pos { color: #5fd88a; }
-.sticky-value.val-neg { color: #ff8a8a; }
-
-
-/* ── Hero result ───────────────────────────────────── */
-.hero-result {
-  background: var(--ink);
-  color: var(--paper);
-  border-radius: var(--radius);
-  padding: 48px;
-  margin-bottom: 32px;
-  text-align: center;
-}
-.hero-toggle {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  border: 1px solid rgba(255,255,255,.25);
-  border-radius: 999px;
-  padding: 3px;
-  margin-bottom: 20px;
-}
-.hero-toggle-btn {
-  border: none;
-  background: transparent;
-  color: var(--paper);
-  opacity: .55;
-  padding: 7px 16px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  letter-spacing: .02em;
-  transition: all .15s;
-}
-.hero-toggle-btn.active { opacity: 1; background: rgba(255,255,255,.14); }
-.hero-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  opacity: .6;
-  margin-bottom: 8px;
-}
-.hero-value {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 600;
-  font-size: clamp(36px, 7vw, 60px);
-  letter-spacing: -.01em;
-  line-height: 1;
-}
-.hero-value.val-pos { color: #5fd88a; }
-.hero-value.val-neg { color: #ff8a8a; }
-.hero-sub { margin-top: 10px; font-size: 12.5px; opacity: .65; }
-
-/* ── Timeline ───────────────────────────────────────── */
-.timeline-section {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 24px 28px 40px;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
-}
-.timeline-track { position: relative; height: 54px; margin-top: 18px; }
-.timeline-line { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--line); }
-.timeline-fill { position: absolute; left: 0; top: 50%; height: 2px; background: var(--green); z-index: 1; }
-.timeline-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
-.timeline-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--ink); border: 2px solid var(--card);
-  box-shadow: 0 0 0 1px var(--line);
-}
-.timeline-marker.ok .timeline-dot { background: var(--green); box-shadow: 0 0 0 1px var(--green); }
-.timeline-marker.neutral .timeline-dot { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-.timeline-marker.mid .timeline-dot { background: rgb(184,146,74); box-shadow: 0 0 0 1px rgb(184,146,74); }
-.timeline-label {
-  position: absolute; left: 50%; transform: translateX(-50%);
-  font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted);
-  white-space: nowrap; text-align: center;
-}
-.timeline-label.above { bottom: 14px; }
-.timeline-label.below { top: 14px; }
-.timeline-label strong { display: block; font-size: 11px; font-weight: 500; color: var(--ink); margin-bottom: 1px; }
-.timeline-note { font-size: 11px; color: var(--muted); text-align: right; }
-
-/* ── Waterfall & gauge ──────────────────────────────── */
-.wf-section {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 28px;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
-}
-.wf-bar {
-  display: flex;
-  height: 30px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--line);
-}
-.wf-bar-debt, .wf-bar-margin {
-  display: flex;
-  align-items: center;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: width .3s ease;
-}
-.wf-bar-debt {
-  background: var(--line);
-  color: var(--muted);
-  padding-left: 12px;
-}
-.wf-bar-margin {
-  background: var(--green);
-  color: var(--paper);
-  justify-content: flex-end;
-  padding-right: 12px;
-}
-.wf-bar-margin.deficit { background: var(--red); justify-content: center; padding: 0; }
-.wf-result {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px 40px;
-}
-.wf-result-item { display: flex; flex-direction: column; gap: 6px; max-width: 260px; }
-.wf-result-note { font-size: 11px; color: var(--muted); line-height: 1.4; }
-.wf-result-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.wf-result-val {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 600;
-  font-size: 24px;
-  letter-spacing: -.01em;
-  color: var(--ink);
-}
-.wf-result-item.secondary .wf-result-val { font-size: 18px; color: var(--muted); }
-.wf-result-val.val-pos { color: var(--green); }
-.wf-result-val.val-neg { color: var(--red); }
-.disclosure {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: var(--muted);
-}
-.disclosure summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.disclosure summary::-webkit-details-marker { display: none; }
-.disclosure summary::before {
-  content: "▸";
-  font-size: 9px;
-  transition: transform .15s;
-  display: inline-block;
-}
-.disclosure[open] summary::before { transform: rotate(90deg); }
-.disclosure summary:hover { color: var(--ink); }
-.disclosure-body { margin-top: 14px; }
-.disclosure-body p { margin-bottom: 8px; }
-.disclosure-body p:last-child { margin-bottom: 0; }
-.disclosure strong { color: var(--ink); font-weight: 600; }
-.disclosure code {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11.5px;
-  color: var(--ink);
-  background: var(--cream);
-  padding: 2px 5px;
-  border-radius: 2px;
-}
-.disclosure-warn { color: var(--red); }
+/* ── Ce que le bien a coûté ──────────────────────────── */
+.sum{display:flex; flex-wrap:wrap; align-items:baseline; gap:12px 20px}
+.sum .item p:first-child{margin:0; font-size:14px; color:var(--muted)}
+.sum .item p:last-child{margin:0; font-size:28px; font-weight:700}
+.sum .total p:last-child{font-size:38px; font-weight:800; line-height:1.15; color:var(--butter)}
+.op{font-family:'Sofia Sans Condensed',sans-serif; font-size:30px; color:var(--muted)}
 
 /* ── Chart ──────────────────────────────────────────── */
-.chart-section {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 28px 28px 16px;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
+.chart-legend{display:flex; flex-wrap:wrap; gap:8px 22px; font-size:14px; color:var(--muted); margin-bottom:12px}
+.chart-legend .ln{display:inline-block; width:18px; height:3px; background:var(--text); vertical-align:middle; margin-right:8px}
+.chart-legend .ln.alt{height:0; width:18px; border-top:2px dashed var(--muted); background:none}
+.chart-legend .dot{display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--butter); vertical-align:0; margin-right:8px}
+.chart-wrap{position:relative}
+.chart-wrap svg{width:100%; height:auto; display:block; overflow:visible}
+.chart-tooltip{
+  position:absolute; pointer-events:none; opacity:0; transition:opacity .1s;
+  background:var(--ground); border:1px solid var(--line); color:var(--text);
+  padding:8px 12px; border-radius:6px; font-size:12px; line-height:1.5; white-space:nowrap;
+  transform:translate(-50%,-100%); z-index:5;
 }
-.chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-.chart-legend {
-  display: flex;
-  gap: 16px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-}
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-swatch {
-  display: inline-block;
-  width: 16px; height: 2px;
-  background: var(--ink);
-  border-radius: 2px;
-}
-.legend-swatch.brute {
-  background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 7px);
-  height: 2px;
-}
-.chart-wrap { position: relative; }
-.chart-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
-.chart-tooltip {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .1s;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 8px 12px;
-  border-radius: 3px;
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: nowrap;
-  transform: translate(-50%, -100%);
-  z-index: 5;
-}
-.chart-tooltip strong { font-weight: 500; color: var(--accent2); }
+.chart-tooltip strong{color:var(--butter)}
 
-/* ── Sensitivity grid ───────────────────────────────── */
-.grid-section {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 28px;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
-}
-.grid-section .slider-label { margin-bottom: 16px; display: block; }
-.grid-wrap { overflow-x: auto; }
-.sens-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-.sens-table th, .sens-table td {
-  padding: 8px 10px;
-  text-align: right;
-  white-space: nowrap;
-  border: 1px solid var(--line);
-}
-.sens-table thead th {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .06em;
-  color: var(--muted);
-  background: var(--cream);
-  font-weight: 400;
-}
-.sens-table thead th.now { color: var(--accent); }
-.sens-table tbody th {
-  text-align: left;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink);
-  background: var(--cream);
-  cursor: pointer;
-}
-.sens-table tbody th:hover { color: var(--accent); }
-.sens-table tbody th.active-row { color: var(--accent); }
-.sens-table td {
-  font-family: 'IBM Plex Mono', monospace;
-  cursor: pointer;
-  transition: outline .1s;
-}
-.sens-table td:hover { outline: 1.5px solid var(--accent); outline-offset: -1.5px; }
-.sens-table td.val-pos { color: var(--green); }
-.sens-table td.val-neg { color: var(--red); }
-.grid-note { margin-top: 12px; font-size: 11px; color: var(--muted); }
-
-/* ── Presets ────────────────────────────────────────── */
-.presets {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
-}
-.preset-btn {
-  border: 1px solid var(--line);
-  background: var(--card);
-  padding: 8px 16px;
-  border-radius: 2px;
-  cursor: pointer;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
-  transition: all .15s;
-  letter-spacing: .05em;
-}
-.preset-btn:hover { border-color: var(--accent); color: var(--accent); }
-.preset-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-
-/* ── Table ──────────────────────────────────────────── */
-.table-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-.table-subnote { font-size: 11.5px; color: var(--muted); margin: -4px 0 14px; }
-.table-wrap {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: auto;
-  max-height: 520px;
-  -webkit-overflow-scrolling: touch;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13.5px;
-}
-thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background: var(--cream);
-  padding: 12px 16px;
-  text-align: left;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-weight: 400;
-  border-bottom: 1px solid var(--line);
-  white-space: nowrap;
-}
-thead th.r { text-align: right; }
-tbody tr { border-bottom: 1px solid var(--line); transition: background .1s; }
-tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: rgba(184,146,74,.04); }
-tbody td { padding: 11px 16px; }
-tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
-.row-ok td { background: rgba(45,106,79,.035); }
-.row-low td { background: rgba(139,41,41,.03); }
-.val-pos { color: var(--green); font-weight: 500; }
-.val-neg { color: var(--red); }
-.month-col {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
-}
-.month-marker {
-  display: inline-block;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  margin-right: 8px;
-  vertical-align: middle;
-  opacity: 0;
-}
-.row-threshold .month-marker { opacity: 1; }
-
-/* ── Actions ────────────────────────────────────────── */
-.actions {
-  display: flex;
-  gap: 10px;
-  margin: 24px 0;
-  flex-wrap: wrap;
-}
-.btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  background: var(--card);
-  cursor: pointer;
-  font-family: 'Source Serif 4', serif;
-  font-size: 13.5px;
-  font-weight: 400;
-  color: var(--ink);
-  text-decoration: none;
-  transition: all .15s;
-}
-.btn:hover { border-color: var(--ink); }
-.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.btn.primary:hover { background: #333; }
-.btn svg { width: 15px; height: 15px; }
+/* ── Mois par mois ────────────────────────────────────── */
+.months-wrap{max-height:420px; overflow:auto}
+.months{width:100%; min-width:520px; border-collapse:collapse}
+.months th,.months td{padding:10px 16px; text-align:right; border-bottom:1px solid var(--line)}
+.months th:first-child,.months td:first-child{text-align:left}
+.months thead th{position:sticky; top:0; background:var(--panel); color:var(--muted); font-weight:500; font-size:13px}
 
 /* ── Footer ─────────────────────────────────────────── */
-.footer {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.footer-note {
-  font-size: 12px;
-  color: var(--muted);
-  font-style: italic;
-  line-height: 1.5;
-}
-.footer-date {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-}
+footer.bottom{border-top:1px solid var(--line); padding-top:20px; font-size:13px; color:var(--muted); max-width:72ch}
 
-/* ── Print ───────────────────────────────────────────── */
-@media print {
-  body { background: white; }
-  .slider-section, .presets, .actions, .footer, .sticky-bar, .hero-toggle { display: none !important; }
-  .page { padding: 20px; }
-  .table-wrap { border: 1px solid #ccc; }
+/* ── Impression ───────────────────────────────────────── */
+@media print{
+  .noprint{display:none}
+  body{background:white; color:#0F2A2E}
 }
 
 /* ── Responsive ──────────────────────────────────────── */
-@media (max-width: 640px) {
-  .acq-grid { grid-template-columns: 1fr 1fr; }
-  .derived { grid-template-columns: 1fr 1fr; }
-  .header { flex-direction: column; }
-  .header-badge { align-items: flex-start; }
-  .table-wrap { max-height: 420px; }
-  table { min-width: 480px; }
-  .chart-section { padding: 20px 16px 12px; }
-  .hero-result { padding: 32px 24px; }
-  .acq-cell { padding: 16px 14px; }
+@media (max-width:760px){
+  .wrap{padding:22px 16px 60px; gap:40px}
+  .controls{padding:18px 16px}
+  .ccol{height:200px}
+  .cascade{gap:8px}
+  .op{font-size:22px}
+  .side{padding:18px}
 }
-
-/* ── Animations ─────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.page > * {
-  animation: fadeUp .5s ease both;
-}
-.page > *:nth-child(1) { animation-delay: 0s; }
-.page > *:nth-child(2) { animation-delay: .07s; }
-.page > *:nth-child(3) { animation-delay: .14s; }
-.page > *:nth-child(4) { animation-delay: .18s; }
-.page > *:nth-child(5) { animation-delay: .22s; }
-.page > *:nth-child(6) { animation-delay: .26s; }
-.page > *:nth-child(7) { animation-delay: .30s; }
 </style>
 </head>
 
 <body>
-<div class="sticky-bar" id="stickyBar">
-  <span class="sticky-label">Vous récupérez</span>
-  <span class="sticky-value" id="stickyValue">—</span>
-</div>
-<div class="page">
+<div class="wrap">
 
   <!-- Header -->
-  <header class="header">
-    <div class="header-left">
-      <div class="eyebrow">Analyse de revente · Simulation</div>
-      <h1 class="title">5 Théophile<br><em>Leducq</em></h1>
-      <p class="subtitle">54 m² — Calcul de marge sur 36 mois glissants</p>
+  <header class="top">
+    <div>
+      <h1>Quand et à quel prix vendre Leducq</h1>
+      <p>5 Théophile Leducq. Appartement de 54 m², simulation sur 36 mois glissants.</p>
     </div>
-    <div class="header-badge">
-      <span class="badge-tag">Coût total</span>
-      <span class="badge-val">446 590 €</span>
-      <span class="badge-sub">achat + travaux + notaire</span>
+    <div class="noprint" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <button class="ghost" type="button" onclick="window.print()">Imprimer</button>
+      <button class="ghost" type="button" onclick="copyLink()">Copier le lien</button>
+      <button class="ghost" type="button" onclick="exportCSV()">Exporter en CSV</button>
     </div>
   </header>
 
-  <!-- 1 · Le bien -->
-  <div class="section-eyebrow">01 — Le bien</div>
-  <div class="acq-grid">
-    <div class="acq-cell">
-      <div class="acq-label">Prix d'achat</div>
-      <div class="acq-value">341 964 €</div>
+  <!-- Contrôles -->
+  <div class="panel controls">
+    <div style="flex: 1 1 300px; min-width: 0">
+      <label for="prixSlider" class="muted" style="display: block">Prix de vente net vendeur</label>
+      <p class="cond" id="prixValue" style="margin: 0 0 4px; font-size: 34px; font-weight: 800; line-height: 1.1">—</p>
+      <input id="prixSlider" type="range" min="250000" max="600000" step="1000" value="370000">
     </div>
-    <div class="acq-cell">
-      <div class="acq-label">Travaux</div>
-      <div class="acq-value">77 268 €</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px" role="group" aria-label="Prix fréquents" id="presetsContainer"></div>
+    <div class="exact-group">
+      <label for="prixInput" class="muted">Montant exact</label>
+      <input id="prixInput" type="number" inputmode="numeric" min="250000" max="600000" step="1000" value="370000">
+      <span class="muted" style="font-size: 12px">€</span>
     </div>
-    <div class="acq-cell">
-      <div class="acq-label">Frais de notaire</div>
-      <div class="acq-value">27 357 €</div>
+    <div class="toggle2" role="group" aria-label="Au moment de la vente">
+      <button type="button" class="hero-toggle-btn active" data-scenario="habite">J'y habite</button>
+      <button type="button" class="hero-toggle-btn" data-scenario="location">Je le loue</button>
     </div>
-    <div class="acq-cell accent">
-      <div class="acq-label">Coût total</div>
-      <div class="acq-value">446 590 €</div>
-    </div>
-  </div>
-
-  <!-- 2 · Prix de vente -->
-  <div class="section-eyebrow">02 — À quel prix le vendre ?</div>
-  <div class="slider-section">
-    <div class="slider-header">
-      <span class="slider-label">Prix net vendeur</span>
-      <div class="slider-display">
-        <span class="slider-amount" id="prixValue">370 000</span>
-        <span class="slider-currency">€</span>
-      </div>
-    </div>
-    <input type="range" id="prixSlider" min="250000" max="600000" step="1000" value="370000">
-    <div class="range-bounds"><span>250 000 €</span><span>600 000 €</span></div>
-    <div class="exact-input-row">
-      <label for="prixInput">Saisie exacte</label>
-      <input type="number" id="prixInput" min="250000" max="600000" step="1000" value="370000">
-      <span>€</span>
-    </div>
-    <div class="presets" id="presetsContainer"></div>
-    <details class="disclosure">
-      <summary>Détails du prix (FAI, agence, €/m²)</summary>
-      <div class="disclosure-body">
-        <div class="derived">
-          <div class="derived-item">
-            <div class="d-label">Prix FAI (+ 4,5 %)</div>
-            <div class="d-val" id="prixFAI">—</div>
-          </div>
-          <div class="derived-item">
-            <div class="d-label">Frais d'agence</div>
-            <div class="d-val" id="fraisAgence">—</div>
-          </div>
-          <div class="derived-item">
-            <div class="d-label">Prix au m² (FAI)</div>
-            <div class="d-val" id="prixM2">—</div>
-          </div>
-        </div>
+    <details class="disclosure-inline">
+      <summary class="muted">Détails du prix (FAI, agence, €/m²)</summary>
+      <div class="d-body">
+        <div class="d-item"><p class="d-label">Prix FAI (+ 4,5 %)</p><p class="d-val" id="prixFAI">—</p></div>
+        <div class="d-item"><p class="d-label">Frais d'agence</p><p class="d-val" id="fraisAgence">—</p></div>
+        <div class="d-item"><p class="d-label">Prix au m² (FAI)</p><p class="d-val" id="prixM2">—</p></div>
       </div>
     </details>
   </div>
 
-  <!-- 3 · Résultat -->
-  <div class="section-eyebrow">03 — Ce que vous récupérez</div>
-  <div class="hero-result">
-    <div class="hero-toggle" role="group" aria-label="Scénario">
-      <button type="button" class="hero-toggle-btn active" data-scenario="habite">J'habite dedans</button>
-      <button type="button" class="hero-toggle-btn" data-scenario="location">Je mets en location</button>
+  <!-- Grille prix × mois + panneau de détail -->
+  <div class="layout">
+    <div class="gridbox">
+      <table class="heat" id="heatTable"></table>
+      <div class="heat-legend">
+        <span><span class="sw" style="background:#4A2A2A"></span>Perte</span>
+        <span><span class="sw" style="background:#1E474C"></span>Moins de 50 k€</span>
+        <span><span class="sw" style="background:#2C7270"></span>50 à 120 k€</span>
+        <span><span class="sw" style="background:#8FD0C2"></span>Plus de 120 k€</span>
+        <span>Cliquez sur une case pour la détailler.</span>
+      </div>
     </div>
-    <div class="hero-label">Vous récupérez</div>
-    <div class="hero-value" id="heroValue">—</div>
-    <div class="hero-sub" id="heroSub">—</div>
+
+    <aside class="panel side" aria-live="polite">
+      <p class="muted" id="sideIntro">—</p>
+      <p class="cond hero" id="sideHero">—</p>
+      <p class="versus" id="sideVersus">—</p>
+      <dl id="sideLines"></dl>
+      <p class="taxnote" id="sideTaxNote">—</p>
+    </aside>
   </div>
 
-  <!-- 4 · Quand -->
-  <div class="section-eyebrow">04 — Dans combien de temps</div>
-  <div class="timeline-section">
-    <div class="chart-header">
-      <span class="slider-label">Chronologie</span>
-      <span class="timeline-note" id="timelineNote"></span>
+  <!-- Cascade -->
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <div class="cascade-head">
+      <h2 id="cascadeTitle">Où partent les —</h2>
+      <p class="muted" id="cascadeMonth">—</p>
     </div>
-    <div class="timeline-track" id="timelineTrack"></div>
-  </div>
-
-  <!-- 5 · Décomposition -->
-  <div class="section-eyebrow">05 — Le détail du calcul</div>
-  <div class="wf-section">
-    <div class="chart-header">
-      <span class="slider-label" id="wfTitle">Décomposition</span>
+    <div class="panel cascade-panel">
+      <div class="cascade" id="cascadeCols" aria-hidden="true"></div>
+      <div class="cascade-labels cascade" id="cascadeLabels"></div>
     </div>
-    <div class="wf-bar">
-      <div class="wf-bar-debt" id="wfBarDebt"></div>
-      <div class="wf-bar-margin" id="wfBarMargin"></div>
+  </section>
+
+  <!-- Ce que le bien a coûté -->
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <h2>Ce que le bien vous a coûté</h2>
+    <div class="sum">
+      <div class="item"><p>Achat</p><p class="cond">341 964 €</p></div>
+      <span class="op" aria-hidden="true">+</span>
+      <div class="item"><p>Travaux</p><p class="cond">77 268 €</p></div>
+      <span class="op" aria-hidden="true">+</span>
+      <div class="item"><p>Frais de notaire</p><p class="cond">27 357 €</p></div>
+      <span class="op" aria-hidden="true">=</span>
+      <div class="item total"><p>Coût total</p><p class="cond">446 590 €</p></div>
     </div>
-    <div class="wf-result">
-      <div class="wf-result-item secondary">
-        <span class="wf-result-label">Marge brute</span>
-        <span class="wf-result-val" id="wfResultBrute">—</span>
-      </div>
-      <div class="wf-result-item">
-        <span class="wf-result-label">Marge nette · j'habite dedans</span>
-        <span class="wf-result-val" id="wfResultVal">—</span>
-        <span class="wf-result-note">résidence principale au jour de la vente → plus-value exonérée (0 %)</span>
-      </div>
-      <div class="wf-result-item">
-        <span class="wf-result-label">Marge nette · je mets en location</span>
-        <span class="wf-result-val" id="wfResultSecondaire">—</span>
-        <span class="wf-result-note">bien secondaire/locatif → plus-value 36,2 % (19 % IR + 17,2 % PS), travaux inclus (facture entreprise), sans abattement (détention &lt; 6 ans)</span>
-      </div>
+  </section>
+
+  <!-- Quand vendre -->
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <div class="cascade-head">
+      <h2>Quand vendre</h2>
+      <p style="margin: 0; font-weight: 600" id="chartThreshold">—</p>
     </div>
-
-    <details class="disclosure">
-      <summary>Comment lire ces deux colonnes ?</summary>
-      <div class="disclosure-body">
-        <p>Le fisc ne regarde pas ton prêt : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €), pas à ton capital restant dû.</p>
-        <p><code>Plus-value imposable = max(0, Prix de vente − 446 590 €)</code><br><code>Taxe = Plus-value imposable × 36,2 %</code></p>
-        <p>Tant que le prix net vendeur reste <strong>sous 446 590 €</strong>, la plus-value imposable est nulle → aucune taxe, en résidence principale comme en location. Ce seuil fiscal est différent du seuil de rentabilité réel (capital restant dû + frais de notaire) : on peut être en profit cash et non imposable en même temps, ou l'inverse.</p>
-        <p class="disclosure-warn">⚠️ Ce seuil de 446 590 € suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), et jamais déjà déduits de revenus fonciers. Si une partie est retoquée en contrôle, le seuil baisse d'autant.</p>
-      </div>
-    </details>
-
-  </div>
-
-  <!-- 6 · Évolution -->
-  <div class="section-eyebrow">06 — Évolution sur 36 mois</div>
-  <div class="chart-section">
-    <div class="chart-header">
-      <span class="slider-label" id="chartTitle">Évolution de la marge</span>
+    <div class="panel" style="padding: 24px">
       <div class="chart-legend">
-        <span class="legend-item"><span class="legend-swatch nette"></span><span id="legendNetteLabel">Marge nette</span></span>
-        <span class="legend-item"><span class="legend-swatch brute"></span>Marge brute</span>
+        <span><span class="ln"></span><span id="legendNetteLabel">Marge nette</span></span>
+        <span><span class="ln alt"></span>Marge brute</span>
+        <span><span class="dot"></span>Mois sélectionné</span>
+      </div>
+      <div class="chart-wrap" id="chartWrap">
+        <svg id="marginChart" viewBox="0 0 860 300" preserveAspectRatio="none"></svg>
+        <div class="chart-tooltip" id="chartTooltip"></div>
       </div>
     </div>
-    <div class="chart-wrap" id="chartWrap">
-      <svg id="marginChart" viewBox="0 0 860 300" preserveAspectRatio="none"></svg>
-      <div class="chart-tooltip" id="chartTooltip"></div>
+  </section>
+
+  <!-- Mois par mois -->
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <h2>Mois par mois</h2>
+    <div class="panel months-wrap" tabindex="0" aria-label="Tableau mois par mois">
+      <table class="months">
+        <thead>
+          <tr><th scope="col">Mois</th><th scope="col">Prêt restant</th><th scope="col">Marge brute</th><th scope="col" id="netColLabel">Marge nette</th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
     </div>
-  </div>
+  </section>
 
-  <!-- 7 · Sensibilité -->
-  <div class="section-eyebrow">07 — Et si le prix change ?</div>
-  <div class="grid-section">
-    <span class="slider-label">Grille de sensibilité — prix × mois de sortie</span>
-    <div class="grid-wrap">
-      <table class="sens-table" id="sensTable"></table>
+  <!-- Explications légales -->
+  <details class="disclosure-inline panel" style="padding: 20px 24px">
+    <summary>Comment lire la fiscalité de la plus-value ?</summary>
+    <div class="d-body" style="flex-direction: column; gap: 10px; font-size: 13px; line-height: 1.6">
+      <p>Le fisc ne regarde pas le prêt restant : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €).</p>
+      <p>Plus-value imposable = max(0, Prix de vente − 446 590 €). Taxe = Plus-value imposable × 36,2 % (19 % IR + 17,2 % prélèvements sociaux).</p>
+      <p>Tant que le prix net vendeur reste sous 446 590 €, la plus-value imposable est nulle, en résidence principale comme en location.</p>
+      <p style="color: var(--coral)">⚠️ Ce seuil suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), jamais déjà déduits de revenus fonciers.</p>
     </div>
-    <div class="grid-note" id="gridNote">Marge nette (€) pour chaque combinaison. Clique une cellule pour charger ce prix dans le simulateur.</div>
-  </div>
-
-  <!-- 8 · Tableau -->
-  <div class="section-eyebrow">08 — Mois par mois</div>
-  <div class="table-title" id="tableTitle">Tableau de marge</div>
-  <p class="table-subnote">Indépendant du scénario fiscal (habiter/louer) — suit le cash pur (prix − capital restant − frais de notaire). Pour l'effet de la taxe sur la plus-value, voir la Décomposition ci-dessus.</p>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Mois</th>
-          <th class="r">Capital restant dû</th>
-          <th class="r">Marge brute</th>
-          <th class="r">Marge nette (− notaire)</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-
-  <!-- Actions -->
-  <div class="actions">
-    <button class="btn primary" onclick="window.print()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
-      Imprimer / PDF
-    </button>
-    <button class="btn" onclick="copyLink()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.7"/></svg>
-      Copier le lien
-    </button>
-    <button class="btn" onclick="exportCSV()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      Exporter CSV
-    </button>
-  </div>
+  </details>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-note">
-      Marge nette = Prix net vendeur − Capital restant − Frais de notaire (27 357 €).<br>
-      Frais d'agence calculés à 4,5 % du prix FAI pour information uniquement.<br>
-      Fiscalité de la plus-value (résidence principale vs location) détaillée dans la section Décomposition ci-dessus — à vérifier auprès du notaire.
-    </div>
-    <div class="footer-date" id="footerDate"></div>
+  <footer class="bottom">
+    Marge nette = prix net vendeur − prêt restant − frais de notaire, moins l'impôt sur la plus-value si le bien est loué (36,2 % : 19 % d'IR + 17,2 % de prélèvements sociaux). Fiscalité à confirmer avec le notaire.
+    <br><span id="footerDate"></span>
   </footer>
 
 </div>
 
 <script>
-/* ── Constantes ───────────────────────────────────── */
+/* ── Constantes (inchangées) ────────────────────────── */
 const PRIX_ACHAT    = 341964;
 const FRAIS_NOTAIRE = 27357;
 const COUT_TOTAL    = 446590;
@@ -1058,12 +337,15 @@ const PRESETS = [
   { label:"450 k", val:450000 },
 ];
 
-/* ── Helpers ──────────────────────────────────────── */
+/* ── Helpers (inchangés) ────────────────────────────── */
 const fmt = (n, dec=0) => n.toLocaleString("fr-FR",{minimumFractionDigits:dec,maximumFractionDigits:dec});
 const fmtDate = ds => {
   const d = new Date(ds);
   return d.toLocaleDateString("fr-FR",{month:"short",year:"2-digit"});
 };
+const signed = n => (n >= 0 ? "+" : "−") + fmt(Math.abs(n), 0) + " €";
+const kSigned = n => { const k = Math.round(n/1000); return (k >= 0 ? "+" : "−") + Math.abs(k) + " k"; };
+const kEur = n => { const k = Math.round(n/1000); return (k < 0 ? "−" : "") + Math.abs(k) + " k€"; };
 
 function filtre3Ans(d) {
   const now = new Date(); now.setDate(1); now.setHours(0,0,0,0);
@@ -1071,183 +353,7 @@ function filtre3Ans(d) {
   return d.filter(([ds]) => { const dt=new Date(ds); return dt>=now && dt<=end; });
 }
 
-/* ── Refs DOM ─────────────────────────────────────── */
-const slider      = document.getElementById("prixSlider");
-const prixInput   = document.getElementById("prixInput");
-const elPrix      = document.getElementById("prixValue");
-const elFAI       = document.getElementById("prixFAI");
-const elAgence    = document.getElementById("fraisAgence");
-const elM2        = document.getElementById("prixM2");
-const tbody       = document.getElementById("tableBody");
-const tableTitle  = document.getElementById("tableTitle");
-const chartTitle  = document.getElementById("chartTitle");
-const chartWrap   = document.getElementById("chartWrap");
-const chartSvg    = document.getElementById("marginChart");
-const chartTooltip= document.getElementById("chartTooltip");
-const sensTable   = document.getElementById("sensTable");
-const timelineTrack = document.getElementById("timelineTrack");
-const timelineNote  = document.getElementById("timelineNote");
-const wfBarDebt   = document.getElementById("wfBarDebt");
-const wfBarMargin = document.getElementById("wfBarMargin");
-const wfTitle     = document.getElementById("wfTitle");
-const wfResultVal = document.getElementById("wfResultVal");
-const wfResultBrute = document.getElementById("wfResultBrute");
-const wfResultSecondaire = document.getElementById("wfResultSecondaire");
-const heroValue   = document.getElementById("heroValue");
-const heroSub     = document.getElementById("heroSub");
-const heroToggleBtns = document.querySelectorAll(".hero-toggle-btn");
-const stickyBar   = document.getElementById("stickyBar");
-const stickyValue = document.getElementById("stickyValue");
-const legendNetteLabel = document.getElementById("legendNetteLabel");
-const gridNote    = document.getElementById("gridNote");
-
-/* ── Bandeau collant (vue mobile, quand le Hero sort de l'écran) ───── */
-const heroResultEl = document.querySelector(".hero-result");
-if (heroResultEl && "IntersectionObserver" in window) {
-  new IntersectionObserver(([entry]) => {
-    stickyBar.classList.toggle("visible", !entry.isIntersecting);
-  }, { threshold: 0 }).observe(heroResultEl);
-}
-
-/* ── Presets ──────────────────────────────────────── */
-const presetsEl = document.getElementById("presetsContainer");
-PRESETS.forEach(p => {
-  const b = document.createElement("button");
-  b.className = "preset-btn";
-  b.textContent = p.label;
-  b.onclick = () => { slider.value = p.val; render(p.val); };
-  presetsEl.appendChild(b);
-});
-
-function updatePresets(v) {
-  presetsEl.querySelectorAll(".preset-btn").forEach((b,i) => {
-    b.classList.toggle("active", PRESETS[i].val === +v);
-  });
-}
-
-/* ── Render ───────────────────────────────────────── */
-function render(v) {
-  const prix = +v;
-  const prixFAI    = prix / (1 - TAUX_AGENCE);
-  const fraisAg    = prixFAI - prix;
-  const m2         = prixFAI / SURFACE;
-
-  elPrix.textContent   = fmt(prix);
-  elFAI.textContent    = fmt(prixFAI) + " €";
-  elAgence.textContent = fmt(fraisAg) + " €";
-  elM2.textContent     = fmt(m2) + " €/m²";
-
-  updatePresets(prix);
-  if (prixInput && document.activeElement !== prixInput) prixInput.value = prix;
-
-  /* table */
-  const rows = filtre3Ans(DATA);
-  let html = "";
-  let seuilDate = null;
-  let seuilBrutDate = null;
-  let isFirstPos = true;
-  let isFirstPosBrut = true;
-
-  rows.forEach(([ds, cap]) => {
-    const brute = prix - cap;
-    const nette  = brute - FRAIS_NOTAIRE;
-    const ok     = nette >= 0;
-
-    if (brute >= 0 && isFirstPosBrut) { isFirstPosBrut = false; seuilBrutDate = ds; }
-
-    let thresholdClass = "";
-    if (ok && isFirstPos) { isFirstPos = false; seuilDate = ds; thresholdClass = " row-threshold"; }
-
-    html += `<tr class="${ok?"row-ok":"row-low"}${thresholdClass}">
-      <td class="month-col"><span class="month-marker">●</span>${fmtDate(ds)}</td>
-      <td class="r">${fmt(cap,2)} €</td>
-      <td class="r">${fmt(brute,2)} €</td>
-      <td class="r ${ok?"val-pos":"val-neg"}">${ok?"+":""}${fmt(nette,2)} €</td>
-    </tr>`;
-  });
-  tbody.innerHTML = html;
-
-  if (rows.length) {
-    const span = `${fmtDate(rows[0][0])} → ${fmtDate(rows[rows.length-1][0])} (${rows.length} mois)`;
-    tableTitle.textContent = "Tableau de marge — " + span;
-    chartTitle.textContent = "Évolution de la marge — " + span;
-  }
-
-  renderChart(prix, rows);
-  renderSensitivityGrid(rows);
-  renderTimeline(rows, seuilBrutDate, seuilDate);
-  if (rows.length) {
-    const capToday = rows[0][1];
-    wfTitle.textContent = "Décomposition — " + fmtDate(rows[0][0]);
-    renderWaterfall(prix, capToday);
-    updateHero(prix, capToday);
-  }
-}
-
-/* ── Timeline ─────────────────────────────────────── */
-function renderTimeline(rows, seuilBrutDate, seuilNetDate) {
-  timelineTrack.innerHTML = "";
-  if (rows.length < 2) { timelineNote.textContent = ""; return; }
-
-  const today = rows[0][0];
-  const end   = rows[rows.length - 1][0];
-
-  const line = document.createElement("div");
-  line.className = "timeline-line";
-  timelineTrack.appendChild(line);
-
-  function addMarker(sub, label, cls, pos, leftPct) {
-    const m = document.createElement("div");
-    m.className = "timeline-marker" + (cls ? " " + cls : "");
-    m.style.left = leftPct + "%";
-    m.innerHTML = `<div class="timeline-dot"></div>`;
-    const l = document.createElement("div");
-    l.className = "timeline-label " + pos;
-    l.innerHTML = `<strong>${label}</strong>${sub}`;
-    m.appendChild(l);
-    timelineTrack.appendChild(m);
-  }
-
-  // Étapes espacées régulièrement (façon stepper), pas proportionnelles aux
-  // dates réelles : évite que "fin simulation" (~30 mois plus tard) écrase
-  // les autres repères l'un contre l'autre. "Achat" n'a pas de date connue,
-  // on affiche le prix d'achat à la place. Nombre d'étapes variable selon
-  // les seuils atteints (brut / net) sur la période affichée.
-  const achatLabel = fmt(PRIX_ACHAT, 0) + " €";
-
-  const events = [
-    { label: "Achat", sub: achatLabel, cls: "" },
-    { label: "Aujourd'hui", sub: fmtDate(today), cls: "neutral" }
-  ];
-  if (seuilBrutDate) events.push({ label: "Seuil de renta. brut", sub: fmtDate(seuilBrutDate), cls: "mid" });
-  if (seuilNetDate)  events.push({ label: "Seuil de renta. net",  sub: fmtDate(seuilNetDate),  cls: "ok" });
-  events.push({ label: "Fin simulation", sub: fmtDate(end), cls: "" });
-
-  const n = events.length;
-  events.forEach((e, i) => {
-    addMarker(e.sub, e.label, e.cls, i % 2 === 0 ? "below" : "above", i / (n - 1) * 100);
-  });
-
-  const todayIdx = 1;
-  const lastReachedIdx = seuilNetDate ? events.findIndex(e => e.label === "Seuil de renta. net")
-                        : seuilBrutDate ? events.findIndex(e => e.label === "Seuil de renta. brut")
-                        : -1;
-  if (lastReachedIdx > -1) {
-    const fromPct = todayIdx / (n - 1) * 100;
-    const toPct = lastReachedIdx / (n - 1) * 100;
-    const fill = document.createElement("div");
-    fill.className = "timeline-fill";
-    fill.style.left = fromPct + "%";
-    fill.style.width = (toPct - fromPct) + "%";
-    timelineTrack.appendChild(fill);
-  }
-
-  if (seuilNetDate) timelineNote.textContent = "";
-  else if (seuilBrutDate) timelineNote.textContent = "Seuil net non atteint sur la période";
-  else timelineNote.textContent = "Seuil non atteint sur la période";
-}
-
-/* ── Décomposition ──────────────────────────────────── */
+/* ── Vrais calculs (inchangés, réutilisés partout) ──── */
 function computeMarges(prix, capToday) {
   const brute = prix - capToday;
   const nette = brute - FRAIS_NOTAIRE;
@@ -1256,27 +362,55 @@ function computeMarges(prix, capToday) {
   const netteSecondaire = nette - taxePlusValue;
   return { brute, nette, plusValueImposable, taxePlusValue, netteSecondaire };
 }
+function netFor(prix, capToday, scenario) {
+  const m = computeMarges(prix, capToday);
+  return scenario === "habite" ? m.nette : m.netteSecondaire;
+}
 
+/* ── Refs DOM ───────────────────────────────────────── */
+const slider      = document.getElementById("prixSlider");
+const prixInput   = document.getElementById("prixInput");
+const elPrix      = document.getElementById("prixValue");
+const elFAI       = document.getElementById("prixFAI");
+const elAgence    = document.getElementById("fraisAgence");
+const elM2        = document.getElementById("prixM2");
+const tbody       = document.getElementById("tableBody");
+const netColLabel = document.getElementById("netColLabel");
+const chartWrap   = document.getElementById("chartWrap");
+const chartSvg    = document.getElementById("marginChart");
+const chartTooltip= document.getElementById("chartTooltip");
+const chartThreshold = document.getElementById("chartThreshold");
+const legendNetteLabel = document.getElementById("legendNetteLabel");
+const heatTable   = document.getElementById("heatTable");
+const sideIntro   = document.getElementById("sideIntro");
+const sideHero    = document.getElementById("sideHero");
+const sideVersus  = document.getElementById("sideVersus");
+const sideLines   = document.getElementById("sideLines");
+const sideTaxNote = document.getElementById("sideTaxNote");
+const cascadeTitle  = document.getElementById("cascadeTitle");
+const cascadeMonth  = document.getElementById("cascadeMonth");
+const cascadeCols   = document.getElementById("cascadeCols");
+const cascadeLabels = document.getElementById("cascadeLabels");
+const heroToggleBtns = document.querySelectorAll(".hero-toggle-btn");
+
+/* ── État ───────────────────────────────────────────── */
 let heroScenario = "habite";
+let selectedMonthIdx = 0;
 
-function updateHero(prix, capToday) {
-  const { nette, netteSecondaire } = computeMarges(prix, capToday);
-  const val = heroScenario === "habite" ? nette : netteSecondaire;
-  const sign = (val >= 0 ? "+" : "") + fmt(val, 0) + " €";
-  const cls = val >= 0 ? "val-pos" : "val-neg";
-
-  heroValue.textContent = sign;
-  heroValue.className = "hero-value " + cls;
-  heroSub.textContent = heroScenario === "habite"
-    ? "Résidence principale au jour de la vente → plus-value exonérée"
-    : "Bien secondaire/locatif → après plus-value de 36,2 %";
-
-  stickyValue.textContent = sign;
-  stickyValue.className = "sticky-value " + cls;
-
-  const scenarioLabel = heroScenario === "habite" ? "j'habite dedans" : "je mets en location";
-  legendNetteLabel.textContent = `Marge nette (${scenarioLabel})`;
-  gridNote.textContent = `Marge nette (€, scénario : ${scenarioLabel}) pour chaque combinaison. Clique une cellule pour charger ce prix dans le simulateur.`;
+/* ── Presets (chips de prix) ──────────────────────────── */
+const presetsEl = document.getElementById("presetsContainer");
+PRESETS.forEach(p => {
+  const b = document.createElement("button");
+  b.className = "chip";
+  b.type = "button";
+  b.textContent = p.label;
+  b.onclick = () => { slider.value = p.val; render(p.val); };
+  presetsEl.appendChild(b);
+});
+function updatePresets(v) {
+  presetsEl.querySelectorAll(".chip").forEach((b,i) => {
+    b.classList.toggle("active", PRESETS[i].val === +v);
+  });
 }
 
 heroToggleBtns.forEach(btn => {
@@ -1288,87 +422,169 @@ heroToggleBtns.forEach(btn => {
   });
 });
 
-function renderWaterfall(prix, capToday) {
-  const { brute, nette, netteSecondaire } = computeMarges(prix, capToday);
-  const debt = capToday + FRAIS_NOTAIRE;
-  const positive = nette >= 0;
+/* ── Render principal ─────────────────────────────────── */
+function render(v) {
+  const prix = +v;
+  const prixFAI = prix / (1 - TAUX_AGENCE);
+  const fraisAg = prixFAI - prix;
+  const m2      = prixFAI / SURFACE;
 
-  if (positive) {
-    const debtPct = Math.max(0, Math.min(100, (debt / prix) * 100));
-    const marginPct = Math.max(0, 100 - debtPct);
-    wfBarDebt.style.width = debtPct + "%";
-    wfBarMargin.style.width = marginPct + "%";
-    wfBarDebt.textContent = `Capital restant + frais — ${fmt(debt, 0)} €`;
-    wfBarMargin.textContent = `Marge — ${fmt(nette, 0)} €`;
-    wfBarMargin.classList.remove("deficit");
-  } else {
-    wfBarDebt.style.width = "100%";
-    wfBarMargin.style.width = "0%";
-    wfBarDebt.textContent = "";
-    wfBarMargin.textContent = `Manque ${fmt(Math.abs(nette), 0)} €`;
-    wfBarMargin.classList.add("deficit");
-    wfBarMargin.style.width = "34%";
-    wfBarDebt.style.width = "66%";
-    wfBarDebt.textContent = `Capital restant + frais — ${fmt(debt, 0)} €`;
-  }
+  elPrix.textContent   = fmt(prix) + " €";
+  elFAI.textContent    = fmt(prixFAI) + " €";
+  elAgence.textContent = fmt(fraisAg) + " €";
+  elM2.textContent     = fmt(m2) + " €/m²";
 
-  wfResultBrute.textContent = (brute >= 0 ? "+" : "") + fmt(brute, 0) + " €";
-  wfResultBrute.className = "wf-result-val " + (brute >= 0 ? "val-pos" : "val-neg");
+  updatePresets(prix);
+  if (prixInput && document.activeElement !== prixInput) prixInput.value = prix;
 
-  wfResultVal.textContent = (nette >= 0 ? "+" : "") + fmt(nette, 0) + " €";
-  wfResultVal.className = "wf-result-val " + (nette >= 0 ? "val-pos" : "val-neg");
+  const rows = filtre3Ans(DATA);
+  if (selectedMonthIdx > rows.length - 1) selectedMonthIdx = Math.max(0, rows.length - 1);
+  if (!rows.length) return;
 
-  wfResultSecondaire.textContent = (netteSecondaire >= 0 ? "+" : "") + fmt(netteSecondaire, 0) + " €";
-  wfResultSecondaire.className = "wf-result-val " + (netteSecondaire >= 0 ? "val-pos" : "val-neg");
+  const capSelected  = rows[selectedMonthIdx][1];
+  const dateSelected = rows[selectedMonthIdx][0];
+  const capToday     = rows[0][1];
+
+  renderTable(prix, rows);
+  renderHeat(prix, rows);
+  renderSide(prix, capSelected, dateSelected, rows);
+  renderCascade(prix, capSelected, dateSelected);
+  renderChart(prix, rows);
+
+  const scenarioLabel = heroScenario === "habite" ? "j'habite dedans" : "je mets en location";
+  legendNetteLabel.textContent = `Marge nette (${scenarioLabel})`;
 }
 
-/* ── Sensitivity grid (price × exit month) ─────────── */
-function renderSensitivityGrid(rows) {
-  if (!rows.length) { sensTable.innerHTML = ""; return; }
+/* ── Mois par mois ────────────────────────────────────── */
+function renderTable(prix, rows) {
+  netColLabel.textContent = heroScenario === "habite" ? "Marge nette (j'habite dedans)" : "Marge nette (je mets en location)";
+  let html = "";
+  rows.forEach(([ds, cap], i) => {
+    const brute = prix - cap;
+    const nette = netFor(prix, cap, heroScenario);
+    const sel = i === selectedMonthIdx;
+    html += `<tr style="background:${sel ? "#245B5F" : "transparent"}">
+      <td style="color:${sel ? "var(--butter)" : "var(--text)"}; font-weight:${sel ? "700" : "400"}">${fmtDate(ds)}</td>
+      <td>${fmt(cap, 0)} €</td>
+      <td class="muted">${fmt(brute, 0)} €</td>
+      <td style="font-weight:600; color:${nette < 0 ? "var(--coral)" : "var(--text)"}">${signed(nette)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+/* ── Grille prix × mois (heat) ────────────────────────── */
+function renderHeat(prix, rows) {
   const n = rows.length;
-  const step = Math.max(1, Math.ceil(n / 6));
+  const step = Math.max(1, Math.ceil(n / 7));
   const colIdxs = [];
   for (let i = 0; i < n; i += step) colIdxs.push(i);
   if (colIdxs[colIdxs.length - 1] !== n - 1) colIdxs.push(n - 1);
 
-  const priceGrid = PRESETS.map(p => p.val);
-  const values = priceGrid.map(price => colIdxs.map(ci => {
-    const m = computeMarges(price, rows[ci][1]);
-    return heroScenario === "habite" ? m.nette : m.netteSecondaire;
-  }));
-  const maxAbs = Math.max(...values.flat().map(Math.abs), 1);
-  const currentPrix = +slider.value;
+  const priceStep = 35000;
+  const prices = [];
+  for (let p = +slider.max; p >= +slider.min; p -= priceStep) prices.push(p);
+  if (!prices.includes(prix)) { prices.push(prix); prices.sort((a,b) => b - a); }
 
-  let html = "<thead><tr><th>Prix / Mois</th>";
-  colIdxs.forEach((ci, idx) => {
-    html += `<th class="${idx === 0 ? "now" : ""}">${fmtDate(rows[ci][0])}</th>`;
-  });
+  let html = `<thead><tr><th scope="col" style="text-align:right">Prix \\ Vente en</th>`;
+  colIdxs.forEach(ci => { html += `<th scope="col">${ci === 0 ? "Aujourd'hui" : fmtDate(rows[ci][0])}</th>`; });
   html += "</tr></thead><tbody>";
 
-  priceGrid.forEach((price, ri) => {
-    html += `<tr><th class="${price === currentPrix ? "active-row" : ""}" data-price="${price}">${fmt(price)} €</th>`;
-    colIdxs.forEach((ci, ci2) => {
-      const v = values[ri][ci2];
-      const ok = v >= 0;
-      const alpha = (0.06 + 0.22 * Math.min(1, Math.abs(v) / maxAbs)).toFixed(2);
-      const bg = ok ? `rgba(45,106,79,${alpha})` : `rgba(139,41,41,${alpha})`;
-      html += `<td class="${ok ? "val-pos" : "val-neg"}" style="background:${bg}" data-price="${price}">${ok ? "+" : ""}${fmt(v, 0)}</td>`;
+  prices.forEach(pr => {
+    const cur = pr === prix;
+    html += `<tr><th scope="row" style="color:${cur ? "var(--butter)" : "var(--muted)"}; font-weight:${cur ? "700" : "500"}" data-price="${pr}">${fmt(pr, 0)} €</th>`;
+    colIdxs.forEach(ci => {
+      const nval = netFor(pr, rows[ci][1], heroScenario);
+      const on = cur && ci === selectedMonthIdx;
+      let bg, fg;
+      if (nval < 0)          { bg = "#4A2A2A"; fg = "#FFB3A1"; }
+      else if (nval < 50000) { bg = "#1E474C"; fg = "#E6EFEC"; }
+      else if (nval < 120000){ bg = "#2C7270"; fg = "#E6EFEC"; }
+      else                   { bg = "#8FD0C2"; fg = "#0F2A2E"; }
+      const ring = on ? "outline:3px solid var(--butter); outline-offset:-3px;" : "";
+      html += `<td style="padding:0"><button type="button" class="cell" data-price="${pr}" data-month="${ci}"
+        aria-pressed="${on}" aria-label="${fmt(pr,0)} €, vente en ${fmtDate(rows[ci][0])} : ${signed(nval)}"
+        style="background:${bg}; color:${fg}; font-weight:${on ? "800" : "500"}; ${ring}">${kSigned(nval)}</button></td>`;
     });
     html += "</tr>";
   });
   html += "</tbody>";
-  sensTable.innerHTML = html;
+  heatTable.innerHTML = html;
 
-  sensTable.querySelectorAll("[data-price]").forEach(el => {
+  heatTable.querySelectorAll("th[data-price]").forEach(el => {
+    el.addEventListener("click", () => { slider.value = +el.dataset.price; render(el.dataset.price); });
+  });
+  heatTable.querySelectorAll(".cell").forEach(el => {
     el.addEventListener("click", () => {
-      const v = +el.dataset.price;
-      slider.value = v;
-      render(v);
+      slider.value = +el.dataset.price;
+      selectedMonthIdx = +el.dataset.month;
+      render(el.dataset.price);
     });
   });
 }
 
-/* ── Chart ────────────────────────────────────────── */
+/* ── Panneau de détail (côté grille) ──────────────────── */
+function renderSide(prix, capSelected, dateSelected, rows) {
+  const n     = netFor(prix, capSelected, heroScenario);
+  const n0    = netFor(prix, rows[0][1], heroScenario);
+  const t     = heroScenario === "habite" ? 0 : Math.max(0, prix - COUT_TOTAL) * TAUX_PLUSVALUE;
+  const monthLabel = selectedMonthIdx === 0 ? "aujourd'hui" : fmtDate(dateSelected);
+
+  sideIntro.textContent = `Vendu ${fmt(prix,0)} € en ${monthLabel}, il vous reste`;
+  sideHero.textContent = signed(n);
+  sideHero.style.color = n < 0 ? "var(--coral)" : "var(--text)";
+  sideVersus.textContent = selectedMonthIdx === 0
+    ? "En vendant maintenant."
+    : `${signed(n - n0)} par rapport à une vente aujourd'hui.`;
+
+  const lines = [
+    { label: "Prix de vente", value: fmt(prix,0) + " €" },
+    { label: "Prêt restant en " + monthLabel, value: "−" + fmt(capSelected,0) + " €" },
+    { label: "Frais de notaire", value: "−" + fmt(FRAIS_NOTAIRE,0) + " €" }
+  ];
+  if (heroScenario === "location") lines.push({ label: "Impôt sur la plus-value", value: "−" + fmt(t,0) + " €" });
+  lines.push({ label: "Il vous reste", value: signed(n) });
+  sideLines.innerHTML = lines.map(l => `<div><dt>${l.label}</dt><dd>${l.value}</dd></div>`).join("");
+
+  const pv = prix - COUT_TOTAL;
+  sideTaxNote.textContent = heroScenario === "habite"
+    ? "Résidence principale au moment de la vente : plus-value exonérée."
+    : (pv > 0 ? `Bien loué : plus-value de ${fmt(pv,0)} € taxée à 36,2 %.` : "Bien loué : pas de plus-value, donc pas d'impôt.");
+}
+
+/* ── Cascade "Où partent les X €" ──────────────────────── */
+function renderCascade(prix, capSelected, dateSelected) {
+  cascadeTitle.textContent = `Où partent les ${fmt(prix,0)} €`;
+  cascadeMonth.textContent = "Vente en " + (selectedMonthIdx === 0 ? "aujourd'hui" : fmtDate(dateSelected));
+
+  const t = heroScenario === "location" ? Math.max(0, prix - COUT_TOTAL) * TAUX_PLUSVALUE : 0;
+  const n = netFor(prix, capSelected, heroScenario);
+
+  const outs = [["Prêt restant", capSelected], ["Frais de notaire", FRAIS_NOTAIRE]];
+  if (heroScenario === "location") outs.push(["Impôt plus-value", t]);
+
+  let level = prix;
+  const raw = [{ label: "Prix de vente", from: 0, to: prix, color: "var(--mint)", text: kEur(prix) }];
+  outs.forEach(([label, amount]) => {
+    const next = level - amount;
+    raw.push({ label, from: Math.max(0, next), to: level, color: "var(--mid)", text: "−" + kEur(amount) });
+    level = next;
+  });
+  if (n >= 0) raw.push({ label: "Il reste", from: 0, to: n, color: "var(--butter)", text: kEur(n) });
+  else        raw.push({ label: "Il manque", from: 0, to: -n, color: "var(--coral)", text: kEur(n) });
+
+  const top = Math.max(prix, capSelected + FRAIS_NOTAIRE + t, 1);
+  const pct = x => (x / top * 100).toFixed(2) + "%";
+
+  cascadeCols.innerHTML = raw.map(s => `
+    <div class="ccol">
+      <div class="bar" style="bottom:${pct(s.from)}; height:${pct(Math.max(s.to - s.from, top * 0.004))}; background:${s.color}"></div>
+      <p class="val" style="bottom:calc(${pct(s.to)} + 8px)">${s.text}</p>
+    </div>`).join("");
+  cascadeLabels.innerHTML = raw.map(s => `<p>${s.label}</p>`).join("");
+}
+
+/* ── Chart "Quand vendre" ─────────────────────────────── */
 const SVGNS = "http://www.w3.org/2000/svg";
 const CHART_W = 860, CHART_H = 300;
 const PAD = { l: 58, r: 16, t: 16, b: 28 };
@@ -1389,10 +605,12 @@ function renderChart(prix, rows) {
   const months = rows.map(r => r[0]);
   const caps   = rows.map(r => r[1]);
   const brute  = caps.map(c => prix - c);
-  const nette  = caps.map(c => {
-    const m = computeMarges(prix, c);
-    return heroScenario === "habite" ? m.nette : m.netteSecondaire;
-  });
+  const nette  = caps.map(c => netFor(prix, c, heroScenario));
+
+  const first = nette.findIndex(v => v >= 0);
+  chartThreshold.textContent = first === 0 ? "Rentable dès aujourd'hui"
+    : first > 0 ? "Rentable à partir de " + fmtDate(months[first])
+    : "Pas rentable sur la période";
 
   const allVals = brute.concat(nette, [0]);
   let minV = Math.min(...allVals), maxV = Math.max(...allVals);
@@ -1404,108 +622,88 @@ function renderChart(prix, rows) {
   const yAt = v => PAD.t + (maxV - v) / (maxV - minV) * PLOT_H;
   const y0  = yAt(0);
 
-  /* colored fill segments relative to the zero threshold */
   const fillsGroup = svgEl("g", {});
   for (let i = 0; i < n - 1; i++) {
     const x1 = xAt(i), x2 = xAt(i + 1), v1 = nette[i], v2 = nette[i + 1];
     const segs = [];
-    if ((v1 >= 0) === (v2 >= 0)) {
-      segs.push([x1, v1, x2, v2]);
-    } else {
+    if ((v1 >= 0) === (v2 >= 0)) { segs.push([x1, v1, x2, v2]); }
+    else {
       const t = v1 / (v1 - v2);
       const xc = x1 + (x2 - x1) * t;
-      segs.push([x1, v1, xc, 0]);
-      segs.push([xc, 0, x2, v2]);
+      segs.push([x1, v1, xc, 0]); segs.push([xc, 0, x2, v2]);
     }
     segs.forEach(([xa, va, xb, vb]) => {
       const ok = va >= 0 && vb >= 0;
       fillsGroup.appendChild(svgEl("polygon", {
         points: `${xa.toFixed(1)},${y0.toFixed(1)} ${xa.toFixed(1)},${yAt(va).toFixed(1)} ${xb.toFixed(1)},${yAt(vb).toFixed(1)} ${xb.toFixed(1)},${y0.toFixed(1)}`,
-        fill: ok ? "var(--green)" : "var(--red)",
-        opacity: "0.08"
+        fill: ok ? "var(--mint)" : "var(--coral)", opacity: "0.1"
       }));
     });
   }
   chartSvg.appendChild(fillsGroup);
 
-  /* zero threshold line */
   chartSvg.appendChild(svgEl("line", {
     x1: PAD.l, x2: PAD.l + PLOT_W, y1: y0, y2: y0,
     stroke: "var(--muted)", "stroke-width": 1, "stroke-dasharray": "3 4", opacity: .6
   }));
-  chartSvg.appendChild(svgEl("text", {
-    x: PAD.l + PLOT_W, y: y0 - 5, "text-anchor": "end",
-    "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
-  })).textContent = "seuil 0 €";
+  const seuilT = svgEl("text", { x: PAD.l + PLOT_W, y: y0 - 5, "text-anchor": "end", "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
+  seuilT.textContent = "seuil 0 €";
+  chartSvg.appendChild(seuilT);
 
-  /* y-axis labels (max / 0 / min) */
   [maxV, minV].forEach(v => {
     const y = yAt(v);
     chartSvg.appendChild(svgEl("line", { x1: PAD.l, x2: PAD.l + PLOT_W, y1: y, y2: y, stroke: "var(--line)", "stroke-width": 1 }));
-    const t = svgEl("text", { x: 4, y: y + 3, "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)" });
+    const t = svgEl("text", { x: 4, y: y + 3, "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
     t.textContent = fmt(v, 0);
     chartSvg.appendChild(t);
   });
 
-  /* x-axis labels (sparse) */
   const step = Math.max(1, Math.ceil(n / 6));
   for (let i = 0; i < n; i += step) {
-    const t = svgEl("text", {
-      x: xAt(i), y: CHART_H - 6, "text-anchor": "middle",
-      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
-    });
-    t.textContent = fmtDate(months[i]);
+    const t = svgEl("text", { x: xAt(i), y: CHART_H - 6, "text-anchor": "middle", "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
+    t.textContent = i === 0 ? "Aujourd'hui" : fmtDate(months[i]);
     chartSvg.appendChild(t);
   }
   if ((n - 1) % step !== 0) {
-    const t = svgEl("text", {
-      x: xAt(n - 1), y: CHART_H - 6, "text-anchor": "middle",
-      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--muted)"
-    });
+    const t = svgEl("text", { x: xAt(n - 1), y: CHART_H - 6, "text-anchor": "middle", "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
     t.textContent = fmtDate(months[n - 1]);
     chartSvg.appendChild(t);
   }
 
-  /* brute line (secondary, dashed) */
   chartSvg.appendChild(svgEl("path", {
     d: brute.map((v, i) => `${i === 0 ? "M" : "L"}${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(" "),
     fill: "none", stroke: "var(--muted)", "stroke-width": 2,
     "stroke-dasharray": "2 5", "stroke-linecap": "round", "stroke-linejoin": "round"
   }));
-
-  /* nette line (primary, solid) */
   chartSvg.appendChild(svgEl("path", {
     d: nette.map((v, i) => `${i === 0 ? "M" : "L"}${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(" "),
-    fill: "none", stroke: "var(--ink)", "stroke-width": 2,
+    fill: "none", stroke: "var(--text)", "stroke-width": 3,
     "stroke-linecap": "round", "stroke-linejoin": "round"
   }));
 
-  /* breakeven marker */
   const bIdx = nette.findIndex(v => v >= 0);
   if (bIdx >= 0) {
-    chartSvg.appendChild(svgEl("circle", { cx: xAt(bIdx), cy: yAt(nette[bIdx]), r: 4.5, fill: "var(--accent)", stroke: "var(--card)", "stroke-width": 1.5 }));
-    const t = svgEl("text", {
-      x: xAt(bIdx), y: yAt(nette[bIdx]) - 11, "text-anchor": "middle",
-      "font-family": "IBM Plex Mono, monospace", "font-size": "10", fill: "var(--accent)", "font-weight": "500"
-    });
-    t.textContent = fmtDate(months[bIdx]);
-    chartSvg.appendChild(t);
+    chartSvg.appendChild(svgEl("circle", { cx: xAt(bIdx), cy: yAt(nette[bIdx]), r: 4.5, fill: "var(--text)", stroke: "var(--panel)", "stroke-width": 1.5 }));
   }
 
-  /* endpoint direct label */
   const lastV = nette[n - 1];
   const lt = svgEl("text", {
     x: xAt(n - 1) - 4, y: yAt(lastV) + (lastV >= 0 ? -10 : 16), "text-anchor": "end",
-    "font-family": "IBM Plex Mono, monospace", "font-size": "11", "font-weight": "500",
-    fill: lastV >= 0 ? "var(--green)" : "var(--red)"
+    "font-family": "Sofia Sans Condensed, sans-serif", "font-size": "13", "font-weight": "700",
+    fill: lastV >= 0 ? "var(--mint)" : "var(--coral)"
   });
-  lt.textContent = (lastV >= 0 ? "+" : "") + fmt(lastV, 0) + " €";
+  lt.textContent = signed(lastV);
   chartSvg.appendChild(lt);
 
-  /* hover layer: crosshair + dots + hit area */
-  const crosshair = svgEl("line", { x1: 0, x2: 0, y1: PAD.t, y2: PAD.t + PLOT_H, stroke: "var(--accent)", "stroke-width": 1, opacity: 0 });
-  const dotNette = svgEl("circle", { r: 4, fill: "var(--ink)", stroke: "var(--card)", "stroke-width": 1.5, opacity: 0 });
-  const dotBrute = svgEl("circle", { r: 4, fill: "var(--muted)", stroke: "var(--card)", "stroke-width": 1.5, opacity: 0 });
+  /* marqueur du mois sélectionné (persistant, piloté par la grille) */
+  const selIdx = Math.max(0, Math.min(n - 1, selectedMonthIdx));
+  chartSvg.appendChild(svgEl("line", { x1: xAt(selIdx), x2: xAt(selIdx), y1: PAD.t, y2: PAD.t + PLOT_H, stroke: "var(--butter)", "stroke-width": 1, "stroke-dasharray": "3 4" }));
+  chartSvg.appendChild(svgEl("circle", { cx: xAt(selIdx), cy: yAt(nette[selIdx]), r: 6, fill: "var(--butter)" }));
+
+  /* survol : crosshair + tooltip (comportement existant conservé) */
+  const crosshair = svgEl("line", { x1: 0, x2: 0, y1: PAD.t, y2: PAD.t + PLOT_H, stroke: "var(--butter)", "stroke-width": 1, opacity: 0 });
+  const dotNette = svgEl("circle", { r: 4, fill: "var(--text)", stroke: "var(--panel)", "stroke-width": 1.5, opacity: 0 });
+  const dotBrute = svgEl("circle", { r: 4, fill: "var(--muted)", stroke: "var(--panel)", "stroke-width": 1.5, opacity: 0 });
   chartSvg.appendChild(crosshair);
   chartSvg.appendChild(dotBrute);
   chartSvg.appendChild(dotNette);
@@ -1526,10 +724,10 @@ function renderChart(prix, rows) {
     dotBrute.setAttribute("cx", xAt(i)); dotBrute.setAttribute("cy", yAt(brute[i])); dotBrute.setAttribute("opacity", 1);
 
     chartTooltip.innerHTML =
-      `<strong>${fmtDate(months[i])}</strong><br>` +
+      `<strong>${i === 0 ? "Aujourd'hui" : fmtDate(months[i])}</strong><br>` +
       `Capital restant : ${fmt(caps[i], 0)} €<br>` +
       `Marge brute : ${fmt(brute[i], 0)} €<br>` +
-      `Marge nette : ${nette[i] >= 0 ? "+" : ""}${fmt(nette[i], 0)} €`;
+      `Marge nette : ${signed(nette[i])}`;
     chartTooltip.style.left = px + "px";
     chartTooltip.style.top = Math.min(pyNette, pyBrute) + "px";
     chartTooltip.style.opacity = 1;
@@ -1544,9 +742,16 @@ function renderChart(prix, rows) {
   hit.addEventListener("mouseleave", onLeave);
   hit.addEventListener("touchmove", e => { onMove(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); }, { passive: false });
   hit.addEventListener("touchend", onLeave);
+  hit.addEventListener("click", e => {
+    const wrapRect = chartWrap.getBoundingClientRect();
+    const scale = wrapRect.width / CHART_W;
+    const svgX = (e.clientX - wrapRect.left) / scale;
+    selectedMonthIdx = Math.max(0, Math.min(n - 1, Math.round((svgX - PAD.l) / (PLOT_W / (n - 1)))));
+    render(slider.value);
+  });
 }
 
-/* ── Slider / input sync ──────────────────────────── */
+/* ── Slider / input sync (inchangé) ───────────────────── */
 slider.addEventListener("input", e => render(e.target.value));
 prixInput.addEventListener("input", e => {
   const v = +e.target.value;
@@ -1557,7 +762,7 @@ prixInput.addEventListener("blur", e => {
   e.target.value = v; slider.value = v; render(v);
 });
 
-/* ── Export CSV ───────────────────────────────────── */
+/* ── Export CSV (inchangé) ────────────────────────────── */
 function exportCSV() {
   const prix = +slider.value;
   const rows = filtre3Ans(DATA);
@@ -1565,7 +770,7 @@ function exportCSV() {
   let csv = "Mois;Capital restant;Marge brute;Marge nette\n";
   rows.forEach(([ds, cap]) => {
     const brute = prix - cap;
-    const nette  = brute - FRAIS_NOTAIRE;
+    const nette = netFor(prix, cap, heroScenario);
     csv += `${fmtDate(ds)};${dec(cap)};${dec(brute)};${dec(nette)}\n`;
   });
   const blob = new Blob(["﻿" + csv], { type:"text/csv;charset=utf-8;" });
@@ -1575,24 +780,23 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
-/* ── Copy link ────────────────────────────────────── */
+/* ── Copier le lien (inchangé) ─────────────────────────── */
 function copyLink() {
   const url = new URL(location.href);
   url.searchParams.set("prix", slider.value);
   navigator.clipboard.writeText(url.toString()).then(() => {
-    const btn = document.querySelector('.actions .btn:nth-child(2)');
+    const btn = document.querySelector('.noprint .ghost:nth-child(2)');
     const old = btn.textContent;
     btn.textContent = "✓ Lien copié !";
     setTimeout(() => btn.textContent = old, 2000);
   });
 }
 
-/* ── URL param ────────────────────────────────────── */
+/* ── Démarrage ─────────────────────────────────────────── */
 const startPrix = new URLSearchParams(location.search).get("prix") || 370000;
 slider.value = startPrix;
 render(startPrix);
 
-/* ── Footer date ──────────────────────────────────── */
 document.getElementById("footerDate").textContent =
   "Simulateur mis à jour le " + new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
 </script>
