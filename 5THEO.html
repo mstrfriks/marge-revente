@@ -295,6 +295,55 @@ input[type=range]::-moz-range-thumb {
   color: var(--ink);
 }
 
+/* ── Hero result ───────────────────────────────────── */
+.hero-result {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.hero-toggle {
+  display: inline-flex;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  padding: 3px;
+  margin-bottom: 20px;
+}
+.hero-toggle-btn {
+  border: none;
+  background: transparent;
+  color: var(--paper);
+  opacity: .55;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .02em;
+  transition: all .15s;
+}
+.hero-toggle-btn.active { opacity: 1; background: rgba(255,255,255,.14); }
+.hero-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  opacity: .6;
+  margin-bottom: 8px;
+}
+.hero-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  font-size: clamp(36px, 7vw, 56px);
+  letter-spacing: -.01em;
+  line-height: 1;
+}
+.hero-value.val-pos { color: #5fd88a; }
+.hero-value.val-neg { color: #ff8a8a; }
+.hero-sub { margin-top: 10px; font-size: 12.5px; opacity: .65; }
+
 /* ── Timeline ───────────────────────────────────────── */
 .timeline-section {
   background: var(--card);
@@ -371,16 +420,30 @@ input[type=range]::-moz-range-thumb {
   line-height: 1.6;
   color: var(--muted);
 }
-.wf-explainer-title {
+.wf-explainer summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 10px;
 }
-.wf-explainer p { margin-bottom: 8px; }
-.wf-explainer p:last-child { margin-bottom: 0; }
+.wf-explainer summary::-webkit-details-marker { display: none; }
+.wf-explainer summary::before {
+  content: "▸";
+  font-size: 9px;
+  transition: transform .15s;
+  display: inline-block;
+}
+.wf-explainer[open] summary::before { transform: rotate(90deg); }
+.wf-explainer summary:hover { color: var(--ink); }
+.wf-explainer-body { margin-top: 14px; }
+.wf-explainer-body p { margin-bottom: 8px; }
+.wf-explainer-body p:last-child { margin-bottom: 0; }
 .wf-explainer strong { color: var(--ink); font-weight: 600; }
 .wf-explainer code {
   font-family: 'IBM Plex Mono', monospace;
@@ -776,6 +839,17 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
     </div>
   </div>
 
+  <!-- Hero result -->
+  <div class="hero-result">
+    <div class="hero-toggle" role="group" aria-label="Scénario">
+      <button type="button" class="hero-toggle-btn active" data-scenario="habite">J'habite dedans</button>
+      <button type="button" class="hero-toggle-btn" data-scenario="location">Je mets en location</button>
+    </div>
+    <div class="hero-label">Vous récupérez</div>
+    <div class="hero-value" id="heroValue">—</div>
+    <div class="hero-sub" id="heroSub">—</div>
+  </div>
+
   <!-- Timeline -->
   <div class="timeline-section">
     <div class="chart-header">
@@ -810,13 +884,15 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
       </div>
     </div>
 
-    <div class="wf-explainer">
-      <div class="wf-explainer-title">Comment lire ces deux colonnes</div>
-      <p>Le fisc ne regarde pas ton prêt : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €), pas à ton capital restant dû.</p>
-      <p><code>Plus-value imposable = max(0, Prix de vente − 446 590 €)</code><br><code>Taxe = Plus-value imposable × 36,2 %</code></p>
-      <p>Tant que le prix net vendeur reste <strong>sous 446 590 €</strong>, la plus-value imposable est nulle → aucune taxe, en résidence principale comme en location. Ce seuil fiscal est différent du seuil de rentabilité réel (capital restant dû + frais de notaire) : on peut être en profit cash et non imposable en même temps, ou l'inverse.</p>
-      <p class="wf-explainer-warn">⚠️ Ce seuil de 446 590 € suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), et jamais déjà déduits de revenus fonciers. Si une partie est retoquée en contrôle, le seuil baisse d'autant.</p>
-    </div>
+    <details class="wf-explainer">
+      <summary>Comment lire ces deux colonnes ?</summary>
+      <div class="wf-explainer-body">
+        <p>Le fisc ne regarde pas ton prêt : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €), pas à ton capital restant dû.</p>
+        <p><code>Plus-value imposable = max(0, Prix de vente − 446 590 €)</code><br><code>Taxe = Plus-value imposable × 36,2 %</code></p>
+        <p>Tant que le prix net vendeur reste <strong>sous 446 590 €</strong>, la plus-value imposable est nulle → aucune taxe, en résidence principale comme en location. Ce seuil fiscal est différent du seuil de rentabilité réel (capital restant dû + frais de notaire) : on peut être en profit cash et non imposable en même temps, ou l'inverse.</p>
+        <p class="wf-explainer-warn">⚠️ Ce seuil de 446 590 € suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), et jamais déjà déduits de revenus fonciers. Si une partie est retoquée en contrôle, le seuil baisse d'autant.</p>
+      </div>
+    </details>
 
     <div class="wf-gauge">
       <div class="wf-gauge-head">
@@ -992,6 +1068,9 @@ const wfTitle     = document.getElementById("wfTitle");
 const wfResultVal = document.getElementById("wfResultVal");
 const wfResultBrute = document.getElementById("wfResultBrute");
 const wfResultSecondaire = document.getElementById("wfResultSecondaire");
+const heroValue   = document.getElementById("heroValue");
+const heroSub     = document.getElementById("heroSub");
+const heroToggleBtns = document.querySelectorAll(".hero-toggle-btn");
 const gaugeFill   = document.getElementById("gaugeFill");
 const gaugePct    = document.getElementById("gaugePct");
 const gaugeSub    = document.getElementById("gaugeSub");
@@ -1082,6 +1161,7 @@ function render(v) {
     wfTitle.textContent = "Décomposition — " + fmtDate(rows[0][0]);
     renderWaterfall(prix, capToday);
     renderGauge(prix - capToday);
+    updateHero(prix, capToday);
   }
 }
 
@@ -1154,10 +1234,39 @@ const WF_PAD = { l: 54, r: 20, t: 28, b: 40 };
 const WF_PW = WF_W - WF_PAD.l - WF_PAD.r;
 const WF_PH = WF_H - WF_PAD.t - WF_PAD.b;
 
-function renderWaterfall(prix, capToday) {
-  wfSvg.innerHTML = "";
+function computeMarges(prix, capToday) {
   const brute = prix - capToday;
   const nette = brute - FRAIS_NOTAIRE;
+  const plusValueImposable = Math.max(0, prix - COUT_TOTAL);
+  const taxePlusValue = plusValueImposable * TAUX_PLUSVALUE;
+  const netteSecondaire = nette - taxePlusValue;
+  return { brute, nette, plusValueImposable, taxePlusValue, netteSecondaire };
+}
+
+let heroScenario = "habite";
+
+function updateHero(prix, capToday) {
+  const { nette, netteSecondaire } = computeMarges(prix, capToday);
+  const val = heroScenario === "habite" ? nette : netteSecondaire;
+  heroValue.textContent = (val >= 0 ? "+" : "") + fmt(val, 0) + " €";
+  heroValue.className = "hero-value " + (val >= 0 ? "val-pos" : "val-neg");
+  heroSub.textContent = heroScenario === "habite"
+    ? "Résidence principale au jour de la vente → plus-value exonérée"
+    : "Bien secondaire/locatif → après plus-value de 36,2 %";
+}
+
+heroToggleBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    heroToggleBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    heroScenario = btn.dataset.scenario;
+    render(slider.value);
+  });
+});
+
+function renderWaterfall(prix, capToday) {
+  wfSvg.innerHTML = "";
+  const { brute, nette, netteSecondaire } = computeMarges(prix, capToday);
 
   const steps = [
     { label: "Prix vente",              v0: 0,     v1: prix, type: "total" },
@@ -1170,9 +1279,6 @@ function renderWaterfall(prix, capToday) {
   wfResultVal.textContent = (nette >= 0 ? "+" : "") + fmt(nette, 0) + " €";
   wfResultVal.className = "wf-result-val " + (nette >= 0 ? "val-pos" : "val-neg");
 
-  const plusValueImposable = Math.max(0, prix - COUT_TOTAL);
-  const taxePlusValue = plusValueImposable * TAUX_PLUSVALUE;
-  const netteSecondaire = nette - taxePlusValue;
   wfResultSecondaire.textContent = (netteSecondaire >= 0 ? "+" : "") + fmt(netteSecondaire, 0) + " €";
   wfResultSecondaire.className = "wf-result-val " + (netteSecondaire >= 0 ? "val-pos" : "val-neg");
 
