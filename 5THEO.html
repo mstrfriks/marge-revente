@@ -343,8 +343,8 @@ input[type=range]::-moz-range-thumb {
   flex-wrap: wrap;
   gap: 24px 40px;
 }
-.wf-result-item { display: flex; flex-direction: column; gap: 6px; }
-.wf-result-note { font-size: 11px; color: var(--muted); }
+.wf-result-item { display: flex; flex-direction: column; gap: 6px; max-width: 260px; }
+.wf-result-note { font-size: 11px; color: var(--muted); line-height: 1.4; }
 .wf-result-label {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -770,13 +770,14 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
         <span class="wf-result-val" id="wfResultBrute">—</span>
       </div>
       <div class="wf-result-item">
-        <span class="wf-result-label">Marge nette</span>
+        <span class="wf-result-label">Marge nette · j'habite dedans</span>
         <span class="wf-result-val" id="wfResultVal">—</span>
+        <span class="wf-result-note">résidence principale au jour de la vente → plus-value exonérée (0 %)</span>
       </div>
       <div class="wf-result-item">
-        <span class="wf-result-label">Marge nette · bien secondaire</span>
+        <span class="wf-result-label">Marge nette · je mets en location</span>
         <span class="wf-result-val" id="wfResultSecondaire">—</span>
-        <span class="wf-result-note">après plus-value 36,2 % (travaux inclus, facturés entreprise)</span>
+        <span class="wf-result-note">bien secondaire/locatif → plus-value 36,2 % (19 % IR + 17,2 % PS), travaux inclus (facture entreprise), sans abattement (détention &lt; 6 ans)</span>
       </div>
     </div>
     <div class="wf-gauge">
