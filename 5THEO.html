@@ -335,6 +335,30 @@ input[type=range]::-moz-range-thumb {
   box-shadow: var(--shadow);
 }
 .wf-chart svg { display: block; width: 100%; height: auto; }
+.wf-result {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.wf-result-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.wf-result-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.wf-result-val.val-pos { color: var(--green); }
+.wf-result-val.val-neg { color: var(--red); }
 .wf-gauge { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
 .wf-gauge-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
 .wf-gauge-head span:first-child {
@@ -688,15 +712,6 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
     </div>
   </div>
 
-  <!-- Timeline -->
-  <div class="timeline-section">
-    <div class="chart-header">
-      <span class="slider-label">Chronologie</span>
-      <span class="timeline-note" id="timelineNote"></span>
-    </div>
-    <div class="timeline-track" id="timelineTrack"></div>
-  </div>
-
   <!-- Slider -->
   <div class="slider-section">
     <div class="slider-header">
@@ -729,6 +744,15 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
     </div>
   </div>
 
+  <!-- Timeline -->
+  <div class="timeline-section">
+    <div class="chart-header">
+      <span class="slider-label">Chronologie</span>
+      <span class="timeline-note" id="timelineNote"></span>
+    </div>
+    <div class="timeline-track" id="timelineTrack"></div>
+  </div>
+
   <!-- Waterfall + gauge -->
   <div class="wf-section">
     <div class="chart-header">
@@ -736,6 +760,10 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
     </div>
     <div class="wf-chart">
       <svg id="wfSvg" viewBox="0 0 760 260" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="wf-result">
+      <span class="wf-result-label">Marge nette</span>
+      <span class="wf-result-val" id="wfResultVal">—</span>
     </div>
     <div class="wf-gauge">
       <div class="wf-gauge-head">
@@ -907,6 +935,7 @@ const timelineTrack = document.getElementById("timelineTrack");
 const timelineNote  = document.getElementById("timelineNote");
 const wfSvg       = document.getElementById("wfSvg");
 const wfTitle     = document.getElementById("wfTitle");
+const wfResultVal = document.getElementById("wfResultVal");
 const gaugeFill   = document.getElementById("gaugeFill");
 const gaugePct    = document.getElementById("gaugePct");
 const gaugeSub    = document.getElementById("gaugeSub");
@@ -1057,13 +1086,14 @@ function renderWaterfall(prix, capToday) {
   const nette = brute - FRAIS_NOTAIRE;
 
   const steps = [
-    { label: "Prix vente",      v0: 0,     v1: prix,  type: "total" },
-    { label: "Capital restant", v0: brute, v1: prix,  type: "sub" },
-    { label: "Frais notaire",   v0: nette, v1: brute, type: "sub" },
-    { label: "Marge nette",     v0: 0,     v1: nette, type: nette >= 0 ? "pos" : "neg" }
+    { label: "Prix vente",              v0: 0,     v1: prix, type: "total" },
+    { label: "Capital restant + frais", v0: nette, v1: prix, type: "sub" }
   ];
 
-  let minV = Math.min(0, prix, brute, nette), maxV = Math.max(0, prix, brute, nette);
+  wfResultVal.textContent = (nette >= 0 ? "+" : "") + fmt(nette, 0) + " €";
+  wfResultVal.className = "wf-result-val " + (nette >= 0 ? "val-pos" : "val-neg");
+
+  let minV = Math.min(0, prix, nette), maxV = Math.max(0, prix, nette);
   const pad = (maxV - minV) * 0.12 || 1000;
   minV -= pad; maxV += pad;
   const yAt = v => WF_PAD.t + (maxV - v) / (maxV - minV) * WF_PH;
