@@ -57,7 +57,6 @@ body {
   margin: 0 auto;
   padding: 48px 20px 80px;
 }
-.layout { display: block; }
 
 /* ── Header ─────────────────────────────────────────── */
 .header {
@@ -179,6 +178,14 @@ body {
   letter-spacing: .15em;
   text-transform: uppercase;
   color: var(--muted);
+}
+.section-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
 }
 .slider-display {
   display: flex;
@@ -328,36 +335,6 @@ input[type=range]::-moz-range-thumb {
 .sticky-value.val-pos { color: #5fd88a; }
 .sticky-value.val-neg { color: #ff8a8a; }
 
-/* ── Detail toggle (vue mobile : accordéon / vue pc : toujours ouvert) ── */
-.detail-toggle { margin-top: 0; }
-.detail-toggle > summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 16px;
-  margin-bottom: 32px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--cream);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transition: all .15s;
-}
-.detail-toggle > summary::-webkit-details-marker { display: none; }
-.detail-toggle > summary::after { content: "▾"; font-size: 10px; transition: transform .15s; }
-.detail-toggle[open] > summary::after { transform: rotate(180deg); }
-.detail-toggle > summary:hover { border-color: var(--ink); color: var(--ink); }
-.scenario-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  color: var(--muted);
-}
 
 /* ── Hero result ───────────────────────────────────── */
 .hero-result {
@@ -658,31 +635,6 @@ input[type=range]::-moz-range-thumb {
 .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
 .preset-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-/* ── Status banners ─────────────────────────────────── */
-.status-banners {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 28px;
-}
-.banner {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  opacity: .35;
-  transition: opacity .3s, background .3s, border-color .3s;
-}
-.banner.active { opacity: 1; }
-.banner.ok.active { background: var(--green-bg); border-color: #a8d5be; }
-.banner.warn.active { background: #fff8ed; border-color: #e6c97a; }
-.banner-icon { font-size: 22px; line-height: 1; }
-.banner-text { font-size: 13px; line-height: 1.5; }
-.banner-text strong { display: block; font-weight: 500; font-size: 14px; color: var(--ink); }
-.banner-text span { color: var(--muted); }
-
 /* ── Table ──────────────────────────────────────────── */
 .table-title {
   font-family: 'IBM Plex Mono', monospace;
@@ -803,18 +755,13 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
   body { background: white; }
   .slider-section, .presets, .actions, .footer, .sticky-bar, .hero-toggle { display: none !important; }
   .page { padding: 20px; }
-  .layout { display: block; }
   .table-wrap { border: 1px solid #ccc; }
-  .status-banners { break-inside: avoid; }
-  .detail-toggle > summary { display: none !important; }
-  .detail-toggle .detail-toggle-body { display: block !important; }
 }
 
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 640px) {
   .acq-grid { grid-template-columns: 1fr 1fr; }
   .derived { grid-template-columns: 1fr 1fr; }
-  .status-banners { grid-template-columns: 1fr; }
   .header { flex-direction: column; }
   .header-badge { align-items: flex-start; }
   .table-wrap { max-height: 420px; }
@@ -861,205 +808,176 @@ tbody td.r { text-align: right; font-family: 'IBM Plex Mono', monospace; font-si
     </div>
   </header>
 
-  <div class="layout">
-    <!-- Colonne essentielle : vue mobile = empilée en haut, vue pc = sidebar collante -->
-    <div class="sidebar-col">
+  <!-- 1 · Le bien -->
+  <div class="section-eyebrow">1 · Le bien</div>
+  <div class="acq-grid">
+    <div class="acq-cell">
+      <div class="acq-label">Prix d'achat</div>
+      <div class="acq-value">341 964 €</div>
+    </div>
+    <div class="acq-cell">
+      <div class="acq-label">Travaux</div>
+      <div class="acq-value">77 268 €</div>
+    </div>
+    <div class="acq-cell">
+      <div class="acq-label">Frais de notaire</div>
+      <div class="acq-value">27 357 €</div>
+    </div>
+    <div class="acq-cell accent">
+      <div class="acq-label">Coût total</div>
+      <div class="acq-value">446 590 €</div>
+    </div>
+  </div>
 
-      <!-- Acquisition -->
-      <div class="acq-grid">
-        <div class="acq-cell">
-          <div class="acq-label">Prix d'achat</div>
-          <div class="acq-value">341 964 €</div>
-        </div>
-        <div class="acq-cell">
-          <div class="acq-label">Travaux</div>
-          <div class="acq-value">77 268 €</div>
-        </div>
-        <div class="acq-cell">
-          <div class="acq-label">Frais de notaire</div>
-          <div class="acq-value">27 357 €</div>
-        </div>
-        <div class="acq-cell accent">
-          <div class="acq-label">Coût total</div>
-          <div class="acq-value">446 590 €</div>
-        </div>
+  <!-- 2 · Prix de vente -->
+  <div class="section-eyebrow">2 · À quel prix le vendre ?</div>
+  <div class="slider-section">
+    <div class="slider-header">
+      <span class="slider-label">Prix net vendeur</span>
+      <div class="slider-display">
+        <span class="slider-amount" id="prixValue">370 000</span>
+        <span class="slider-currency">€</span>
       </div>
-
-      <!-- Slider -->
-      <div class="slider-section">
-        <div class="slider-header">
-          <span class="slider-label">Prix net vendeur</span>
-          <div class="slider-display">
-            <span class="slider-amount" id="prixValue">370 000</span>
-            <span class="slider-currency">€</span>
+    </div>
+    <input type="range" id="prixSlider" min="250000" max="600000" step="1000" value="370000">
+    <div class="range-bounds"><span>250 000 €</span><span>600 000 €</span></div>
+    <div class="exact-input-row">
+      <label for="prixInput">Saisie exacte</label>
+      <input type="number" id="prixInput" min="250000" max="600000" step="1000" value="370000">
+      <span>€</span>
+    </div>
+    <div class="presets" id="presetsContainer"></div>
+    <details class="disclosure">
+      <summary>Détails du prix (FAI, agence, €/m²)</summary>
+      <div class="disclosure-body">
+        <div class="derived">
+          <div class="derived-item">
+            <div class="d-label">Prix FAI (+ 4,5 %)</div>
+            <div class="d-val" id="prixFAI">—</div>
+          </div>
+          <div class="derived-item">
+            <div class="d-label">Frais d'agence</div>
+            <div class="d-val" id="fraisAgence">—</div>
+          </div>
+          <div class="derived-item">
+            <div class="d-label">Prix au m² (FAI)</div>
+            <div class="d-val" id="prixM2">—</div>
           </div>
         </div>
-        <input type="range" id="prixSlider" min="250000" max="600000" step="1000" value="370000">
-        <div class="range-bounds"><span>250 000 €</span><span>600 000 €</span></div>
-        <div class="exact-input-row">
-          <label for="prixInput">Saisie exacte</label>
-          <input type="number" id="prixInput" min="250000" max="600000" step="1000" value="370000">
-          <span>€</span>
-        </div>
-        <details class="disclosure">
-          <summary>Détails du prix (FAI, agence, €/m²)</summary>
-          <div class="disclosure-body">
-            <div class="derived">
-              <div class="derived-item">
-                <div class="d-label">Prix FAI (+ 4,5 %)</div>
-                <div class="d-val" id="prixFAI">—</div>
-              </div>
-              <div class="derived-item">
-                <div class="d-label">Frais d'agence</div>
-                <div class="d-val" id="fraisAgence">—</div>
-              </div>
-              <div class="derived-item">
-                <div class="d-label">Prix au m² (FAI)</div>
-                <div class="d-val" id="prixM2">—</div>
-              </div>
-            </div>
-          </div>
-        </details>
       </div>
+    </details>
+  </div>
 
-      <!-- Presets -->
-      <div class="presets" id="presetsContainer"></div>
+  <!-- 3 · Résultat -->
+  <div class="section-eyebrow">3 · Ce que vous récupérez</div>
+  <div class="hero-result">
+    <div class="hero-toggle" role="group" aria-label="Scénario">
+      <button type="button" class="hero-toggle-btn active" data-scenario="habite">J'habite dedans</button>
+      <button type="button" class="hero-toggle-btn" data-scenario="location">Je mets en location</button>
+    </div>
+    <div class="hero-label">Vous récupérez</div>
+    <div class="hero-value" id="heroValue">—</div>
+    <div class="hero-sub" id="heroSub">—</div>
+  </div>
 
-      <!-- Hero result -->
-      <div class="hero-result">
-        <div class="hero-toggle" role="group" aria-label="Scénario">
-          <button type="button" class="hero-toggle-btn active" data-scenario="habite">J'habite dedans</button>
-          <button type="button" class="hero-toggle-btn" data-scenario="location">Je mets en location</button>
-        </div>
-        <div class="hero-label">Vous récupérez</div>
-        <div class="hero-value" id="heroValue">—</div>
-        <div class="hero-sub" id="heroSub">—</div>
+  <!-- 4 · Quand -->
+  <div class="section-eyebrow">4 · Dans combien de temps</div>
+  <div class="timeline-section">
+    <div class="chart-header">
+      <span class="slider-label">Chronologie</span>
+      <span class="timeline-note" id="timelineNote"></span>
+    </div>
+    <div class="timeline-track" id="timelineTrack"></div>
+  </div>
+
+  <!-- 5 · Décomposition -->
+  <div class="section-eyebrow">5 · Le détail du calcul</div>
+  <div class="wf-section">
+    <div class="chart-header">
+      <span class="slider-label" id="wfTitle">Décomposition</span>
+    </div>
+    <div class="wf-chart">
+      <svg id="wfSvg" viewBox="0 0 760 260" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="wf-result">
+      <div class="wf-result-item secondary">
+        <span class="wf-result-label">Marge brute</span>
+        <span class="wf-result-val" id="wfResultBrute">—</span>
       </div>
-
-      <!-- Timeline -->
-      <div class="timeline-section">
-        <div class="chart-header">
-          <span class="slider-label">Chronologie</span>
-          <span class="timeline-note" id="timelineNote"></span>
-        </div>
-        <div class="timeline-track" id="timelineTrack"></div>
+      <div class="wf-result-item">
+        <span class="wf-result-label">Marge nette · j'habite dedans</span>
+        <span class="wf-result-val" id="wfResultVal">—</span>
+        <span class="wf-result-note">résidence principale au jour de la vente → plus-value exonérée (0 %)</span>
       </div>
-
+      <div class="wf-result-item">
+        <span class="wf-result-label">Marge nette · je mets en location</span>
+        <span class="wf-result-val" id="wfResultSecondaire">—</span>
+        <span class="wf-result-note">bien secondaire/locatif → plus-value 36,2 % (19 % IR + 17,2 % PS), travaux inclus (facture entreprise), sans abattement (détention &lt; 6 ans)</span>
+      </div>
     </div>
 
-    <!-- Colonne détail : vue mobile = accordéon replié, vue pc = toujours ouverte -->
-    <div class="main-col">
-      <details class="detail-toggle" id="detailToggle">
-        <summary>Voir l'analyse détaillée — décomposition, graphique, sensibilité, tableau</summary>
-        <div class="detail-toggle-body">
+    <details class="disclosure">
+      <summary>Comment lire ces deux colonnes ?</summary>
+      <div class="disclosure-body">
+        <p>Le fisc ne regarde pas ton prêt : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €), pas à ton capital restant dû.</p>
+        <p><code>Plus-value imposable = max(0, Prix de vente − 446 590 €)</code><br><code>Taxe = Plus-value imposable × 36,2 %</code></p>
+        <p>Tant que le prix net vendeur reste <strong>sous 446 590 €</strong>, la plus-value imposable est nulle → aucune taxe, en résidence principale comme en location. Ce seuil fiscal est différent du seuil de rentabilité réel (capital restant dû + frais de notaire) : on peut être en profit cash et non imposable en même temps, ou l'inverse.</p>
+        <p class="disclosure-warn">⚠️ Ce seuil de 446 590 € suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), et jamais déjà déduits de revenus fonciers. Si une partie est retoquée en contrôle, le seuil baisse d'autant.</p>
+      </div>
+    </details>
 
-          <!-- Waterfall + gauge -->
-          <div class="wf-section">
-            <div class="chart-header">
-              <span class="slider-label" id="wfTitle">Décomposition</span>
-            </div>
-            <div class="wf-chart">
-              <svg id="wfSvg" viewBox="0 0 760 260" preserveAspectRatio="none"></svg>
-            </div>
-            <div class="wf-result">
-              <div class="wf-result-item secondary">
-                <span class="wf-result-label">Marge brute</span>
-                <span class="wf-result-val" id="wfResultBrute">—</span>
-              </div>
-              <div class="wf-result-item">
-                <span class="wf-result-label">Marge nette · j'habite dedans</span>
-                <span class="wf-result-val" id="wfResultVal">—</span>
-                <span class="wf-result-note">résidence principale au jour de la vente → plus-value exonérée (0 %)</span>
-              </div>
-              <div class="wf-result-item">
-                <span class="wf-result-label">Marge nette · je mets en location</span>
-                <span class="wf-result-val" id="wfResultSecondaire">—</span>
-                <span class="wf-result-note">bien secondaire/locatif → plus-value 36,2 % (19 % IR + 17,2 % PS), travaux inclus (facture entreprise), sans abattement (détention &lt; 6 ans)</span>
-              </div>
-            </div>
-
-            <details class="disclosure">
-              <summary>Comment lire ces deux colonnes ?</summary>
-              <div class="disclosure-body">
-                <p>Le fisc ne regarde pas ton prêt : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €), pas à ton capital restant dû.</p>
-                <p><code>Plus-value imposable = max(0, Prix de vente − 446 590 €)</code><br><code>Taxe = Plus-value imposable × 36,2 %</code></p>
-                <p>Tant que le prix net vendeur reste <strong>sous 446 590 €</strong>, la plus-value imposable est nulle → aucune taxe, en résidence principale comme en location. Ce seuil fiscal est différent du seuil de rentabilité réel (capital restant dû + frais de notaire) : on peut être en profit cash et non imposable en même temps, ou l'inverse.</p>
-                <p class="disclosure-warn">⚠️ Ce seuil de 446 590 € suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), et jamais déjà déduits de revenus fonciers. Si une partie est retoquée en contrôle, le seuil baisse d'autant.</p>
-              </div>
-            </details>
-
-            <div class="wf-gauge">
-              <div class="wf-gauge-head">
-                <span>Apport récupéré (frais de notaire)</span>
-                <span id="gaugePct">—</span>
-              </div>
-              <div class="wf-gauge-track"><div class="wf-gauge-fill" id="gaugeFill"></div></div>
-              <div class="wf-gauge-sub" id="gaugeSub">—</div>
-            </div>
-          </div>
-
-          <!-- Chart -->
-          <div class="chart-section">
-            <div class="chart-header">
-              <span class="slider-label" id="chartTitle">Évolution de la marge</span>
-              <div class="chart-legend">
-                <span class="legend-item"><span class="legend-swatch nette"></span><span id="legendNetteLabel">Marge nette</span></span>
-                <span class="legend-item"><span class="legend-swatch brute"></span>Marge brute</span>
-              </div>
-            </div>
-            <div class="chart-wrap" id="chartWrap">
-              <svg id="marginChart" viewBox="0 0 860 300" preserveAspectRatio="none"></svg>
-              <div class="chart-tooltip" id="chartTooltip"></div>
-            </div>
-          </div>
-
-          <!-- Sensitivity grid -->
-          <div class="grid-section">
-            <span class="slider-label">Grille de sensibilité — prix × mois de sortie</span>
-            <div class="grid-wrap">
-              <table class="sens-table" id="sensTable"></table>
-            </div>
-            <div class="grid-note" id="gridNote">Marge nette (€) pour chaque combinaison. Clique une cellule pour charger ce prix dans le simulateur.</div>
-          </div>
-
-          <!-- Status banners -->
-          <div class="status-banners">
-            <div class="banner ok" id="bannerNotaire">
-              <div class="banner-icon">✓</div>
-              <div class="banner-text">
-                <strong id="bannerNotaireTxt">—</strong>
-                <span>Notaire couvert dès ce mois</span>
-              </div>
-            </div>
-            <div class="banner warn" id="bannerProfit">
-              <div class="banner-icon">◈</div>
-              <div class="banner-text">
-                <strong>Profit complet</strong>
-                <span>Prix ≥ coût total d'acquisition</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Table -->
-          <div class="table-title" id="tableTitle">Tableau de marge</div>
-          <p class="table-subnote">Indépendant du scénario fiscal (habiter/louer) — suit le cash pur (prix − capital restant − frais de notaire). Pour l'effet de la taxe sur la plus-value, voir la Décomposition ci-dessus.</p>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Mois</th>
-                  <th class="r">Capital restant dû</th>
-                  <th class="r">Marge brute</th>
-                  <th class="r">Marge nette (− notaire)</th>
-                </tr>
-              </thead>
-              <tbody id="tableBody"></tbody>
-            </table>
-          </div>
-
-        </div>
-      </details>
+    <div class="wf-gauge">
+      <div class="wf-gauge-head">
+        <span>Apport récupéré (frais de notaire)</span>
+        <span id="gaugePct">—</span>
+      </div>
+      <div class="wf-gauge-track"><div class="wf-gauge-fill" id="gaugeFill"></div></div>
+      <div class="wf-gauge-sub" id="gaugeSub">—</div>
     </div>
+  </div>
+
+  <!-- 6 · Évolution -->
+  <div class="section-eyebrow">6 · Évolution sur 36 mois</div>
+  <div class="chart-section">
+    <div class="chart-header">
+      <span class="slider-label" id="chartTitle">Évolution de la marge</span>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-swatch nette"></span><span id="legendNetteLabel">Marge nette</span></span>
+        <span class="legend-item"><span class="legend-swatch brute"></span>Marge brute</span>
+      </div>
+    </div>
+    <div class="chart-wrap" id="chartWrap">
+      <svg id="marginChart" viewBox="0 0 860 300" preserveAspectRatio="none"></svg>
+      <div class="chart-tooltip" id="chartTooltip"></div>
+    </div>
+  </div>
+
+  <!-- 7 · Sensibilité -->
+  <div class="section-eyebrow">7 · Et si le prix change ?</div>
+  <div class="grid-section">
+    <span class="slider-label">Grille de sensibilité — prix × mois de sortie</span>
+    <div class="grid-wrap">
+      <table class="sens-table" id="sensTable"></table>
+    </div>
+    <div class="grid-note" id="gridNote">Marge nette (€) pour chaque combinaison. Clique une cellule pour charger ce prix dans le simulateur.</div>
+  </div>
+
+  <!-- 8 · Tableau -->
+  <div class="section-eyebrow">8 · Mois par mois</div>
+  <div class="table-title" id="tableTitle">Tableau de marge</div>
+  <p class="table-subnote">Indépendant du scénario fiscal (habiter/louer) — suit le cash pur (prix − capital restant − frais de notaire). Pour l'effet de la taxe sur la plus-value, voir la Décomposition ci-dessus.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Mois</th>
+          <th class="r">Capital restant dû</th>
+          <th class="r">Marge brute</th>
+          <th class="r">Marge nette (− notaire)</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
   </div>
 
   <!-- Actions -->
@@ -1175,9 +1093,6 @@ const gridNote    = document.getElementById("gridNote");
 const gaugeFill   = document.getElementById("gaugeFill");
 const gaugePct    = document.getElementById("gaugePct");
 const gaugeSub    = document.getElementById("gaugeSub");
-const bannerN     = document.getElementById("bannerNotaire");
-const bannerNTxt  = document.getElementById("bannerNotaireTxt");
-const bannerP     = document.getElementById("bannerProfit");
 
 /* ── Bandeau collant (vue mobile, quand le Hero sort de l'écran) ───── */
 const heroResultEl = document.querySelector(".hero-result");
@@ -1221,7 +1136,6 @@ function render(v) {
   /* table */
   const rows = filtre3Ans(DATA);
   let html = "";
-  let seuilMois = null;
   let seuilDate = null;
   let seuilBrutDate = null;
   let isFirstPos = true;
@@ -1235,7 +1149,7 @@ function render(v) {
     if (brute >= 0 && isFirstPosBrut) { isFirstPosBrut = false; seuilBrutDate = ds; }
 
     let thresholdClass = "";
-    if (ok && isFirstPos) { isFirstPos = false; seuilMois = fmtDate(ds); seuilDate = ds; thresholdClass = " row-threshold"; }
+    if (ok && isFirstPos) { isFirstPos = false; seuilDate = ds; thresholdClass = " row-threshold"; }
 
     html += `<tr class="${ok?"row-ok":"row-low"}${thresholdClass}">
       <td class="month-col"><span class="month-marker">●</span>${fmtDate(ds)}</td>
@@ -1251,16 +1165,6 @@ function render(v) {
     tableTitle.textContent = "Tableau de marge — " + span;
     chartTitle.textContent = "Évolution de la marge — " + span;
   }
-
-  /* banners */
-  if (seuilMois) {
-    bannerN.classList.add("active");
-    bannerNTxt.textContent = seuilMois;
-  } else {
-    bannerN.classList.remove("active");
-    bannerNTxt.textContent = "—";
-  }
-  bannerP.classList.toggle("active", prix >= COUT_TOTAL);
 
   renderChart(prix, rows);
   renderSensitivityGrid(rows);
