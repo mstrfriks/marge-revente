@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Simulateur de revente, synthèse PC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@500;700;800&amp;family=Sofia+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root{ --ground:#0F2A2E; --panel:#163A3F; --text:#E6EFEC; --muted:#9DB5B0; --line:#2A5056; --butter:#F2D27A; --coral:#FFB3A1; }
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--text); font-family:'Sofia Sans',system-ui,sans-serif; font-size:15px; line-height:1.5; font-variant-numeric:tabular-nums}
+a{color:var(--butter)} a:hover{color:var(--text)}
+button,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--butter); outline-offset:2px}
+h1,h2{font-family:'Sofia Sans Condensed',sans-serif; margin:0}
+h2{font-size:28px; font-weight:700; line-height:1.1}
+.cond{font-family:'Sofia Sans Condensed',sans-serif}
+.wrap{max-width:1240px; margin:0 auto; padding:40px 32px 88px; display:flex; flex-direction:column; gap:48px}
+.panel{background:var(--panel); border-radius:12px}
+.controls{display:flex; flex-wrap:wrap; align-items:flex-end; gap:20px 32px; padding:20px 24px}
+.ghost{background:transparent; border:1px solid var(--line); border-radius:8px; padding:10px 16px; min-height:44px; cursor:pointer}
+.ghost:hover{border-color:var(--text)}
+input[type=range]{width:100%; accent-color:var(--butter); height:32px; margin:0}
+.layout{display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start}
+.gridbox{flex:999 1 620px; min-width:0; overflow-x:auto}
+.side{flex:1 1 300px; min-width:0; padding:24px}
+.heat{border-collapse:separate; border-spacing:4px; width:100%; min-width:600px}
+.heat th{font-weight:500; color:var(--muted); font-size:13px; padding:4px 6px; text-align:center}
+.heat th[scope=row]{text-align:right; white-space:nowrap; padding-right:10px}
+.cell{width:100%; min-height:48px; border:0; border-radius:6px; cursor:pointer; font-size:15px}
+.cell:hover{box-shadow:inset 0 0 0 2px var(--text)}
+.cascade{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:14px; align-items:end}
+.col{position:relative; height:280px}
+.sum{display:flex; flex-wrap:wrap; align-items:baseline; gap:12px 20px}
+.op{font-family:'Sofia Sans Condensed',sans-serif; font-size:30px; color:var(--muted)}
+.months{width:100%; min-width:520px; border-collapse:collapse}
+.months th,.months td{padding:10px 16px; text-align:right; border-bottom:1px solid var(--line)}
+.months th:first-child,.months td:first-child{text-align:left}
+.months thead th{position:sticky; top:0; background:var(--panel); color:var(--muted); font-weight:500; font-size:13px}
+@media (max-width:760px){
+  .wrap{padding:22px 16px 60px; gap:40px}
+  .controls{padding:18px 16px}
+  .col{height:200px}
+  .cascade{gap:8px}
+  .op{font-size:22px}
+}
+@media print{ .noprint{display:none} }
+</style>
+</helmet>
+
+<div class="wrap">
+
+  <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px">
+    <div>
+      <h1 style="font-size: clamp(30px, 4vw, 46px); font-weight: 800; line-height: 1">Quand et à quel prix vendre Leducq</h1>
+      <p style="margin: 8px 0 0; color: var(--muted)">5 rue Théophile-Leducq, Pantin. Appartement de 54 m², simulation sur 36 mois.</p>
+    </div>
+    <div class="noprint" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <button class="ghost" type="button">Imprimer</button>
+      <button class="ghost" type="button">Copier le lien</button>
+      <button class="ghost" type="button">Exporter en CSV</button>
+    </div>
+  </header>
+
+  <div class="panel controls">
+    <div style="flex: 1 1 300px; min-width: 0">
+      <label for="sRange" style="display: block; color: var(--muted)">Prix de vente net vendeur</label>
+      <p class="cond" style="margin: 0 0 4px; font-size: 34px; font-weight: 800; line-height: 1.1">{{priceText}}</p>
+      <input id="sRange" type="range" min="250000" max="600000" step="1000" value="{{price}}" onChange="{{onRange}}">
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px" role="group" aria-label="Prix fréquents">
+      <sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+        <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; min-height: 44px; cursor: pointer; background: {{c.bg}}; color: {{c.fg}}">{{c.label}}</button>
+      </sc-for>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px">
+      <label for="sExact" style="color: var(--muted)">Montant exact</label>
+      <input id="sExact" type="number" inputmode="numeric" min="100000" max="900000" step="1000" value="{{inputVal}}" onChange="{{onInput}}" style="width: 130px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--ground)">
+    </div>
+    <div style="display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden" role="group" aria-label="Au moment de la vente">
+      <button type="button" onClick="{{setHabite}}" aria-pressed="{{habitePressed}}" style="border: 0; padding: 10px 18px; min-height: 44px; cursor: pointer; background: {{habiteBg}}; color: {{habiteFg}}">J'y habite</button>
+      <button type="button" onClick="{{setLocation}}" aria-pressed="{{locationPressed}}" style="border: 0; padding: 10px 18px; min-height: 44px; cursor: pointer; background: {{locationBg}}; color: {{locationFg}}">Je le loue</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="gridbox">
+      <table class="heat">
+        <thead>
+          <tr>
+            <th scope="col" style="text-align: right">Prix \ Vente en</th>
+            <sc-for list="{{cols}}" as="col" hint-placeholder-count="7"><th scope="col">{{col}}</th></sc-for>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="row" hint-placeholder-count="9">
+            <tr>
+              <th scope="row" style="color: {{row.labelColor}}; font-weight: {{row.labelWeight}}">{{row.label}}</th>
+              <sc-for list="{{row.cells}}" as="cell" hint-placeholder-count="7">
+                <td style="padding: 0"><button type="button" class="cell cond" onClick="{{cell.pick}}" aria-pressed="{{cell.pressed}}" aria-label="{{cell.aria}}" style="background: {{cell.bg}}; color: {{cell.fg}}; outline: {{cell.ring}}; outline-offset: -3px; font-weight: {{cell.weight}}">{{cell.text}}</button></td>
+              </sc-for>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13px; color: var(--muted)">
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #4A2A2A; vertical-align: -1px; margin-right: 6px"></span>Perte</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #1E474C; vertical-align: -1px; margin-right: 6px"></span>Moins de 50 k€</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #2C7270; vertical-align: -1px; margin-right: 6px"></span>50 à 120 k€</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #8FD0C2; vertical-align: -1px; margin-right: 6px"></span>Plus de 120 k€</span>
+        <span>Cliquez sur une case pour la détailler.</span>
+      </div>
+    </div>
+
+    <aside class="panel side" aria-live="polite">
+      <p style="margin: 0; color: var(--muted)">Vendu {{priceText}} en {{monthText}}, il vous reste</p>
+      <p class="cond" style="margin: 6px 0 0; font-size: clamp(64px, 8vw, 92px); font-weight: 800; line-height: .9; color: {{heroColor}}">{{heroValue}}</p>
+      <p style="margin: 10px 0 0; color: var(--muted)">{{versusToday}}</p>
+      <dl style="margin: 22px 0 0; display: flex; flex-direction: column">
+        <sc-for list="{{lines}}" as="l" hint-placeholder-count="4">
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line)">
+            <dt style="color: var(--muted)">{{l.label}}</dt>
+            <dd style="margin: 0; font-weight: 600">{{l.value}}</dd>
+          </div>
+        </sc-for>
+      </dl>
+      <p style="margin: 16px 0 0; font-size: 13px; color: var(--muted)">{{taxNote}}</p>
+    </aside>
+  </div>
+
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px">
+      <h2>Où partent les {{priceText}}</h2>
+      <p style="margin: 0; color: var(--muted)">Vente en {{monthText}}</p>
+    </div>
+    <div class="panel" style="padding: 28px 24px 20px">
+      <div class="cascade" aria-hidden="true">
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+          <div class="col">
+            <div style="position: absolute; left: 0; right: 0; bottom: {{s.bottom}}; height: {{s.height}}; background: {{s.color}}; border-radius: 6px"></div>
+            <p class="cond" style="position: absolute; left: 0; right: 0; bottom: {{s.labelBottom}}; margin: 0; text-align: center; font-weight: 700; font-size: 18px; white-space: nowrap">{{s.valueText}}</p>
+          </div>
+        </sc-for>
+      </div>
+      <div class="cascade" style="margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px">
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+          <p style="margin: 0; text-align: center; font-size: 14px; color: var(--muted)">{{s.label}}</p>
+        </sc-for>
+      </div>
+      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px">
+        <div>
+          <p style="margin: 0; font-size: 13px; color: var(--muted)">Acompte (frais de notaire) récupéré à {{apportPctText}}</p>
+          <p class="cond" style="margin: 2px 0 0; font-size: 20px; font-weight: 700">{{apportText}}</p>
+        </div>
+        <div style="text-align: right">
+          <p style="margin: 0; font-size: 13px; color: var(--muted)">Résultat net</p>
+          <p class="cond" style="margin: 2px 0 0; font-size: 28px; font-weight: 800; color: {{heroColor}}">{{heroValue}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <h2>Ce que le bien vous a coûté</h2>
+    <div class="sum">
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Achat</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">341 964 €</p></div>
+      <span class="op" aria-hidden="true">+</span>
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Travaux</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">77 268 €</p></div>
+      <span class="op" aria-hidden="true">+</span>
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Frais de notaire</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">27 357 €</p></div>
+      <span class="op" aria-hidden="true">=</span>
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Coût total</p><p class="cond" style="margin: 0; font-size: 38px; font-weight: 800; line-height: 1.15; color: var(--butter)">446 590 €</p></div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px">
+      <h2>Quand vendre</h2>
+      <p style="margin: 0; font-weight: 600">{{threshold}}</p>
+    </div>
+    <div class="panel" style="padding: 24px">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); margin-bottom: 12px">
+        <span><span aria-hidden="true" style="display: inline-block; width: 18px; height: 3px; background: var(--text); vertical-align: middle; margin-right: 8px"></span>{{lineMainLabel}}</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 18px; height: 0; border-top: 2px dashed var(--muted); vertical-align: middle; margin-right: 8px"></span>{{lineAltLabel}}</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--butter); vertical-align: 0; margin-right: 8px"></span>Mois sélectionné</span>
+      </div>
+      <svg viewBox="0 0 720 260" role="img" aria-label="{{chartLabel}}" style="width: 100%; height: auto; display: block; overflow: visible">
+        <line x1="0" x2="720" y1="{{chart.y0}}" y2="{{chart.y0}}" stroke="#2A5056" stroke-width="1"></line>
+        <text x="0" y="{{chart.y0Label}}" font-size="12" fill="#9DB5B0" font-family="Sofia Sans, sans-serif">0 €</text>
+        <line x1="{{chart.selX}}" x2="{{chart.selX}}" y1="20" y2="222" stroke="#F2D27A" stroke-width="1" stroke-dasharray="3 4"></line>
+        <polyline points="{{chart.alt}}" fill="none" stroke="#9DB5B0" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"></polyline>
+        <polyline points="{{chart.main}}" fill="none" stroke="#E6EFEC" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></polyline>
+        <circle cx="{{chart.endX}}" cy="{{chart.endY}}" r="4" fill="#E6EFEC"></circle>
+        <circle cx="{{chart.selX}}" cy="{{chart.selY}}" r="6" fill="#F2D27A"></circle>
+        <text x="{{chart.selLabelX}}" y="{{chart.selLabelY}}" text-anchor="{{chart.selAnchor}}" font-size="14" font-weight="700" fill="#F2D27A" font-family="Sofia Sans Condensed, sans-serif">{{chart.selText}}</text>
+        <text x="{{chart.endX}}" y="{{chart.endLabelY}}" text-anchor="end" font-size="14" font-weight="700" fill="#E6EFEC" font-family="Sofia Sans Condensed, sans-serif">{{chart.endText}}</text>
+        <sc-for list="{{chart.ticks}}" as="t" hint-placeholder-count="4">
+          <text x="{{t.x}}" y="252" text-anchor="{{t.anchor}}" font-size="12" fill="#9DB5B0" font-family="Sofia Sans, sans-serif">{{t.label}}</text>
+        </sc-for>
+      </svg>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <h2>Mois par mois</h2>
+    <div class="panel" style="max-height: 420px; overflow: auto" tabindex="0" aria-label="Tableau mois par mois">
+      <table class="months">
+        <thead>
+          <tr><th scope="col">Mois</th><th scope="col">Prêt restant</th><th scope="col">Marge brute</th><th scope="col">{{netColLabel}}</th></tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{monthRows}}" as="r" hint-placeholder-count="6">
+            <tr style="background: {{r.bg}}"><td style="color: {{r.monthColor}}; font-weight: {{r.weight}}">{{r.month}}</td><td>{{r.capital}}</td><td style="color: var(--muted)">{{r.gross}}</td><td style="font-weight: 600; color: {{r.color}}">{{r.net}}</td></tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid var(--line); padding-top: 20px; font-size: 13px; color: var(--muted); max-width: 72ch">
+    Marge nette = prix net vendeur − prêt restant − frais de notaire, moins l'impôt sur la plus-value si le bien est loué (36,2 % : 19 % d'IR + 17,2 % de prélèvements sociaux). Fiscalité à confirmer avec le notaire.
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":3000}}'>
+var MONTHS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+var COST = 446590, NOTAIRE = 27357, ACQUIS = COST - NOTAIRE, CAP0 = 341384, TAX = 0.362;
+function monthLabel(m){ var i = 10 + m; return MONTHS[i % 12] + ' ' + (26 + Math.floor(i / 12)); }
+function capital(m){ return CAP0 - (1371.2 * m + 0.826 * m * m); }
+function plusValue(p){ return Math.max(0, p - ACQUIS); }
+function tax(p){ return plusValue(p) * TAX; }
+function marge(p, m, sc){ return p - capital(m) - (sc === 'location' ? tax(p) : 0); }
+function net(p, m, sc){ return marge(p, m, sc) - NOTAIRE; }
+function eur(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; }
+function signed(n){ var r = Math.round(n); return (r < 0 ? '−' : '+') + Math.abs(r).toLocaleString('fr-FR') + ' €'; }
+function kSigned(n){ var k = Math.round(n / 1000); return (k < 0 ? '−' : '+') + Math.abs(k) + ' k'; }
+function kEur(x){ var k = Math.round(x / 1000); return (k < 0 ? '−' : '') + Math.abs(k) + ' k€'; }
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { scenario: 'habite', price: 480000, inputVal: '480000', month: 0 };
+  }
+  setPrice(p) { p = Math.round(p); this.setState({ price: p, inputVal: String(p) }); }
+  renderVals() {
+    var self = this, sc = this.state.scenario, p = this.state.price, mo = this.state.month, habite = sc === 'habite';
+    var other = habite ? 'location' : 'habite';
+
+    var chips = [420000, 450000, 480000, 510000].map(function (v) {
+      var on = v === p;
+      return { label: (v / 1000) + ' k€', pressed: on ? 'true' : 'false', bg: on ? '#F2D27A' : 'transparent', fg: on ? '#0F2A2E' : '#E6EFEC', pick: function () { self.setPrice(v); } };
+    });
+
+    var months = [0, 6, 12, 18, 24, 30, 36];
+    var prices = [];
+    for (var v = 450000; v >= 300000; v -= 10000) prices.push(v);
+    if (prices.indexOf(p) < 0) { prices.push(p); prices.sort(function (a, b) { return b - a; }); }
+    var rows = prices.map(function (pr) {
+      var cur = pr === p;
+      return {
+        label: eur(pr), labelColor: cur ? '#F2D27A' : '#9DB5B0', labelWeight: cur ? '700' : '500',
+        cells: months.map(function (m) {
+          var n = net(pr, m, sc), on = cur && m === mo;
+          var bg = n < 0 ? '#4A2A2A' : n < 50000 ? '#1E474C' : n < 120000 ? '#2C7270' : '#8FD0C2';
+          var fg = n < 0 ? '#FFB3A1' : n < 120000 ? '#E6EFEC' : '#0F2A2E';
+          return {
+            text: kSigned(n), bg: bg, fg: fg, ring: on ? '3px solid #F2D27A' : 'none', weight: on ? '800' : '500', pressed: on ? 'true' : 'false',
+            aria: eur(pr) + ', vente en ' + monthLabel(m) + ' : ' + signed(n),
+            pick: function () { self.setState({ price: pr, inputVal: String(pr), month: m }); }
+          };
+        })
+      };
+    });
+
+    var n = net(p, mo, sc), n0 = net(p, 0, sc), t = habite ? 0 : tax(p), mg = marge(p, mo, sc);
+    var apportPct = Math.max(0, Math.min(1, mg / NOTAIRE));
+    var apportRecovered = Math.max(0, Math.min(mg, NOTAIRE));
+    var lines = [
+      { label: 'Prix de vente', value: eur(p) },
+      { label: 'Prêt restant en ' + monthLabel(mo), value: '−' + eur(capital(mo)) }
+    ];
+    if (!habite) lines.push({ label: 'Impôt sur la plus-value', value: '−' + eur(t) });
+    lines.push({ label: 'Acompte (frais de notaire) récupéré à ' + Math.round(apportPct * 100) + '%', value: eur(apportRecovered) + ' / ' + eur(NOTAIRE) });
+    lines.push({ label: 'Résultat net', value: signed(n) });
+
+    var top = Math.max(p, capital(mo) + t, NOTAIRE);
+    function pct(x){ return (x / top * 100).toFixed(2) + '%'; }
+    var raw = [{ label: 'Prix de vente', from: 0, to: p, color: '#8FD0C2', valueText: kEur(p) }];
+    var level = p;
+    var outs = [['Prêt restant', capital(mo)]];
+    if (!habite) outs.push(['Impôt', t]);
+    outs.forEach(function (o) {
+      var nl = level - o[1];
+      raw.push({ label: o[0], from: Math.max(0, nl), to: level, color: '#4E7479', valueText: '−' + kEur(o[1]) });
+      level = nl;
+    });
+    if (mg >= 0) raw.push({ label: 'Marge avant acompte', from: 0, to: mg, color: '#F2D27A', valueText: kEur(mg) });
+    else raw.push({ label: 'Marge avant acompte', from: 0, to: -mg, color: '#FFB3A1', valueText: kEur(mg) });
+    var steps = raw.map(function (s) {
+      return { label: s.label, color: s.color, valueText: s.valueText, bottom: pct(s.from), height: pct(Math.max(s.to - s.from, top * 0.004)), labelBottom: 'calc(' + pct(s.to) + ' + 8px)' };
+    });
+
+    var first = -1;
+    for (var m = 0; m <= 36; m++) { if (net(p, m, sc) >= 0) { first = m; break; } }
+    var threshold = first === 0 ? 'Rentable dès aujourd’hui' : first > 0 ? 'Rentable à partir de ' + monthLabel(first) : 'Pas rentable avant ' + monthLabel(36);
+
+    var W = 720, topY = 28, bottom = 222, main = [], alt = [];
+    for (var i = 0; i <= 36; i++) { main.push(net(p, i, sc)); alt.push(net(p, i, other)); }
+    var all = main.concat(alt);
+    var lo = Math.min(0, Math.min.apply(null, all)), hi = Math.max(1, Math.max.apply(null, all)) * 1.12;
+    function X(k){ return 6 + k / 36 * (W - 12); }
+    function Y(val){ return bottom - (val - lo) / (hi - lo) * (bottom - topY); }
+    function pts(arr){ return arr.map(function (val, k) { return X(k).toFixed(1) + ',' + Y(val).toFixed(1); }).join(' '); }
+    var chart = {
+      main: pts(main), alt: pts(alt), y0: Y(0).toFixed(1), y0Label: (Y(0) - 6).toFixed(1),
+      selX: X(mo).toFixed(1), selY: Y(main[mo]).toFixed(1),
+      selLabelX: (X(mo) + (mo > 30 ? -10 : 10)).toFixed(1), selLabelY: (Y(main[mo]) - 12).toFixed(1), selAnchor: mo > 30 ? 'end' : 'start', selText: kSigned(main[mo]) + '€',
+      endX: X(36).toFixed(1), endY: Y(main[36]).toFixed(1), endLabelY: (Y(main[36]) + 22).toFixed(1), endText: kSigned(main[36]) + '€',
+      ticks: [0, 12, 24, 36].map(function (k) { return { x: X(k).toFixed(1), label: k === 0 ? 'Aujourd’hui' : monthLabel(k), anchor: k === 0 ? 'start' : k === 36 ? 'end' : 'middle' }; })
+    };
+
+    var monthRows = [];
+    for (var k = 0; k <= 36; k++) {
+      var nv = net(p, k, sc), sel = k === mo;
+      monthRows.push({ month: monthLabel(k), capital: eur(capital(k)), gross: eur(p - capital(k)), net: signed(nv), color: nv < 0 ? '#FFB3A1' : '#E6EFEC', bg: sel ? '#245B5F' : 'transparent', monthColor: sel ? '#F2D27A' : '#E6EFEC', weight: sel ? '700' : '400' });
+    }
+
+    var pv = plusValue(p);
+    return {
+      price: p, inputVal: this.state.inputVal, priceText: eur(p), monthText: monthLabel(mo), chips: chips,
+      cols: months.map(function (x) { return x === 0 ? 'Aujourd’hui' : monthLabel(x); }), rows: rows, lines: lines, steps: steps,
+      onRange: function (e) { self.setPrice(Number(e.target.value)); },
+      onInput: function (e) {
+        var rv = e.target.value, val = Number(rv);
+        if (rv !== '' && val >= 100000 && val <= 900000) self.setState({ price: Math.round(val), inputVal: rv });
+        else self.setState({ inputVal: rv });
+      },
+      setHabite: function () { self.setState({ scenario: 'habite' }); },
+      setLocation: function () { self.setState({ scenario: 'location' }); },
+      habitePressed: habite ? 'true' : 'false', locationPressed: habite ? 'false' : 'true',
+      habiteBg: habite ? '#F2D27A' : 'transparent', habiteFg: habite ? '#0F2A2E' : '#E6EFEC',
+      locationBg: habite ? 'transparent' : '#F2D27A', locationFg: habite ? '#E6EFEC' : '#0F2A2E',
+      heroValue: signed(n), heroColor: n < 0 ? '#FFB3A1' : '#E6EFEC',
+      apportPctText: Math.round(apportPct * 100) + '%', apportText: eur(apportRecovered) + ' / ' + eur(NOTAIRE),
+      versusToday: mo === 0 ? 'En vendant maintenant.' : signed(n - n0) + ' par rapport à une vente aujourd’hui.',
+      taxNote: habite ? 'Résidence principale au moment de la vente : plus-value exonérée.' : (pv > 0 ? 'Bien loué : plus-value de ' + eur(pv) + ' taxée à 36,2 %.' : 'Bien loué : pas de plus-value, donc pas d’impôt.'),
+      threshold: threshold, chart: chart,
+      lineMainLabel: habite ? 'J’y habite' : 'Je le loue', lineAltLabel: habite ? 'Je le loue' : 'J’y habite',
+      chartLabel: 'Marge nette de ' + monthLabel(0) + ' à ' + monthLabel(36) + ' : de ' + signed(main[0]) + ' à ' + signed(main[36]),
+      monthRows: monthRows, netColLabel: habite ? 'Marge nette (j’y habite)' : 'Marge nette (je le loue)'
+    };
+  }
+}
+</script>
+</body>
+</html>
