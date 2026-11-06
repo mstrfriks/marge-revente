@@ -6,162 +6,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@500;700;800&family=Sofia+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<!-- Favicon standard -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏡</text></svg>">
-
-<!-- iOS : icône sur l'écran d'accueil -->
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%230F2A2E'/><text x='90' y='125' font-size='100' text-anchor='middle'>🏡</text></svg>">
-
-<!-- iOS : titre affiché sous l'icône -->
 <meta name="apple-mobile-web-app-title" content="Leducq">
-
-<!-- iOS : masque la barre Safari quand ouvert depuis l'écran d'accueil -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-
-<!-- iOS : style de la barre de statut (black-translucent = immersif) -->
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
 <style>
-/* ── Variables (palette + typographie de la maquette) ─────────────── */
-:root{
-  --ground:#0F2A2E; --panel:#163A3F; --text:#E6EFEC; --muted:#9DB5B0; --line:#2A5056;
-  --butter:#F2D27A; --coral:#FFB3A1; --mint:#8FD0C2; --mid:#4E7479;
-  --radius: 10px;
-}
-*,*::before,*::after{box-sizing:border-box}
-html{font-size:16px}
-body{
-  margin:0; background:var(--ground); color:var(--text);
-  font-family:'Sofia Sans',system-ui,sans-serif; font-size:15px; line-height:1.5;
-  font-variant-numeric:tabular-nums;
-}
+:root{ --ground:#0F2A2E; --panel:#163A3F; --text:#E6EFEC; --muted:#9DB5B0; --line:#2A5056; --butter:#F2D27A; --coral:#FFB3A1; }
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--text); font-family:'Sofia Sans',system-ui,sans-serif; font-size:15px; line-height:1.5; font-variant-numeric:tabular-nums}
 a{color:var(--butter)} a:hover{color:var(--text)}
 button,input{font:inherit; color:inherit}
 :focus-visible{outline:2px solid var(--butter); outline-offset:2px}
 h1,h2{font-family:'Sofia Sans Condensed',sans-serif; margin:0}
-h2{font-size:24px; font-weight:700; line-height:1.1}
+h2{font-size:28px; font-weight:700; line-height:1.1}
 .cond{font-family:'Sofia Sans Condensed',sans-serif}
 .wrap{max-width:1240px; margin:0 auto; padding:40px 32px 88px; display:flex; flex-direction:column; gap:48px}
-.panel{background:var(--panel); border-radius:var(--radius)}
+.panel{background:var(--panel); border-radius:12px}
 .muted{color:var(--muted)}
-
-/* ── Header ─────────────────────────────────────────── */
-header.top{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:16px 24px}
-header.top h1{font-size:clamp(28px,4vw,44px); font-weight:800; line-height:1.05}
-header.top p{margin:8px 0 0; color:var(--muted)}
-.ghost{background:transparent; border:1px solid var(--line); border-radius:8px; padding:10px 16px; min-height:44px; cursor:pointer; font-family:'Sofia Sans',sans-serif; font-size:14px}
-.ghost:hover{border-color:var(--text)}
-
-/* ── Controls panel ─────────────────────────────────── */
 .controls{display:flex; flex-wrap:wrap; align-items:flex-end; gap:20px 32px; padding:20px 24px}
+.ghost{background:transparent; border:1px solid var(--line); border-radius:8px; padding:10px 16px; min-height:44px; cursor:pointer}
+.ghost:hover{border-color:var(--text)}
 input[type=range]{width:100%; accent-color:var(--butter); height:32px; margin:0}
 .chip{border:1px solid var(--line); border-radius:8px; padding:10px 14px; min-height:44px; cursor:pointer; background:transparent; color:var(--text)}
 .chip.active{background:var(--butter); color:var(--ground); border-color:var(--butter)}
 .exact-group{display:flex; align-items:center; gap:10px}
-.exact-group input{
-  width:130px; min-height:44px; padding:8px 12px; border:1px solid var(--line);
-  border-radius:8px; background:var(--ground); color:var(--text);
-  -moz-appearance:textfield; appearance:textfield;
-}
+.exact-group input{width:130px; min-height:44px; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--ground)}
 .toggle2{display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
 .toggle2 button{border:0; padding:10px 18px; min-height:44px; cursor:pointer; background:transparent; color:var(--text)}
 .toggle2 button.active{background:var(--butter); color:var(--ground)}
-.disclosure-inline{font-size:13px; color:var(--muted); width:100%}
-.disclosure-inline summary{cursor:pointer; list-style:none}
-.disclosure-inline summary::-webkit-details-marker{display:none}
-.disclosure-inline .d-body{display:flex; flex-wrap:wrap; gap:16px 32px; margin-top:12px}
-.disclosure-inline .d-item .d-label{font-size:12px; color:var(--muted); margin:0 0 4px}
-.disclosure-inline .d-item .d-val{font-family:'Sofia Sans Condensed',sans-serif; font-size:16px; font-weight:700; margin:0}
-
-/* ── Grille + panneau latéral ────────────────────────── */
 .layout{display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start}
 .gridbox{flex:999 1 620px; min-width:0; overflow-x:auto}
 .side{flex:1 1 300px; min-width:0; padding:24px}
 .heat{border-collapse:separate; border-spacing:4px; width:100%; min-width:600px}
 .heat th{font-weight:500; color:var(--muted); font-size:13px; padding:4px 6px; text-align:center}
-.heat th[scope=row]{text-align:right; white-space:nowrap; padding-right:10px; cursor:pointer; background:none; border:0}
+.heat th[scope=row]{text-align:right; white-space:nowrap; padding-right:10px; cursor:pointer; background:none; border:0; font-family:inherit}
 .heat th[scope=row]:hover{color:var(--text)}
 .cell{width:100%; min-height:48px; border:0; border-radius:6px; cursor:pointer; font-size:15px; font-family:'Sofia Sans Condensed',sans-serif}
 .cell:hover{box-shadow:inset 0 0 0 2px var(--text)}
-.heat-legend{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:14px; font-size:13px; color:var(--muted)}
-.heat-legend .sw{display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-1px; margin-right:6px}
 .side p{margin:0}
-.side .hero{margin:6px 0 0; font-size:clamp(52px,7vw,80px); font-weight:800; line-height:.9}
-.side .versus{margin:10px 0 0; color:var(--muted)}
 .side dl{margin:22px 0 0; display:flex; flex-direction:column}
-.side dl > div{display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--line)}
+.side dl>div{display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--line)}
 .side dt{color:var(--muted)}
 .side dd{margin:0; font-weight:600}
-.side .taxnote{margin:16px 0 0; font-size:13px; color:var(--muted)}
-
-/* ── Cascade ─────────────────────────────────────────── */
-.cascade-head{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 20px}
-.cascade-panel{padding:28px 24px 20px}
 .cascade{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:14px; align-items:end}
-.ccol{position:relative; height:280px}
-.ccol .bar{position:absolute; left:0; right:0; border-radius:6px}
-.ccol .val{position:absolute; left:0; right:0; margin:0; text-align:center; font-weight:700; font-size:18px; white-space:nowrap}
-.cascade-labels{margin-top:12px; border-top:1px solid var(--line); padding-top:12px}
-.cascade-labels p{margin:0; text-align:center; font-size:14px; color:var(--muted)}
-
-/* ── Ce que le bien a coûté ──────────────────────────── */
+.col{position:relative; height:280px}
+.col .bar{position:absolute; left:0; right:0; border-radius:6px}
+.col .val{position:absolute; left:0; right:0; margin:0; text-align:center; font-weight:700; font-size:18px; white-space:nowrap}
 .sum{display:flex; flex-wrap:wrap; align-items:baseline; gap:12px 20px}
-.sum .item p:first-child{margin:0; font-size:14px; color:var(--muted)}
-.sum .item p:last-child{margin:0; font-size:28px; font-weight:700}
-.sum .total p:last-child{font-size:38px; font-weight:800; line-height:1.15; color:var(--butter)}
 .op{font-family:'Sofia Sans Condensed',sans-serif; font-size:30px; color:var(--muted)}
-
-/* ── Chart ──────────────────────────────────────────── */
-.chart-legend{display:flex; flex-wrap:wrap; gap:8px 22px; font-size:14px; color:var(--muted); margin-bottom:12px}
-.chart-legend .ln{display:inline-block; width:18px; height:3px; background:var(--text); vertical-align:middle; margin-right:8px}
-.chart-legend .ln.alt{height:0; width:18px; border-top:2px dashed var(--muted); background:none}
-.chart-legend .dot{display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--butter); vertical-align:0; margin-right:8px}
-.chart-wrap{position:relative}
-.chart-wrap svg{width:100%; height:auto; display:block; overflow:visible}
-.chart-tooltip{
-  position:absolute; pointer-events:none; opacity:0; transition:opacity .1s;
-  background:var(--ground); border:1px solid var(--line); color:var(--text);
-  padding:8px 12px; border-radius:6px; font-size:12px; line-height:1.5; white-space:nowrap;
-  transform:translate(-50%,-100%); z-index:5;
-}
-.chart-tooltip strong{color:var(--butter)}
-
-/* ── Mois par mois ────────────────────────────────────── */
-.months-wrap{max-height:420px; overflow:auto}
 .months{width:100%; min-width:520px; border-collapse:collapse}
 .months th,.months td{padding:10px 16px; text-align:right; border-bottom:1px solid var(--line)}
 .months th:first-child,.months td:first-child{text-align:left}
 .months thead th{position:sticky; top:0; background:var(--panel); color:var(--muted); font-weight:500; font-size:13px}
-
-/* ── Footer ─────────────────────────────────────────── */
-footer.bottom{border-top:1px solid var(--line); padding-top:20px; font-size:13px; color:var(--muted); max-width:72ch}
-
-/* ── Impression ───────────────────────────────────────── */
-@media print{
-  .noprint{display:none}
-  body{background:white; color:#0F2A2E}
-}
-
-/* ── Responsive ──────────────────────────────────────── */
 @media (max-width:760px){
   .wrap{padding:22px 16px 60px; gap:40px}
   .controls{padding:18px 16px}
-  .ccol{height:200px}
+  .col{height:200px}
   .cascade{gap:8px}
   .op{font-size:22px}
-  .side{padding:18px}
 }
+@media print{ .noprint{display:none} }
 </style>
 </head>
-
 <body>
 <div class="wrap">
 
-  <!-- Header -->
-  <header class="top">
+  <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px">
     <div>
-      <h1>Quand et à quel prix vendre Leducq</h1>
-      <p>5 Théophile Leducq. Appartement de 54 m², simulation sur 36 mois glissants.</p>
+      <h1 style="font-size: clamp(30px, 4vw, 46px); font-weight: 800; line-height: 1">Quand et à quel prix vendre Leducq</h1>
+      <p style="margin: 8px 0 0; color: var(--muted)">5 rue Théophile-Leducq, Pantin. Appartement de 54 m², simulation sur 36 mois.</p>
     </div>
     <div class="noprint" style="display: flex; flex-wrap: wrap; gap: 8px">
       <button class="ghost" type="button" onclick="window.print()">Imprimer</button>
@@ -170,635 +84,353 @@ footer.bottom{border-top:1px solid var(--line); padding-top:20px; font-size:13px
     </div>
   </header>
 
-  <!-- Contrôles -->
   <div class="panel controls">
     <div style="flex: 1 1 300px; min-width: 0">
-      <label for="prixSlider" class="muted" style="display: block">Prix de vente net vendeur</label>
-      <p class="cond" id="prixValue" style="margin: 0 0 4px; font-size: 34px; font-weight: 800; line-height: 1.1">—</p>
-      <input id="prixSlider" type="range" min="250000" max="600000" step="1000" value="370000">
+      <label for="sRange" style="display: block; color: var(--muted)">Prix de vente net vendeur</label>
+      <p class="cond" id="priceText" style="margin: 0 0 4px; font-size: 34px; font-weight: 800; line-height: 1.1">—</p>
+      <input id="sRange" type="range" min="250000" max="600000" step="1000" value="480000">
     </div>
-    <div style="display: flex; flex-wrap: wrap; gap: 6px" role="group" aria-label="Prix fréquents" id="presetsContainer"></div>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px" role="group" aria-label="Prix fréquents" id="chips"></div>
     <div class="exact-group">
-      <label for="prixInput" class="muted">Montant exact</label>
-      <input id="prixInput" type="number" inputmode="numeric" min="250000" max="600000" step="1000" value="370000">
-      <span class="muted" style="font-size: 12px">€</span>
+      <label for="sExact" style="color: var(--muted)">Montant exact</label>
+      <input id="sExact" type="number" inputmode="numeric" min="100000" max="900000" step="1000" value="480000">
     </div>
     <div class="toggle2" role="group" aria-label="Au moment de la vente">
-      <button type="button" class="hero-toggle-btn active" data-scenario="habite">J'y habite</button>
-      <button type="button" class="hero-toggle-btn" data-scenario="location">Je le loue</button>
+      <button type="button" id="btnHabite" data-scenario="habite" class="active">J'y habite</button>
+      <button type="button" id="btnLocation" data-scenario="location">Je le loue</button>
     </div>
-    <details class="disclosure-inline">
-      <summary class="muted">Détails du prix (FAI, agence, €/m²)</summary>
-      <div class="d-body">
-        <div class="d-item"><p class="d-label">Prix FAI (+ 4,5 %)</p><p class="d-val" id="prixFAI">—</p></div>
-        <div class="d-item"><p class="d-label">Frais d'agence</p><p class="d-val" id="fraisAgence">—</p></div>
-        <div class="d-item"><p class="d-label">Prix au m² (FAI)</p><p class="d-val" id="prixM2">—</p></div>
-      </div>
-    </details>
   </div>
 
-  <!-- Grille prix × mois + panneau de détail -->
   <div class="layout">
     <div class="gridbox">
       <table class="heat" id="heatTable"></table>
-      <div class="heat-legend">
-        <span><span class="sw" style="background:#4A2A2A"></span>Perte</span>
-        <span><span class="sw" style="background:#1E474C"></span>Moins de 50 k€</span>
-        <span><span class="sw" style="background:#2C7270"></span>50 à 120 k€</span>
-        <span><span class="sw" style="background:#8FD0C2"></span>Plus de 120 k€</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13px; color: var(--muted)">
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #4A2A2A; vertical-align: -1px; margin-right: 6px"></span>Perte</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #1E474C; vertical-align: -1px; margin-right: 6px"></span>Moins de 50 k€</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #2C7270; vertical-align: -1px; margin-right: 6px"></span>50 à 120 k€</span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #8FD0C2; vertical-align: -1px; margin-right: 6px"></span>Plus de 120 k€</span>
         <span>Cliquez sur une case pour la détailler.</span>
       </div>
     </div>
 
     <aside class="panel side" aria-live="polite">
       <p class="muted" id="sideIntro">—</p>
-      <p class="cond hero" id="sideHero">—</p>
-      <p class="versus" id="sideVersus">—</p>
+      <p class="cond" id="sideHero" style="margin: 6px 0 0; font-size: clamp(64px, 8vw, 92px); font-weight: 800; line-height: .9">—</p>
+      <p class="muted" id="sideVersus" style="margin: 10px 0 0">—</p>
       <dl id="sideLines"></dl>
-      <p class="taxnote" id="sideTaxNote">—</p>
+      <p id="sideTaxNote" style="margin: 16px 0 0; font-size: 13px; color: var(--muted)">—</p>
     </aside>
   </div>
 
-  <!-- Cascade -->
   <section style="display: flex; flex-direction: column; gap: 16px">
-    <div class="cascade-head">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px">
       <h2 id="cascadeTitle">Où partent les —</h2>
       <p class="muted" id="cascadeMonth">—</p>
     </div>
-    <div class="panel cascade-panel">
+    <div class="panel" style="padding: 28px 24px 20px">
       <div class="cascade" id="cascadeCols" aria-hidden="true"></div>
-      <div class="cascade-labels cascade" id="cascadeLabels"></div>
+      <div class="cascade" id="cascadeLabels" style="margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px"></div>
+      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px">
+        <div>
+          <p style="margin: 0; font-size: 13px; color: var(--muted)" id="apportLabel">Acompte (frais de notaire) récupéré à —</p>
+          <p class="cond" id="apportValue" style="margin: 2px 0 0; font-size: 20px; font-weight: 700">—</p>
+        </div>
+        <div style="text-align: right">
+          <p style="margin: 0; font-size: 13px; color: var(--muted)">Résultat net</p>
+          <p class="cond" id="resultNet" style="margin: 2px 0 0; font-size: 28px; font-weight: 800">—</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Ce que le bien a coûté -->
   <section style="display: flex; flex-direction: column; gap: 16px">
     <h2>Ce que le bien vous a coûté</h2>
     <div class="sum">
-      <div class="item"><p>Achat</p><p class="cond">341 964 €</p></div>
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Achat</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">341 964 €</p><p style="margin: 4px 0 0; font-size: 12px; color: var(--muted)">5 décembre 2021</p></div>
       <span class="op" aria-hidden="true">+</span>
-      <div class="item"><p>Travaux</p><p class="cond">77 268 €</p></div>
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Travaux</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">77 268 €</p></div>
       <span class="op" aria-hidden="true">+</span>
-      <div class="item"><p>Frais de notaire</p><p class="cond">27 357 €</p></div>
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Frais de notaire</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">27 357 €</p></div>
       <span class="op" aria-hidden="true">=</span>
-      <div class="item total"><p>Coût total</p><p class="cond">446 590 €</p></div>
+      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Coût total</p><p class="cond" style="margin: 0; font-size: 38px; font-weight: 800; line-height: 1.15; color: var(--butter)">446 590 €</p></div>
     </div>
   </section>
 
-  <!-- Quand vendre -->
   <section style="display: flex; flex-direction: column; gap: 16px">
-    <div class="cascade-head">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px">
       <h2>Quand vendre</h2>
-      <p style="margin: 0; font-weight: 600" id="chartThreshold">—</p>
+      <p style="margin: 0; font-weight: 600" id="threshold">—</p>
     </div>
     <div class="panel" style="padding: 24px">
-      <div class="chart-legend">
-        <span><span class="ln"></span><span id="legendNetteLabel">Marge nette</span></span>
-        <span><span class="ln alt"></span>Marge brute</span>
-        <span><span class="dot"></span>Mois sélectionné</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); margin-bottom: 12px">
+        <span><span aria-hidden="true" style="display: inline-block; width: 18px; height: 3px; background: var(--text); vertical-align: middle; margin-right: 8px"></span><span id="lineMainLabel">—</span></span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 18px; height: 0; border-top: 2px dashed var(--muted); vertical-align: middle; margin-right: 8px"></span><span id="lineAltLabel">—</span></span>
+        <span><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--butter); vertical-align: 0; margin-right: 8px"></span>Mois sélectionné</span>
       </div>
-      <div class="chart-wrap" id="chartWrap">
-        <svg id="marginChart" viewBox="0 0 860 300" preserveAspectRatio="none"></svg>
-        <div class="chart-tooltip" id="chartTooltip"></div>
-      </div>
+      <svg id="chart" viewBox="0 0 720 260" role="img" style="width: 100%; height: auto; display: block; overflow: visible"></svg>
     </div>
   </section>
 
-  <!-- Mois par mois -->
   <section style="display: flex; flex-direction: column; gap: 16px">
     <h2>Mois par mois</h2>
-    <div class="panel months-wrap" tabindex="0" aria-label="Tableau mois par mois">
+    <div class="panel" style="max-height: 420px; overflow: auto" tabindex="0" aria-label="Tableau mois par mois">
       <table class="months">
         <thead>
           <tr><th scope="col">Mois</th><th scope="col">Prêt restant</th><th scope="col">Marge brute</th><th scope="col" id="netColLabel">Marge nette</th></tr>
         </thead>
-        <tbody id="tableBody"></tbody>
+        <tbody id="monthsBody"></tbody>
       </table>
     </div>
   </section>
 
-  <!-- Explications légales -->
-  <details class="disclosure-inline panel" style="padding: 20px 24px">
-    <summary>Comment lire la fiscalité de la plus-value ?</summary>
-    <div class="d-body" style="flex-direction: column; gap: 10px; font-size: 13px; line-height: 1.6">
-      <p>Le fisc ne regarde pas le prêt restant : il compare le prix de vente au <strong>coût total d'acquisition</strong> (achat + notaire + travaux = 446 590 €).</p>
-      <p>Plus-value imposable = max(0, Prix de vente − 446 590 €). Taxe = Plus-value imposable × 36,2 % (19 % IR + 17,2 % prélèvements sociaux).</p>
-      <p>Tant que le prix net vendeur reste sous 446 590 €, la plus-value imposable est nulle, en résidence principale comme en location.</p>
-      <p style="color: var(--coral)">⚠️ Ce seuil suppose que les 77 268 € de travaux restent déductibles : facturés par une entreprise, nature amélioration/construction (pas entretien), jamais déjà déduits de revenus fonciers.</p>
-    </div>
-  </details>
-
-  <!-- Footer -->
-  <footer class="bottom">
+  <footer style="border-top: 1px solid var(--line); padding-top: 20px; font-size: 13px; color: var(--muted); max-width: 72ch">
     Marge nette = prix net vendeur − prêt restant − frais de notaire, moins l'impôt sur la plus-value si le bien est loué (36,2 % : 19 % d'IR + 17,2 % de prélèvements sociaux). Fiscalité à confirmer avec le notaire.
-    <br><span id="footerDate"></span>
   </footer>
 
 </div>
 
 <script>
-/* ── Constantes (inchangées) ────────────────────────── */
-const PRIX_ACHAT    = 341964;
-const FRAIS_NOTAIRE = 27357;
-const COUT_TOTAL    = 446590;
-const TAUX_AGENCE   = 0.045;
-const SURFACE       = 54;
-const TAUX_PLUSVALUE = 0.362; // 19% IR + 17.2% prélèvements sociaux, résidence secondaire, sans abattement (détention <6 ans)
+var MONTHS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+var COST = 446590, NOTAIRE = 27357, ACQUIS = COST - NOTAIRE, CAP0 = 341384, TAX = 0.362;
+function monthLabel(m){ var i = 10 + m; return MONTHS[i % 12] + ' ' + (26 + Math.floor(i / 12)); }
+function capital(m){ return CAP0 - (1371.2 * m + 0.826 * m * m); }
+function plusValue(p){ return Math.max(0, p - ACQUIS); }
+function tax(p){ return plusValue(p) * TAX; }
+function marge(p, m, sc){ return p - capital(m) - (sc === 'location' ? tax(p) : 0); }
+function net(p, m, sc){ return marge(p, m, sc) - NOTAIRE; }
+function eur(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; }
+function signed(n){ var r = Math.round(n); return (r < 0 ? '−' : '+') + Math.abs(r).toLocaleString('fr-FR') + ' €'; }
+function kSigned(n){ var k = Math.round(n / 1000); return (k < 0 ? '−' : '+') + Math.abs(k) + ' k'; }
+function kEur(x){ var k = Math.round(x / 1000); return (k < 0 ? '−' : '') + Math.abs(k) + ' k€'; }
 
-const DATA = [
-  ["2026-02-05",353645.66],["2026-03-05",352290.24],
-  ["2026-04-05",350933.07],["2026-05-05",349574.15],
-  ["2026-06-05",348213.47],["2026-07-05",346851.04],
-  ["2026-08-05",345486.84],["2026-09-05",344120.89],
-  ["2026-10-05",342753.17],["2026-11-05",341383.69],
-  ["2026-12-05",340012.43],["2027-01-05",338639.41],
-  ["2027-02-05",337264.61],["2027-03-05",335888.03],
-  ["2027-04-05",334509.67],["2027-05-05",333129.54],
-  ["2027-06-05",331747.63],["2027-07-05",330363.93],
-  ["2027-08-05",328978.44],["2027-09-05",327591.16],
-  ["2027-10-05",326202.09],["2027-11-05",324811.23],
-  ["2027-12-05",323418.57],["2028-01-05",322024.10],
-  ["2028-02-05",320627.83],["2028-03-05",319229.76],
-  ["2028-04-05",317829.89],["2028-05-05",316428.21],
-  ["2028-06-05",315024.72],["2028-07-05",313619.42],
-  ["2028-08-05",312212.30],["2028-09-05",310803.37],
-  ["2028-10-05",309392.61],["2028-11-05",307980.04],
-  ["2028-12-05",306565.64],["2029-01-05",305149.41],
-  ["2029-02-05",303731.36],["2029-03-05",302311.47],
-  ["2029-04-05",300889.75]
-];
+var CHIPS = [420000, 450000, 480000, 510000];
+var MONTH_COLS = [0, 6, 12, 18, 24, 30, 36];
 
-const PRESETS = [
-  { label:"320 k", val:320000 },
-  { label:"350 k", val:350000 },
-  { label:"370 k", val:370000 },
-  { label:"400 k", val:400000 },
-  { label:"420 k", val:420000 },
-  { label:"450 k", val:450000 },
-];
+var state = { scenario: 'habite', price: 480000, month: 0 };
 
-/* ── Helpers (inchangés) ────────────────────────────── */
-const fmt = (n, dec=0) => n.toLocaleString("fr-FR",{minimumFractionDigits:dec,maximumFractionDigits:dec});
-const fmtDate = ds => {
-  const d = new Date(ds);
-  return d.toLocaleDateString("fr-FR",{month:"short",year:"2-digit"});
-};
-const signed = n => (n >= 0 ? "+" : "−") + fmt(Math.abs(n), 0) + " €";
-const kSigned = n => { const k = Math.round(n/1000); return (k >= 0 ? "+" : "−") + Math.abs(k) + " k"; };
-const kEur = n => { const k = Math.round(n/1000); return (k < 0 ? "−" : "") + Math.abs(k) + " k€"; };
+var sRange = document.getElementById('sRange');
+var sExact = document.getElementById('sExact');
+var chipsEl = document.getElementById('chips');
+var btnHabite = document.getElementById('btnHabite');
+var btnLocation = document.getElementById('btnLocation');
+var heatTable = document.getElementById('heatTable');
 
-function filtre3Ans(d) {
-  const now = new Date(); now.setDate(1); now.setHours(0,0,0,0);
-  const end = new Date(now); end.setMonth(end.getMonth()+36);
-  return d.filter(([ds]) => { const dt=new Date(ds); return dt>=now && dt<=end; });
-}
+function setState(patch){ Object.assign(state, patch); render(); }
+function setPrice(p){ p = Math.round(p); setState({ price: p }); }
 
-/* ── Vrais calculs (inchangés, réutilisés partout) ──── */
-function computeMarges(prix, capToday) {
-  const brute = prix - capToday;
-  const nette = brute - FRAIS_NOTAIRE;
-  const plusValueImposable = Math.max(0, prix - COUT_TOTAL);
-  const taxePlusValue = plusValueImposable * TAUX_PLUSVALUE;
-  const netteSecondaire = nette - taxePlusValue;
-  return { brute, nette, plusValueImposable, taxePlusValue, netteSecondaire };
-}
-function netFor(prix, capToday, scenario) {
-  const m = computeMarges(prix, capToday);
-  return scenario === "habite" ? m.nette : m.netteSecondaire;
-}
-
-/* ── Refs DOM ───────────────────────────────────────── */
-const slider      = document.getElementById("prixSlider");
-const prixInput   = document.getElementById("prixInput");
-const elPrix      = document.getElementById("prixValue");
-const elFAI       = document.getElementById("prixFAI");
-const elAgence    = document.getElementById("fraisAgence");
-const elM2        = document.getElementById("prixM2");
-const tbody       = document.getElementById("tableBody");
-const netColLabel = document.getElementById("netColLabel");
-const chartWrap   = document.getElementById("chartWrap");
-const chartSvg    = document.getElementById("marginChart");
-const chartTooltip= document.getElementById("chartTooltip");
-const chartThreshold = document.getElementById("chartThreshold");
-const legendNetteLabel = document.getElementById("legendNetteLabel");
-const heatTable   = document.getElementById("heatTable");
-const sideIntro   = document.getElementById("sideIntro");
-const sideHero    = document.getElementById("sideHero");
-const sideVersus  = document.getElementById("sideVersus");
-const sideLines   = document.getElementById("sideLines");
-const sideTaxNote = document.getElementById("sideTaxNote");
-const cascadeTitle  = document.getElementById("cascadeTitle");
-const cascadeMonth  = document.getElementById("cascadeMonth");
-const cascadeCols   = document.getElementById("cascadeCols");
-const cascadeLabels = document.getElementById("cascadeLabels");
-const heroToggleBtns = document.querySelectorAll(".hero-toggle-btn");
-
-/* ── État ───────────────────────────────────────────── */
-let heroScenario = "habite";
-let selectedMonthIdx = 0;
-
-/* ── Presets (chips de prix) ──────────────────────────── */
-const presetsEl = document.getElementById("presetsContainer");
-PRESETS.forEach(p => {
-  const b = document.createElement("button");
-  b.className = "chip";
-  b.type = "button";
-  b.textContent = p.label;
-  b.onclick = () => { slider.value = p.val; render(p.val); };
-  presetsEl.appendChild(b);
+CHIPS.forEach(function (v) {
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip'; b.textContent = (v / 1000) + ' k€';
+  b.addEventListener('click', function () { setPrice(v); });
+  chipsEl.appendChild(b);
 });
-function updatePresets(v) {
-  presetsEl.querySelectorAll(".chip").forEach((b,i) => {
-    b.classList.toggle("active", PRESETS[i].val === +v);
-  });
-}
-
-heroToggleBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    heroToggleBtns.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    heroScenario = btn.dataset.scenario;
-    render(slider.value);
-  });
+btnHabite.addEventListener('click', function () { setState({ scenario: 'habite' }); });
+btnLocation.addEventListener('click', function () { setState({ scenario: 'location' }); });
+sRange.addEventListener('input', function (e) { setPrice(Number(e.target.value)); });
+sExact.addEventListener('input', function (e) {
+  var rv = e.target.value, val = Number(rv);
+  if (rv !== '' && val >= 100000 && val <= 900000) setState({ price: Math.round(val) });
 });
+sExact.addEventListener('blur', function () { sExact.value = state.price; });
 
-/* ── Render principal ─────────────────────────────────── */
-function render(v) {
-  const prix = +v;
-  const prixFAI = prix / (1 - TAUX_AGENCE);
-  const fraisAg = prixFAI - prix;
-  const m2      = prixFAI / SURFACE;
+function render() {
+  var sc = state.scenario, p = state.price, mo = state.month, habite = sc === 'habite';
+  var other = habite ? 'location' : 'habite';
 
-  elPrix.textContent   = fmt(prix) + " €";
-  elFAI.textContent    = fmt(prixFAI) + " €";
-  elAgence.textContent = fmt(fraisAg) + " €";
-  elM2.textContent     = fmt(m2) + " €/m²";
+  document.getElementById('priceText').textContent = eur(p);
+  sRange.value = p;
+  if (document.activeElement !== sExact) sExact.value = p;
 
-  updatePresets(prix);
-  if (prixInput && document.activeElement !== prixInput) prixInput.value = prix;
-
-  const rows = filtre3Ans(DATA);
-  if (selectedMonthIdx > rows.length - 1) selectedMonthIdx = Math.max(0, rows.length - 1);
-  if (!rows.length) return;
-
-  const capSelected  = rows[selectedMonthIdx][1];
-  const dateSelected = rows[selectedMonthIdx][0];
-  const capToday     = rows[0][1];
-
-  renderTable(prix, rows);
-  renderHeat(prix, rows);
-  renderSide(prix, capSelected, dateSelected, rows);
-  renderCascade(prix, capSelected, dateSelected);
-  renderChart(prix, rows);
-
-  const scenarioLabel = heroScenario === "habite" ? "j'habite dedans" : "je mets en location";
-  legendNetteLabel.textContent = `Marge nette (${scenarioLabel})`;
-}
-
-/* ── Mois par mois ────────────────────────────────────── */
-function renderTable(prix, rows) {
-  netColLabel.textContent = heroScenario === "habite" ? "Marge nette (j'habite dedans)" : "Marge nette (je mets en location)";
-  let html = "";
-  rows.forEach(([ds, cap], i) => {
-    const brute = prix - cap;
-    const nette = netFor(prix, cap, heroScenario);
-    const sel = i === selectedMonthIdx;
-    html += `<tr style="background:${sel ? "#245B5F" : "transparent"}">
-      <td style="color:${sel ? "var(--butter)" : "var(--text)"}; font-weight:${sel ? "700" : "400"}">${fmtDate(ds)}</td>
-      <td>${fmt(cap, 0)} €</td>
-      <td class="muted">${fmt(brute, 0)} €</td>
-      <td style="font-weight:600; color:${nette < 0 ? "var(--coral)" : "var(--text)"}">${signed(nette)}</td>
-    </tr>`;
+  chipsEl.querySelectorAll('.chip').forEach(function (b, i) {
+    var on = CHIPS[i] === p;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
-  tbody.innerHTML = html;
+  btnHabite.classList.toggle('active', habite);
+  btnLocation.classList.toggle('active', !habite);
+  btnHabite.setAttribute('aria-pressed', habite ? 'true' : 'false');
+  btnLocation.setAttribute('aria-pressed', !habite ? 'true' : 'false');
+
+  renderHeat(p, mo, sc);
+  renderSide(p, mo, sc, habite);
+  renderCascade(p, mo, sc, habite);
+  renderChart(p, mo, sc, other);
+  renderMonths(p, mo, sc, habite);
 }
 
-/* ── Grille prix × mois (heat) ────────────────────────── */
-function renderHeat(prix, rows) {
-  const n = rows.length;
-  const step = Math.max(1, Math.ceil(n / 7));
-  const colIdxs = [];
-  for (let i = 0; i < n; i += step) colIdxs.push(i);
-  if (colIdxs[colIdxs.length - 1] !== n - 1) colIdxs.push(n - 1);
+function renderHeat(p, mo, sc) {
+  var prices = [];
+  for (var v = 450000; v >= 300000; v -= 10000) prices.push(v);
+  if (prices.indexOf(p) < 0) { prices.push(p); prices.sort(function (a, b) { return b - a; }); }
 
-  const priceStep = 35000;
-  const prices = [];
-  for (let p = +slider.max; p >= +slider.min; p -= priceStep) prices.push(p);
-  if (!prices.includes(prix)) { prices.push(prix); prices.sort((a,b) => b - a); }
+  var html = '<thead><tr><th scope="col" style="text-align:right">Prix \\ Vente en</th>';
+  MONTH_COLS.forEach(function (m) { html += '<th scope="col">' + (m === 0 ? 'Aujourd’hui' : monthLabel(m)) + '</th>'; });
+  html += '</tr></thead><tbody>';
 
-  let html = `<thead><tr><th scope="col" style="text-align:right">Prix \\ Vente en</th>`;
-  colIdxs.forEach(ci => { html += `<th scope="col">${ci === 0 ? "Aujourd'hui" : fmtDate(rows[ci][0])}</th>`; });
-  html += "</tr></thead><tbody>";
-
-  prices.forEach(pr => {
-    const cur = pr === prix;
-    html += `<tr><th scope="row" style="color:${cur ? "var(--butter)" : "var(--muted)"}; font-weight:${cur ? "700" : "500"}" data-price="${pr}">${fmt(pr, 0)} €</th>`;
-    colIdxs.forEach(ci => {
-      const nval = netFor(pr, rows[ci][1], heroScenario);
-      const on = cur && ci === selectedMonthIdx;
-      let bg, fg;
-      if (nval < 0)          { bg = "#4A2A2A"; fg = "#FFB3A1"; }
-      else if (nval < 50000) { bg = "#1E474C"; fg = "#E6EFEC"; }
-      else if (nval < 120000){ bg = "#2C7270"; fg = "#E6EFEC"; }
-      else                   { bg = "#8FD0C2"; fg = "#0F2A2E"; }
-      const ring = on ? "outline:3px solid var(--butter); outline-offset:-3px;" : "";
-      html += `<td style="padding:0"><button type="button" class="cell" data-price="${pr}" data-month="${ci}"
-        aria-pressed="${on}" aria-label="${fmt(pr,0)} €, vente en ${fmtDate(rows[ci][0])} : ${signed(nval)}"
-        style="background:${bg}; color:${fg}; font-weight:${on ? "800" : "500"}; ${ring}">${kSigned(nval)}</button></td>`;
+  prices.forEach(function (pr) {
+    var cur = pr === p;
+    html += '<tr><th scope="row" style="color:' + (cur ? '#F2D27A' : '#9DB5B0') + '; font-weight:' + (cur ? '700' : '500') + '" data-price="' + pr + '">' + eur(pr) + '</th>';
+    MONTH_COLS.forEach(function (m) {
+      var n = net(pr, m, sc), on = cur && m === mo;
+      var bg = n < 0 ? '#4A2A2A' : n < 50000 ? '#1E474C' : n < 120000 ? '#2C7270' : '#8FD0C2';
+      var fg = n < 0 ? '#FFB3A1' : n < 120000 ? '#E6EFEC' : '#0F2A2E';
+      var ring = on ? 'outline:3px solid #F2D27A; outline-offset:-3px;' : '';
+      html += '<td style="padding:0"><button type="button" class="cell cond" data-price="' + pr + '" data-month="' + m + '" aria-pressed="' + on + '" aria-label="' + eur(pr) + ', vente en ' + monthLabel(m) + ' : ' + signed(n) + '" style="background:' + bg + '; color:' + fg + '; font-weight:' + (on ? '800' : '500') + '; ' + ring + '">' + kSigned(n) + '</button></td>';
     });
-    html += "</tr>";
+    html += '</tr>';
   });
-  html += "</tbody>";
+  html += '</tbody>';
   heatTable.innerHTML = html;
 
-  heatTable.querySelectorAll("th[data-price]").forEach(el => {
-    el.addEventListener("click", () => { slider.value = +el.dataset.price; render(el.dataset.price); });
+  heatTable.querySelectorAll('th[data-price]').forEach(function (el) {
+    el.addEventListener('click', function () { setPrice(+el.dataset.price); });
   });
-  heatTable.querySelectorAll(".cell").forEach(el => {
-    el.addEventListener("click", () => {
-      slider.value = +el.dataset.price;
-      selectedMonthIdx = +el.dataset.month;
-      render(el.dataset.price);
-    });
+  heatTable.querySelectorAll('.cell').forEach(function (el) {
+    el.addEventListener('click', function () { setState({ price: +el.dataset.price, month: +el.dataset.month }); });
   });
 }
 
-/* ── Panneau de détail (côté grille) ──────────────────── */
-function renderSide(prix, capSelected, dateSelected, rows) {
-  const n     = netFor(prix, capSelected, heroScenario);
-  const n0    = netFor(prix, rows[0][1], heroScenario);
-  const t     = heroScenario === "habite" ? 0 : Math.max(0, prix - COUT_TOTAL) * TAUX_PLUSVALUE;
-  const monthLabel = selectedMonthIdx === 0 ? "aujourd'hui" : fmtDate(dateSelected);
+function renderSide(p, mo, sc, habite) {
+  var n = net(p, mo, sc), n0 = net(p, 0, sc), t = habite ? 0 : tax(p), mg = marge(p, mo, sc);
+  var apportPct = Math.max(0, Math.min(1, mg / NOTAIRE));
+  var apportRecovered = Math.max(0, Math.min(mg, NOTAIRE));
 
-  sideIntro.textContent = `Vendu ${fmt(prix,0)} € en ${monthLabel}, il vous reste`;
-  sideHero.textContent = signed(n);
-  sideHero.style.color = n < 0 ? "var(--coral)" : "var(--text)";
-  sideVersus.textContent = selectedMonthIdx === 0
-    ? "En vendant maintenant."
-    : `${signed(n - n0)} par rapport à une vente aujourd'hui.`;
+  document.getElementById('sideIntro').textContent = 'Vendu ' + eur(p) + ' en ' + monthLabel(mo) + ', il vous reste';
+  var hero = document.getElementById('sideHero');
+  hero.textContent = signed(n);
+  hero.style.color = n < 0 ? 'var(--coral)' : 'var(--text)';
+  document.getElementById('sideVersus').textContent = mo === 0 ? 'En vendant maintenant.' : signed(n - n0) + ' par rapport à une vente aujourd’hui.';
 
-  const lines = [
-    { label: "Prix de vente", value: fmt(prix,0) + " €" },
-    { label: "Prêt restant en " + monthLabel, value: "−" + fmt(capSelected,0) + " €" },
-    { label: "Frais de notaire", value: "−" + fmt(FRAIS_NOTAIRE,0) + " €" }
+  var lines = [
+    { label: 'Prix de vente', value: eur(p) },
+    { label: 'Prêt restant en ' + monthLabel(mo), value: '−' + eur(capital(mo)) }
   ];
-  if (heroScenario === "location") lines.push({ label: "Impôt sur la plus-value", value: "−" + fmt(t,0) + " €" });
-  lines.push({ label: "Il vous reste", value: signed(n) });
-  sideLines.innerHTML = lines.map(l => `<div><dt>${l.label}</dt><dd>${l.value}</dd></div>`).join("");
+  if (!habite) lines.push({ label: 'Impôt sur la plus-value', value: '−' + eur(t) });
+  lines.push({ label: 'Acompte (frais de notaire) récupéré à ' + Math.round(apportPct * 100) + '%', value: eur(apportRecovered) + ' / ' + eur(NOTAIRE) });
+  lines.push({ label: 'Résultat net', value: signed(n) });
+  document.getElementById('sideLines').innerHTML = lines.map(function (l) {
+    return '<div><dt>' + l.label + '</dt><dd>' + l.value + '</dd></div>';
+  }).join('');
 
-  const pv = prix - COUT_TOTAL;
-  sideTaxNote.textContent = heroScenario === "habite"
-    ? "Résidence principale au moment de la vente : plus-value exonérée."
-    : (pv > 0 ? `Bien loué : plus-value de ${fmt(pv,0)} € taxée à 36,2 %.` : "Bien loué : pas de plus-value, donc pas d'impôt.");
+  var pv = plusValue(p);
+  document.getElementById('sideTaxNote').textContent = habite
+    ? 'Résidence principale au moment de la vente : plus-value exonérée.'
+    : (pv > 0 ? 'Bien loué : plus-value de ' + eur(pv) + ' taxée à 36,2 %.' : 'Bien loué : pas de plus-value, donc pas d’impôt.');
+
+  document.getElementById('apportLabel').textContent = 'Acompte (frais de notaire) récupéré à ' + Math.round(apportPct * 100) + '%';
+  document.getElementById('apportValue').textContent = eur(apportRecovered) + ' / ' + eur(NOTAIRE);
+  var rn = document.getElementById('resultNet');
+  rn.textContent = signed(n);
+  rn.style.color = n < 0 ? 'var(--coral)' : 'var(--text)';
 }
 
-/* ── Cascade "Où partent les X €" ──────────────────────── */
-function renderCascade(prix, capSelected, dateSelected) {
-  cascadeTitle.textContent = `Où partent les ${fmt(prix,0)} €`;
-  cascadeMonth.textContent = "Vente en " + (selectedMonthIdx === 0 ? "aujourd'hui" : fmtDate(dateSelected));
+function renderCascade(p, mo, sc, habite) {
+  document.getElementById('cascadeTitle').textContent = 'Où partent les ' + eur(p);
+  document.getElementById('cascadeMonth').textContent = 'Vente en ' + monthLabel(mo);
 
-  const t = heroScenario === "location" ? Math.max(0, prix - COUT_TOTAL) * TAUX_PLUSVALUE : 0;
-  const n = netFor(prix, capSelected, heroScenario);
+  var t = habite ? 0 : tax(p);
+  var mg = marge(p, mo, sc);
+  var top = Math.max(p, capital(mo) + t, NOTAIRE);
+  function pct(x) { return (x / top * 100).toFixed(2) + '%'; }
 
-  const outs = [["Prêt restant", capSelected], ["Frais de notaire", FRAIS_NOTAIRE]];
-  if (heroScenario === "location") outs.push(["Impôt plus-value", t]);
-
-  let level = prix;
-  const raw = [{ label: "Prix de vente", from: 0, to: prix, color: "var(--mint)", text: kEur(prix) }];
-  outs.forEach(([label, amount]) => {
-    const next = level - amount;
-    raw.push({ label, from: Math.max(0, next), to: level, color: "var(--mid)", text: "−" + kEur(amount) });
-    level = next;
+  var raw = [{ label: 'Prix de vente', from: 0, to: p, color: '#8FD0C2', text: kEur(p) }];
+  var level = p;
+  var outs = [['Prêt restant', capital(mo)]];
+  if (!habite) outs.push(['Impôt', t]);
+  outs.forEach(function (o) {
+    var nl = level - o[1];
+    raw.push({ label: o[0], from: Math.max(0, nl), to: level, color: '#4E7479', text: '−' + kEur(o[1]) });
+    level = nl;
   });
-  if (n >= 0) raw.push({ label: "Il reste", from: 0, to: n, color: "var(--butter)", text: kEur(n) });
-  else        raw.push({ label: "Il manque", from: 0, to: -n, color: "var(--coral)", text: kEur(n) });
+  if (mg >= 0) raw.push({ label: 'Marge avant acompte', from: 0, to: mg, color: '#F2D27A', text: kEur(mg) });
+  else raw.push({ label: 'Marge avant acompte', from: 0, to: -mg, color: '#FFB3A1', text: kEur(mg) });
 
-  const top = Math.max(prix, capSelected + FRAIS_NOTAIRE + t, 1);
-  const pct = x => (x / top * 100).toFixed(2) + "%";
-
-  cascadeCols.innerHTML = raw.map(s => `
-    <div class="ccol">
-      <div class="bar" style="bottom:${pct(s.from)}; height:${pct(Math.max(s.to - s.from, top * 0.004))}; background:${s.color}"></div>
-      <p class="val" style="bottom:calc(${pct(s.to)} + 8px)">${s.text}</p>
-    </div>`).join("");
-  cascadeLabels.innerHTML = raw.map(s => `<p>${s.label}</p>`).join("");
+  document.getElementById('cascadeCols').innerHTML = raw.map(function (s) {
+    return '<div class="col"><div class="bar" style="bottom:' + pct(s.from) + '; height:' + pct(Math.max(s.to - s.from, top * 0.004)) + '; background:' + s.color + '"></div><p class="val cond" style="bottom:calc(' + pct(s.to) + ' + 8px)">' + s.text + '</p></div>';
+  }).join('');
+  document.getElementById('cascadeLabels').innerHTML = raw.map(function (s) {
+    return '<p style="margin:0; text-align:center; font-size:14px; color:var(--muted)">' + s.label + '</p>';
+  }).join('');
 }
 
-/* ── Chart "Quand vendre" ─────────────────────────────── */
-const SVGNS = "http://www.w3.org/2000/svg";
-const CHART_W = 860, CHART_H = 300;
-const PAD = { l: 58, r: 16, t: 16, b: 28 };
-const PLOT_W = CHART_W - PAD.l - PAD.r;
-const PLOT_H = CHART_H - PAD.t - PAD.b;
+function renderChart(p, mo, sc, other) {
+  var first = -1;
+  for (var m = 0; m <= 36; m++) { if (net(p, m, sc) >= 0) { first = m; break; } }
+  document.getElementById('threshold').textContent = first === 0 ? 'Rentable dès aujourd’hui' : first > 0 ? 'Rentable à partir de ' + monthLabel(first) : 'Pas rentable avant ' + monthLabel(36);
 
-function svgEl(tag, attrs) {
-  const el = document.createElementNS(SVGNS, tag);
-  for (const k in attrs) el.setAttribute(k, attrs[k]);
-  return el;
+  document.getElementById('lineMainLabel').textContent = sc === 'habite' ? 'J’y habite' : 'Je le loue';
+  document.getElementById('lineAltLabel').textContent = sc === 'habite' ? 'Je le loue' : 'J’y habite';
+
+  var W = 720, topY = 28, bottom = 222, main = [], alt = [];
+  for (var i = 0; i <= 36; i++) { main.push(net(p, i, sc)); alt.push(net(p, i, other)); }
+  var all = main.concat(alt);
+  var lo = Math.min(0, Math.min.apply(null, all)), hi = Math.max(1, Math.max.apply(null, all)) * 1.12;
+  function X(k) { return 6 + k / 36 * (W - 12); }
+  function Y(val) { return bottom - (val - lo) / (hi - lo) * (bottom - topY); }
+  function pts(arr) { return arr.map(function (val, k) { return X(k).toFixed(1) + ',' + Y(val).toFixed(1); }).join(' '); }
+
+  var y0 = Y(0).toFixed(1), y0Label = (Y(0) - 6).toFixed(1);
+  var selX = X(mo).toFixed(1), selY = Y(main[mo]).toFixed(1);
+  var selAnchor = mo > 30 ? 'end' : 'start';
+  var selLabelX = (X(mo) + (mo > 30 ? -10 : 10)).toFixed(1), selLabelY = (Y(main[mo]) - 12).toFixed(1);
+  var endX = X(36).toFixed(1), endY = Y(main[36]).toFixed(1), endLabelY = (Y(main[36]) + 22).toFixed(1);
+
+  var ticks = [0, 12, 24, 36].map(function (k) { return { x: X(k).toFixed(1), label: k === 0 ? 'Aujourd’hui' : monthLabel(k), anchor: k === 0 ? 'start' : k === 36 ? 'end' : 'middle' }; });
+
+  var svg = '';
+  svg += '<line x1="0" x2="720" y1="' + y0 + '" y2="' + y0 + '" stroke="#2A5056" stroke-width="1"></line>';
+  svg += '<text x="0" y="' + y0Label + '" font-size="12" fill="#9DB5B0" font-family="Sofia Sans, sans-serif">0 €</text>';
+  svg += '<line x1="' + selX + '" x2="' + selX + '" y1="20" y2="222" stroke="#F2D27A" stroke-width="1" stroke-dasharray="3 4"></line>';
+  svg += '<polyline points="' + pts(alt) + '" fill="none" stroke="#9DB5B0" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"></polyline>';
+  svg += '<polyline points="' + pts(main) + '" fill="none" stroke="#E6EFEC" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></polyline>';
+  svg += '<circle cx="' + endX + '" cy="' + endY + '" r="4" fill="#E6EFEC"></circle>';
+  svg += '<circle cx="' + selX + '" cy="' + selY + '" r="6" fill="#F2D27A"></circle>';
+  svg += '<text x="' + selLabelX + '" y="' + selLabelY + '" text-anchor="' + selAnchor + '" font-size="14" font-weight="700" fill="#F2D27A" font-family="Sofia Sans Condensed, sans-serif">' + kSigned(main[mo]) + '€</text>';
+  svg += '<text x="' + endX + '" y="' + endLabelY + '" text-anchor="end" font-size="14" font-weight="700" fill="#E6EFEC" font-family="Sofia Sans Condensed, sans-serif">' + kSigned(main[36]) + '€</text>';
+  ticks.forEach(function (t) { svg += '<text x="' + t.x + '" y="252" text-anchor="' + t.anchor + '" font-size="12" fill="#9DB5B0" font-family="Sofia Sans, sans-serif">' + t.label + '</text>'; });
+
+  document.getElementById('chart').innerHTML = svg;
+  document.getElementById('chart').setAttribute('aria-label', 'Marge nette de ' + monthLabel(0) + ' à ' + monthLabel(36) + ' : de ' + signed(main[0]) + ' à ' + signed(main[36]));
 }
 
-function renderChart(prix, rows) {
-  chartSvg.innerHTML = "";
-  chartTooltip.style.opacity = 0;
-  if (rows.length < 2) return;
-
-  const months = rows.map(r => r[0]);
-  const caps   = rows.map(r => r[1]);
-  const brute  = caps.map(c => prix - c);
-  const nette  = caps.map(c => netFor(prix, c, heroScenario));
-
-  const first = nette.findIndex(v => v >= 0);
-  chartThreshold.textContent = first === 0 ? "Rentable dès aujourd'hui"
-    : first > 0 ? "Rentable à partir de " + fmtDate(months[first])
-    : "Pas rentable sur la période";
-
-  const allVals = brute.concat(nette, [0]);
-  let minV = Math.min(...allVals), maxV = Math.max(...allVals);
-  const pad = (maxV - minV) * 0.12 || 1000;
-  minV -= pad; maxV += pad;
-
-  const n = rows.length;
-  const xAt = i => PAD.l + (n === 1 ? 0 : i * (PLOT_W / (n - 1)));
-  const yAt = v => PAD.t + (maxV - v) / (maxV - minV) * PLOT_H;
-  const y0  = yAt(0);
-
-  const fillsGroup = svgEl("g", {});
-  for (let i = 0; i < n - 1; i++) {
-    const x1 = xAt(i), x2 = xAt(i + 1), v1 = nette[i], v2 = nette[i + 1];
-    const segs = [];
-    if ((v1 >= 0) === (v2 >= 0)) { segs.push([x1, v1, x2, v2]); }
-    else {
-      const t = v1 / (v1 - v2);
-      const xc = x1 + (x2 - x1) * t;
-      segs.push([x1, v1, xc, 0]); segs.push([xc, 0, x2, v2]);
-    }
-    segs.forEach(([xa, va, xb, vb]) => {
-      const ok = va >= 0 && vb >= 0;
-      fillsGroup.appendChild(svgEl("polygon", {
-        points: `${xa.toFixed(1)},${y0.toFixed(1)} ${xa.toFixed(1)},${yAt(va).toFixed(1)} ${xb.toFixed(1)},${yAt(vb).toFixed(1)} ${xb.toFixed(1)},${y0.toFixed(1)}`,
-        fill: ok ? "var(--mint)" : "var(--coral)", opacity: "0.1"
-      }));
-    });
+function renderMonths(p, mo, sc, habite) {
+  document.getElementById('netColLabel').textContent = habite ? 'Marge nette (j’y habite)' : 'Marge nette (je le loue)';
+  var html = '';
+  for (var k = 0; k <= 36; k++) {
+    var nv = net(p, k, sc), sel = k === mo;
+    html += '<tr style="background:' + (sel ? '#245B5F' : 'transparent') + '"><td style="color:' + (sel ? '#F2D27A' : '#E6EFEC') + '; font-weight:' + (sel ? '700' : '400') + '">' + monthLabel(k) + '</td><td>' + eur(capital(k)) + '</td><td style="color:var(--muted)">' + eur(p - capital(k)) + '</td><td style="font-weight:600; color:' + (nv < 0 ? '#FFB3A1' : '#E6EFEC') + '">' + signed(nv) + '</td></tr>';
   }
-  chartSvg.appendChild(fillsGroup);
-
-  chartSvg.appendChild(svgEl("line", {
-    x1: PAD.l, x2: PAD.l + PLOT_W, y1: y0, y2: y0,
-    stroke: "var(--muted)", "stroke-width": 1, "stroke-dasharray": "3 4", opacity: .6
-  }));
-  const seuilT = svgEl("text", { x: PAD.l + PLOT_W, y: y0 - 5, "text-anchor": "end", "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
-  seuilT.textContent = "seuil 0 €";
-  chartSvg.appendChild(seuilT);
-
-  [maxV, minV].forEach(v => {
-    const y = yAt(v);
-    chartSvg.appendChild(svgEl("line", { x1: PAD.l, x2: PAD.l + PLOT_W, y1: y, y2: y, stroke: "var(--line)", "stroke-width": 1 }));
-    const t = svgEl("text", { x: 4, y: y + 3, "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
-    t.textContent = fmt(v, 0);
-    chartSvg.appendChild(t);
-  });
-
-  const step = Math.max(1, Math.ceil(n / 6));
-  for (let i = 0; i < n; i += step) {
-    const t = svgEl("text", { x: xAt(i), y: CHART_H - 6, "text-anchor": "middle", "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
-    t.textContent = i === 0 ? "Aujourd'hui" : fmtDate(months[i]);
-    chartSvg.appendChild(t);
-  }
-  if ((n - 1) % step !== 0) {
-    const t = svgEl("text", { x: xAt(n - 1), y: CHART_H - 6, "text-anchor": "middle", "font-family": "Sofia Sans, sans-serif", "font-size": "10", fill: "var(--muted)" });
-    t.textContent = fmtDate(months[n - 1]);
-    chartSvg.appendChild(t);
-  }
-
-  chartSvg.appendChild(svgEl("path", {
-    d: brute.map((v, i) => `${i === 0 ? "M" : "L"}${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(" "),
-    fill: "none", stroke: "var(--muted)", "stroke-width": 2,
-    "stroke-dasharray": "2 5", "stroke-linecap": "round", "stroke-linejoin": "round"
-  }));
-  chartSvg.appendChild(svgEl("path", {
-    d: nette.map((v, i) => `${i === 0 ? "M" : "L"}${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(" "),
-    fill: "none", stroke: "var(--text)", "stroke-width": 3,
-    "stroke-linecap": "round", "stroke-linejoin": "round"
-  }));
-
-  const bIdx = nette.findIndex(v => v >= 0);
-  if (bIdx >= 0) {
-    chartSvg.appendChild(svgEl("circle", { cx: xAt(bIdx), cy: yAt(nette[bIdx]), r: 4.5, fill: "var(--text)", stroke: "var(--panel)", "stroke-width": 1.5 }));
-  }
-
-  const lastV = nette[n - 1];
-  const lt = svgEl("text", {
-    x: xAt(n - 1) - 4, y: yAt(lastV) + (lastV >= 0 ? -10 : 16), "text-anchor": "end",
-    "font-family": "Sofia Sans Condensed, sans-serif", "font-size": "13", "font-weight": "700",
-    fill: lastV >= 0 ? "var(--mint)" : "var(--coral)"
-  });
-  lt.textContent = signed(lastV);
-  chartSvg.appendChild(lt);
-
-  /* marqueur du mois sélectionné (persistant, piloté par la grille) */
-  const selIdx = Math.max(0, Math.min(n - 1, selectedMonthIdx));
-  chartSvg.appendChild(svgEl("line", { x1: xAt(selIdx), x2: xAt(selIdx), y1: PAD.t, y2: PAD.t + PLOT_H, stroke: "var(--butter)", "stroke-width": 1, "stroke-dasharray": "3 4" }));
-  chartSvg.appendChild(svgEl("circle", { cx: xAt(selIdx), cy: yAt(nette[selIdx]), r: 6, fill: "var(--butter)" }));
-
-  /* survol : crosshair + tooltip (comportement existant conservé) */
-  const crosshair = svgEl("line", { x1: 0, x2: 0, y1: PAD.t, y2: PAD.t + PLOT_H, stroke: "var(--butter)", "stroke-width": 1, opacity: 0 });
-  const dotNette = svgEl("circle", { r: 4, fill: "var(--text)", stroke: "var(--panel)", "stroke-width": 1.5, opacity: 0 });
-  const dotBrute = svgEl("circle", { r: 4, fill: "var(--muted)", stroke: "var(--panel)", "stroke-width": 1.5, opacity: 0 });
-  chartSvg.appendChild(crosshair);
-  chartSvg.appendChild(dotBrute);
-  chartSvg.appendChild(dotNette);
-
-  const hit = svgEl("rect", { x: PAD.l, y: 0, width: PLOT_W, height: CHART_H, fill: "transparent", cursor: "crosshair" });
-  chartSvg.appendChild(hit);
-
-  function onMove(clientX, clientY) {
-    const wrapRect = chartWrap.getBoundingClientRect();
-    const scale = wrapRect.width / CHART_W;
-    const svgX = (clientX - wrapRect.left) / scale;
-    const i = Math.max(0, Math.min(n - 1, Math.round((svgX - PAD.l) / (PLOT_W / (n - 1)))));
-
-    const px = xAt(i) * scale, pyNette = yAt(nette[i]) * scale, pyBrute = yAt(brute[i]) * scale;
-
-    crosshair.setAttribute("x1", xAt(i)); crosshair.setAttribute("x2", xAt(i)); crosshair.setAttribute("opacity", .5);
-    dotNette.setAttribute("cx", xAt(i)); dotNette.setAttribute("cy", yAt(nette[i])); dotNette.setAttribute("opacity", 1);
-    dotBrute.setAttribute("cx", xAt(i)); dotBrute.setAttribute("cy", yAt(brute[i])); dotBrute.setAttribute("opacity", 1);
-
-    chartTooltip.innerHTML =
-      `<strong>${i === 0 ? "Aujourd'hui" : fmtDate(months[i])}</strong><br>` +
-      `Capital restant : ${fmt(caps[i], 0)} €<br>` +
-      `Marge brute : ${fmt(brute[i], 0)} €<br>` +
-      `Marge nette : ${signed(nette[i])}`;
-    chartTooltip.style.left = px + "px";
-    chartTooltip.style.top = Math.min(pyNette, pyBrute) + "px";
-    chartTooltip.style.opacity = 1;
-  }
-  function onLeave() {
-    crosshair.setAttribute("opacity", 0);
-    dotNette.setAttribute("opacity", 0);
-    dotBrute.setAttribute("opacity", 0);
-    chartTooltip.style.opacity = 0;
-  }
-  hit.addEventListener("mousemove", e => onMove(e.clientX, e.clientY));
-  hit.addEventListener("mouseleave", onLeave);
-  hit.addEventListener("touchmove", e => { onMove(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); }, { passive: false });
-  hit.addEventListener("touchend", onLeave);
-  hit.addEventListener("click", e => {
-    const wrapRect = chartWrap.getBoundingClientRect();
-    const scale = wrapRect.width / CHART_W;
-    const svgX = (e.clientX - wrapRect.left) / scale;
-    selectedMonthIdx = Math.max(0, Math.min(n - 1, Math.round((svgX - PAD.l) / (PLOT_W / (n - 1)))));
-    render(slider.value);
-  });
+  document.getElementById('monthsBody').innerHTML = html;
 }
 
-/* ── Slider / input sync (inchangé) ───────────────────── */
-slider.addEventListener("input", e => render(e.target.value));
-prixInput.addEventListener("input", e => {
-  const v = +e.target.value;
-  if (!isNaN(v)) { slider.value = Math.max(+slider.min, Math.min(+slider.max, v)); render(v); }
-});
-prixInput.addEventListener("blur", e => {
-  const v = Math.max(+slider.min, Math.min(+slider.max, +e.target.value || +slider.value));
-  e.target.value = v; slider.value = v; render(v);
-});
-
-/* ── Export CSV (inchangé) ────────────────────────────── */
 function exportCSV() {
-  const prix = +slider.value;
-  const rows = filtre3Ans(DATA);
-  const dec = n => n.toFixed(2).replace(".", ",");
-  let csv = "Mois;Capital restant;Marge brute;Marge nette\n";
-  rows.forEach(([ds, cap]) => {
-    const brute = prix - cap;
-    const nette = netFor(prix, cap, heroScenario);
-    csv += `${fmtDate(ds)};${dec(cap)};${dec(brute)};${dec(nette)}\n`;
-  });
-  const blob = new Blob(["﻿" + csv], { type:"text/csv;charset=utf-8;" });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href = url; a.download = "marge-leducq.csv"; a.click();
+  var p = state.price, sc = state.scenario;
+  var dec = function (n) { return n.toFixed(2).replace('.', ','); };
+  var csv = 'Mois;Prêt restant;Marge brute;Marge nette\n';
+  for (var k = 0; k <= 36; k++) {
+    csv += monthLabel(k) + ';' + dec(capital(k)) + ';' + dec(p - capital(k)) + ';' + dec(net(p, k, sc)) + '\n';
+  }
+  var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'marge-leducq.csv'; a.click();
   URL.revokeObjectURL(url);
 }
 
-/* ── Copier le lien (inchangé) ─────────────────────────── */
 function copyLink() {
-  const url = new URL(location.href);
-  url.searchParams.set("prix", slider.value);
-  navigator.clipboard.writeText(url.toString()).then(() => {
-    const btn = document.querySelector('.noprint .ghost:nth-child(2)');
-    const old = btn.textContent;
-    btn.textContent = "✓ Lien copié !";
-    setTimeout(() => btn.textContent = old, 2000);
+  var url = new URL(location.href);
+  url.searchParams.set('prix', state.price);
+  navigator.clipboard.writeText(url.toString()).then(function () {
+    var btn = document.querySelector('.noprint .ghost:nth-child(2)');
+    var old = btn.textContent;
+    btn.textContent = '✓ Lien copié !';
+    setTimeout(function () { btn.textContent = old; }, 2000);
   });
 }
 
-/* ── Démarrage ─────────────────────────────────────────── */
-const startPrix = new URLSearchParams(location.search).get("prix") || 370000;
-slider.value = startPrix;
-render(startPrix);
-
-document.getElementById("footerDate").textContent =
-  "Simulateur mis à jour le " + new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+var startPrix = Number(new URLSearchParams(location.search).get('prix')) || 480000;
+state.price = Math.max(100000, Math.min(900000, startPrix));
+render();
 </script>
 </body>
 </html>
