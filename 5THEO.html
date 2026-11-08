@@ -101,6 +101,12 @@ input[type=range]{width:100%; accent-color:var(--butter); height:32px; margin:0}
     </div>
   </div>
 
+  <section id="heroBlock" aria-live="polite" style="text-align: center">
+    <p class="muted" id="sideIntro">—</p>
+    <p class="cond" id="sideHero" style="margin: 6px 0 0; font-size: clamp(64px, 8vw, 92px); font-weight: 800; line-height: .9">—</p>
+    <p class="muted" id="heroApport" style="margin: 10px 0 0">—</p>
+  </section>
+
   <div class="layout">
     <div class="gridbox">
       <table class="heat" id="heatTable"></table>
@@ -114,9 +120,7 @@ input[type=range]{width:100%; accent-color:var(--butter); height:32px; margin:0}
     </div>
 
     <aside class="panel side" aria-live="polite">
-      <p class="muted" id="sideIntro">—</p>
-      <p class="cond" id="sideHero" style="margin: 6px 0 0; font-size: clamp(64px, 8vw, 92px); font-weight: 800; line-height: .9">—</p>
-      <p class="muted" id="sideVersus" style="margin: 10px 0 0">—</p>
+      <p class="muted" id="sideVersus" style="margin: 0">—</p>
       <dl id="sideLines"></dl>
       <p id="sideTaxNote" style="margin: 16px 0 0; font-size: 13px; color: var(--muted)">—</p>
     </aside>
@@ -203,7 +207,8 @@ function signed(n){ var r = Math.round(n); return (r < 0 ? '−' : '+') + Math.a
 function kSigned(n){ var k = Math.round(n / 1000); return (k < 0 ? '−' : '+') + Math.abs(k) + ' k'; }
 function kEur(x){ var k = Math.round(x / 1000); return (k < 0 ? '−' : '') + Math.abs(k) + ' k€'; }
 
-var CHIPS = [420000, 450000, 480000, 510000];
+var CHIPS = [];
+for (var cv = 320000; cv <= 420000; cv += 10000) CHIPS.push(cv);
 var MONTH_COLS = [0, 6, 12, 18, 24, 30, 36];
 
 var state = { scenario: 'habite', price: 480000, month: 0 };
@@ -295,10 +300,15 @@ function renderSide(p, mo, sc, habite) {
   var apportPct = Math.max(0, Math.min(1, mg / NOTAIRE));
   var apportRecovered = Math.max(0, Math.min(mg, NOTAIRE));
 
+  var gross = p - capital(mo);
+  var grossApportPct = Math.max(0, Math.min(1, gross / NOTAIRE));
+  var grossApportRecovered = Math.max(0, Math.min(gross, NOTAIRE));
+
   document.getElementById('sideIntro').textContent = 'Vendu ' + eur(p) + ' en ' + monthLabel(mo) + ', il vous reste';
   var hero = document.getElementById('sideHero');
-  hero.textContent = signed(n);
-  hero.style.color = n < 0 ? 'var(--coral)' : 'var(--text)';
+  hero.textContent = signed(gross);
+  hero.style.color = gross < 0 ? 'var(--coral)' : 'var(--text)';
+  document.getElementById('heroApport').textContent = Math.round(grossApportPct * 100) + '% de l’apport récupéré (' + eur(grossApportRecovered) + ' / ' + eur(NOTAIRE) + ')';
   document.getElementById('sideVersus').textContent = mo === 0 ? 'En vendant maintenant.' : signed(n - n0) + ' par rapport à une vente aujourd’hui.';
 
   var lines = [
