@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Quand et à quel prix vendre Leducq</title>
+<title>À quel prix vendre Leducq</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@500;700;800&family=Sofia+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,239 +12,438 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-:root{ --ground:#0F2A2E; --panel:#163A3F; --text:#E6EFEC; --muted:#9DB5B0; --line:#2A5056; --butter:#F2D27A; --coral:#FFB3A1; }
+/* Couleurs. Code apport : --ok = récupéré en totalité, --part = en partie, --zero = rien */
+:root{
+  --ground:#0F2A2E; --panel:#163A3F; --text:#E6EFEC; --muted:#9DB5B0; --line:#2A5056; --sel:#245B5F;
+  --butter:#F2D27A; --coral:#FFB3A1;
+  --ok:#B5EBDD; --part:#F2D27A; --zero:#FFB3A1;
+}
 *{box-sizing:border-box}
 body{margin:0; background:var(--ground); color:var(--text); font-family:'Sofia Sans',system-ui,sans-serif; font-size:15px; line-height:1.5; font-variant-numeric:tabular-nums}
 a{color:var(--butter)} a:hover{color:var(--text)}
-button,input{font:inherit; color:inherit}
+button,input,select{font:inherit; color:inherit}
 :focus-visible{outline:2px solid var(--butter); outline-offset:2px}
 h1,h2{font-family:'Sofia Sans Condensed',sans-serif; margin:0}
 h2{font-size:28px; font-weight:700; line-height:1.1}
 .cond{font-family:'Sofia Sans Condensed',sans-serif}
-.wrap{max-width:1240px; margin:0 auto; padding:40px 32px 88px; display:flex; flex-direction:column; gap:48px}
+.wrap{max-width:1240px; margin:0 auto; padding:40px 32px 88px; display:flex; flex-direction:column; gap:40px}
+.wrap > *{min-width:0}
 .panel{background:var(--panel); border-radius:12px}
 .muted{color:var(--muted)}
-.controls{display:flex; flex-wrap:wrap; align-items:flex-end; gap:20px 32px; padding:20px 24px}
 .ghost{background:transparent; border:1px solid var(--line); border-radius:8px; padding:10px 16px; min-height:44px; cursor:pointer}
 .ghost:hover{border-color:var(--text)}
-input[type=range]{width:100%; accent-color:var(--butter); height:32px; margin:0}
-.chip{border:1px solid var(--line); border-radius:8px; padding:10px 14px; min-height:44px; cursor:pointer; background:transparent; color:var(--text)}
-.chip.active{background:var(--butter); color:var(--ground); border-color:var(--butter)}
-.exact-group{display:flex; align-items:center; gap:10px}
-.exact-group input{width:130px; min-height:44px; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--ground)}
+
+/* Coût du bien : bande compacte */
+.cost-strip{display:flex; flex-wrap:wrap; align-items:center; gap:10px 28px; padding:14px 20px}
+.cost-strip .cs-title{font-size:13px; color:var(--muted); flex:0 0 auto}
+.cs-items{display:flex; flex-wrap:wrap; align-items:flex-end; gap:6px 14px}
+.cs-items small{display:block; font-size:12px; color:var(--muted); line-height:1.2}
+.cs-items b{font-family:'Sofia Sans Condensed',sans-serif; font-size:21px; font-weight:700; line-height:1.15}
+.cs-items .op{font-family:'Sofia Sans Condensed',sans-serif; font-size:20px; color:var(--muted); line-height:1.15}
+.cs-items .total b{font-size:25px; font-weight:800; color:var(--butter)}
+
+/* Bloc prix */
+.controls{display:grid; grid-template-columns:minmax(0,330px) minmax(240px,1fr) minmax(0,330px); align-items:center; gap:16px 32px; padding:16px 20px}
+.ctl-label{display:block; margin:0 0 6px; font-size:13px; color:var(--muted)}
+.stepper{display:flex; align-items:center; gap:6px}
+.stepper button,.mini-btn{width:36px; height:36px; border:1px solid var(--line); border-radius:8px; background:transparent; color:var(--text); cursor:pointer; font-size:18px; line-height:1}
+.stepper button:hover,.mini-btn:hover{border-color:var(--text)}
+.price-input{width:170px; padding:2px 8px; border:1px solid transparent; border-radius:8px; background:transparent; font-family:'Sofia Sans Condensed',sans-serif; font-size:30px; font-weight:800; text-align:center}
+.price-input:hover,.price-input:focus{border-color:var(--line); background:var(--ground)}
+.gap-note{margin:6px 0 0; font-size:13px; font-weight:600}
+.floor-note{margin:2px 0 0; font-size:12px; color:var(--muted)}
+.floor-note strong{color:var(--text); font-weight:600}
+.market-note{margin:2px 0 0; font-size:12px}
+.track{position:relative}
+input[type=range]{width:100%; accent-color:var(--butter); height:28px; margin:0; display:block}
+.scale{position:relative; height:46px; margin-top:2px; font-size:12px; color:var(--muted)}
+.scale span{position:absolute; top:10px; line-height:1.2; white-space:nowrap}
+.scale .cost-mark{top:0; height:7px; margin-left:-1px; border-left:2px solid var(--butter); pointer-events:none}
+.scale .cost-label{transform:translateX(-50%); color:var(--butter)}
+.scale .market-band{top:0; height:7px; border-radius:4px; background:rgba(143,208,194,.45); pointer-events:none}
+.scale .market-label{top:27px; transform:translateX(-50%); color:var(--ok)}
+.side-ctl{display:flex; flex-direction:column; gap:12px}
 .toggle2{display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
-.toggle2 button{border:0; padding:10px 18px; min-height:44px; cursor:pointer; background:transparent; color:var(--text)}
+.toggle2 button{flex:1; border:0; padding:8px 14px; min-height:36px; cursor:pointer; background:transparent; color:var(--text)}
 .toggle2 button.active{background:var(--butter); color:var(--ground)}
-.layout{display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start}
-.gridbox{flex:999 1 620px; min-width:0; overflow-x:auto}
-.side{flex:1 1 300px; min-width:0; padding:24px}
-.heat{border-collapse:separate; border-spacing:4px; width:100%; min-width:600px}
-.heat th{font-weight:500; color:var(--muted); font-size:13px; padding:4px 6px; text-align:center}
-.heat th[scope=row]{text-align:right; white-space:nowrap; padding-right:10px; cursor:pointer; background:none; border:0; font-family:inherit}
-.heat th[scope=row]:hover{color:var(--text)}
-.cell{width:100%; min-height:48px; border:0; border-radius:6px; cursor:pointer; font-size:15px; font-family:'Sofia Sans Condensed',sans-serif}
-.cell:hover{box-shadow:inset 0 0 0 2px var(--text)}
+.two{display:grid; grid-template-columns:1fr auto; gap:10px}
+.acte-note{margin:-4px 0 0; font-size:12px; color:var(--muted)}
+.acte-note strong{color:var(--text); font-weight:600}
+.month-select{min-height:36px; width:100%; padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:var(--ground); color:var(--text); cursor:pointer}
+.chips{grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:6px; padding-top:14px; border-top:1px solid var(--line)}
+.chip{flex:1 1 64px; border:1px solid var(--line); border-radius:8px; padding:6px 8px; min-height:34px; cursor:pointer; background:transparent; color:var(--text); font-size:13px}
+.chip:hover{border-color:var(--text)}
+.chip.active{background:var(--butter); color:var(--ground); border-color:var(--butter)}
+
+/* Barre réduite qui reste en haut en défilant */
+.mini{position:fixed; top:0; left:0; right:0; z-index:20; background:var(--panel); border-bottom:1px solid var(--line); box-shadow:0 6px 18px rgba(0,0,0,.25); transform:translateY(-110%); transition:transform .2s ease; visibility:hidden}
+.mini.show{transform:none; visibility:visible}
+.mini-in{max-width:1240px; margin:0 auto; padding:8px 32px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px}
+.mini-price{font-family:'Sofia Sans Condensed',sans-serif; font-size:22px; font-weight:800; min-width:110px; text-align:center}
+.mini .month-select{width:auto}
+.mini-status{font-size:13px; font-weight:600; margin-left:auto}
+
+/* Chiffre clé + jauge */
+.gauge-wrap{max-width:440px; margin:14px auto 0}
+.gauge{height:10px; border-radius:5px; background:var(--line); overflow:hidden}
+.gauge-fill{height:100%; border-radius:5px; transition:width .25s ease}
+.gauge-scale{display:flex; justify-content:space-between; margin-top:4px; font-size:12px; color:var(--muted)}
+
+.side{padding:24px}
 .side p{margin:0}
 .side dl{margin:22px 0 0; display:flex; flex-direction:column}
 .side dl>div{display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--line)}
 .side dt{color:var(--muted)}
 .side dd{margin:0; font-weight:600}
-.cascade{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:14px; align-items:end}
-.col{position:relative; height:280px}
-.col .bar{position:absolute; left:0; right:0; border-radius:6px}
-.col .val{position:absolute; left:0; right:0; margin:0; text-align:center; font-weight:700; font-size:18px; white-space:nowrap}
-.sum{display:flex; flex-wrap:wrap; align-items:baseline; gap:12px 20px}
-.op{font-family:'Sofia Sans Condensed',sans-serif; font-size:30px; color:var(--muted)}
-.months{width:100%; min-width:520px; border-collapse:collapse}
+
+/* Tableau mois par mois */
+.months{width:100%; min-width:620px; border-collapse:collapse}
 .months th,.months td{padding:10px 16px; text-align:right; border-bottom:1px solid var(--line)}
 .months th:first-child,.months td:first-child{text-align:left}
+.months tbody tr{cursor:pointer}
+.months tbody tr:hover td{background:rgba(242,210,122,.08)}
+.months tbody tr.sel{background:var(--sel)}
+.months tbody tr.sel td:first-child{color:var(--butter); font-weight:700}
 .months thead th{position:sticky; top:0; background:var(--panel); color:var(--muted); font-weight:500; font-size:13px}
+
+/* Grille */
+.gridbox{min-width:0; overflow-x:auto}
+.heat{border-collapse:separate; border-spacing:4px; width:100%; min-width:600px}
+.heat th{font-weight:500; color:var(--muted); font-size:13px; padding:4px 6px; text-align:center}
+.heat thead th[data-month]{cursor:pointer; border-radius:6px}
+.heat thead th[data-month]:hover{color:var(--text)}
+.heat th.on{color:var(--butter); font-weight:700}
+.heat th[scope=row]{text-align:right; white-space:nowrap; padding-right:10px; cursor:pointer}
+.heat th[scope=row]:hover{color:var(--text)}
+.cell{width:100%; min-height:56px; padding:6px 4px; line-height:1.15; border:0; border-radius:6px; cursor:pointer; font-size:15px; font-family:'Sofia Sans Condensed',sans-serif; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.cell .net{display:block; font-size:12px; font-weight:600; color:#B5EBDD}
+.cell .net.part{color:#F2D27A}
+.cell .net.zero{color:#FFB3A1}
+.cell.cross{box-shadow:inset 0 0 0 1px rgba(242,210,122,.55)}
+.cell:hover{box-shadow:inset 0 0 0 2px var(--text)}
+.legend{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:14px; font-size:13px; color:var(--muted)}
+.sw{display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-1px; margin-right:6px}
+
 @media (max-width:760px){
-  .wrap{padding:22px 16px 60px; gap:40px}
-  .controls{padding:18px 16px}
-  .col{height:200px}
-  .cascade{gap:8px}
-  .op{font-size:22px}
+  .wrap{padding:22px 16px 60px; gap:32px}
+  .controls{grid-template-columns:1fr; padding:14px 16px; gap:14px}
+  .mini-in{padding:8px 16px}
+  .mini-status{margin-left:0; width:100%}
 }
-@media print{ .noprint{display:none} }
+
+/* Impression : version claire, sans les commandes */
+@media print{
+  :root{ --ground:#fff; --panel:#fff; --text:#16282B; --muted:#5A6B68; --line:#C9D4D1; --sel:#FBF1D2;
+         --butter:#8A6A00; --coral:#B2452E; --ok:#1F7A5C; --part:#8A6A00; --zero:#B2452E; }
+  @page{ size:A4; margin:12mm }
+  body{font-size:12px}
+  .wrap{padding:0; gap:18px; max-width:none}
+  .noprint,.mini,.track,.chips,.stepper button,.toggle2 button:not(.active){display:none !important}
+  .panel{border:1px solid var(--line)}
+  .controls{grid-template-columns:auto auto; gap:8px 24px; padding:10px 14px}
+  .toggle2{border:0}
+  .toggle2 button.active{background:none; color:var(--text); padding:0; font-weight:600}
+  .month-select{border:0; padding:0; appearance:none; -webkit-appearance:none; background:none}
+  .price-input{width:auto; text-align:left; padding:0; font-size:24px}
+  #sideHero{font-size:54px !important}
+  .gauge,.gauge-fill{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  .months-box{max-height:none !important; overflow:visible !important}
+  .months th,.months td{padding:3px 10px}
+  .months thead th{position:static}
+  section,.side,.cost-strip,.controls{break-inside:avoid}
+  .grid-section{break-before:page}
+  h2{font-size:20px}
+}
 </style>
 </head>
 <body>
+
+<div class="mini noprint" id="mini" aria-hidden="true">
+  <div class="mini-in">
+    <button type="button" class="mini-btn" id="miniMinus" aria-label="Baisser de 5 000 €" tabindex="-1">−</button>
+    <span class="mini-price" id="miniPrice">—</span>
+    <button type="button" class="mini-btn" id="miniPlus" aria-label="Augmenter de 5 000 €" tabindex="-1">+</button>
+    <select class="month-select" id="miniMonth" aria-label="Mois de mise en vente" tabindex="-1"></select>
+    <span class="muted" id="miniActe" style="font-size: 13px">—</span>
+    <span class="muted" id="miniScen" style="font-size: 13px">—</span>
+    <span class="mini-status" id="miniStatus">—</span>
+  </div>
+</div>
+
 <div class="wrap">
 
   <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px">
     <div>
-      <h1 style="font-size: clamp(30px, 4vw, 46px); font-weight: 800; line-height: 1">Quand et à quel prix vendre Leducq</h1>
-      <p style="margin: 8px 0 0; color: var(--muted)">5 rue Théophile-Leducq, Pantin. Appartement de 54 m², simulation sur 36 mois.</p>
+      <h1 style="font-size: clamp(30px, 4vw, 46px); font-weight: 800; line-height: 1">À quel prix vendre Leducq</h1>
+      <p style="margin: 8px 0 0; color: var(--muted)">5 rue Théophile-Leducq, Pantin. Appartement de 54 m². Marge à la revente selon le prix et le mois, sur 36 mois.</p>
     </div>
     <div class="noprint" style="display: flex; flex-wrap: wrap; gap: 8px">
       <button class="ghost" type="button" onclick="window.print()">Imprimer</button>
-      <button class="ghost" type="button" onclick="copyLink()">Copier le lien</button>
+      <button class="ghost" type="button" id="btnCopy" onclick="copyLink()">Copier le lien</button>
       <button class="ghost" type="button" onclick="exportCSV()">Exporter en CSV</button>
     </div>
   </header>
 
-  <div class="panel controls">
-    <div style="flex: 1 1 300px; min-width: 0">
-      <label for="sRange" style="display: block; color: var(--muted)">Prix de vente net vendeur</label>
-      <p class="cond" id="priceText" style="margin: 0 0 4px; font-size: 34px; font-weight: 800; line-height: 1.1">—</p>
-      <input id="sRange" type="range" min="250000" max="600000" step="1000" value="480000">
+  <section class="panel cost-strip" aria-label="Ce que le bien vous a coûté">
+    <span class="cs-title">Ce que le bien vous a coûté</span>
+    <div class="cs-items">
+      <span><small>Achat (janv. 2021)</small><b>343 000 €</b></span>
+      <span class="op" aria-hidden="true">+</span>
+      <span><small>Travaux</small><b>77 268 €</b></span>
+      <span class="op" aria-hidden="true">+</span>
+      <span><small>Frais de notaire (apport)</small><b>27 357 €</b></span>
+      <span class="op" aria-hidden="true">=</span>
+      <span class="total"><small>Coût total</small><b>447 625 €</b></span>
     </div>
-    <div style="display: flex; flex-wrap: wrap; gap: 6px" role="group" aria-label="Prix fréquents" id="chips"></div>
-    <div class="exact-group">
-      <label for="sExact" style="color: var(--muted)">Montant exact</label>
-      <input id="sExact" type="number" inputmode="numeric" min="100000" max="900000" step="1000" value="480000">
+  </section>
+
+  <div class="panel controls" id="controls">
+    <div>
+      <label for="sExact" class="ctl-label">Prix de vente net vendeur</label>
+      <div class="stepper">
+        <button type="button" id="btnMinus" aria-label="Baisser de 5 000 €">−</button>
+        <input id="sExact" class="price-input" type="text" inputmode="numeric" autocomplete="off" value="350 000 €">
+        <button type="button" id="btnPlus" aria-label="Augmenter de 5 000 €">+</button>
+      </div>
+      <p class="gap-note" id="gapNote">—</p>
+      <p class="floor-note" id="floorNote">—</p>
+      <p class="market-note" id="marketNote">—</p>
     </div>
-    <div class="toggle2" role="group" aria-label="Au moment de la vente">
-      <button type="button" id="btnHabite" data-scenario="habite" class="active">J'y habite</button>
-      <button type="button" id="btnLocation" data-scenario="location">Je le loue</button>
+    <div class="track">
+      <input id="sRange" type="range" min="250000" max="600000" step="1000" value="350000" aria-label="Prix de vente (curseur)">
+      <div class="scale" aria-hidden="true">
+        <span style="left: 0">250 k€</span>
+        <span id="marketBand" class="market-band"></span>
+        <span id="marketLabel" class="market-label">Marché</span>
+        <span id="costMark" class="cost-mark"></span>
+        <span id="costLabel" class="cost-label">Coût total</span>
+        <span style="right: 0">600 k€</span>
+      </div>
     </div>
+    <div class="side-ctl">
+      <div class="two">
+        <div>
+          <label for="sMonth" class="ctl-label">Mise en vente</label>
+          <select class="month-select" id="sMonth"></select>
+        </div>
+        <div>
+          <label for="sDelay" class="ctl-label">Délai jusqu’à l’acte</label>
+          <select class="month-select" id="sDelay">
+            <option value="0">Immédiat</option>
+            <option value="2">2 mois</option>
+            <option value="3">3 mois</option>
+            <option value="4">4 mois</option>
+            <option value="5">5 mois</option>
+            <option value="6">6 mois</option>
+          </select>
+        </div>
+      </div>
+      <p class="acte-note" id="acteNote">—</p>
+      <div>
+        <span class="ctl-label" id="scenLabel">Au moment de la vente</span>
+        <div class="toggle2" role="group" aria-labelledby="scenLabel">
+          <button type="button" id="btnHabite" data-scenario="habite" class="active">J'y habite</button>
+          <button type="button" id="btnLocation" data-scenario="location">Je le loue</button>
+        </div>
+      </div>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Prix rapides"></div>
   </div>
 
   <section id="heroBlock" aria-live="polite" style="text-align: center">
-    <p class="muted" id="sideIntro">—</p>
+    <p class="muted" id="sideIntro" style="margin: 0">—</p>
     <p class="cond" id="sideHero" style="margin: 6px 0 0; font-size: clamp(64px, 8vw, 92px); font-weight: 800; line-height: .9">—</p>
-    <p class="muted" id="heroApport" style="margin: 10px 0 0">—</p>
+    <p id="heroNet" class="cond" style="margin: 12px 0 0; font-size: 24px; font-weight: 700">—</p>
+    <div class="gauge-wrap">
+      <div class="gauge" id="gauge" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="Part de l’apport récupérée"><div class="gauge-fill" id="gaugeFill"></div></div>
+      <div class="gauge-scale"><span>0 %</span><span id="gaugeMid">Apport 27 357 €</span><span>100 %</span></div>
+    </div>
+    <p class="muted" id="heroApport" style="margin: 8px 0 0; font-size: 13px">—</p>
   </section>
 
-  <div class="layout">
-    <div class="gridbox">
-      <table class="heat" id="heatTable"></table>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13px; color: var(--muted)">
-        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #4A2A2A; vertical-align: -1px; margin-right: 6px"></span>Perte</span>
-        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #1E474C; vertical-align: -1px; margin-right: 6px"></span>Moins de 50 k€</span>
-        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #2C7270; vertical-align: -1px; margin-right: 6px"></span>50 à 120 k€</span>
-        <span><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #8FD0C2; vertical-align: -1px; margin-right: 6px"></span>Plus de 120 k€</span>
-        <span>Cliquez sur une case pour la détailler.</span>
-      </div>
-    </div>
-
-    <aside class="panel side" aria-live="polite">
-      <p class="muted" id="sideVersus" style="margin: 0">—</p>
-      <dl id="sideLines"></dl>
-      <p id="sideTaxNote" style="margin: 16px 0 0; font-size: 13px; color: var(--muted)">—</p>
-    </aside>
-  </div>
-
-  <section style="display: flex; flex-direction: column; gap: 16px">
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px">
-      <h2 id="cascadeTitle">Où partent les —</h2>
-      <p class="muted" id="cascadeMonth">—</p>
-    </div>
-    <div class="panel" style="padding: 28px 24px 20px">
-      <div class="cascade" id="cascadeCols" aria-hidden="true"></div>
-      <div class="cascade" id="cascadeLabels" style="margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px"></div>
-      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px">
-        <div>
-          <p style="margin: 0; font-size: 13px; color: var(--muted)" id="apportLabel">Acompte (frais de notaire) récupéré à —</p>
-          <p class="cond" id="apportValue" style="margin: 2px 0 0; font-size: 20px; font-weight: 700">—</p>
-        </div>
-        <div style="text-align: right">
-          <p style="margin: 0; font-size: 13px; color: var(--muted)">Résultat net</p>
-          <p class="cond" id="resultNet" style="margin: 2px 0 0; font-size: 28px; font-weight: 800">—</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section style="display: flex; flex-direction: column; gap: 16px">
-    <h2>Ce que le bien vous a coûté</h2>
-    <div class="sum">
-      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Achat</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">341 964 €</p><p style="margin: 4px 0 0; font-size: 12px; color: var(--muted)">5 décembre 2021</p></div>
-      <span class="op" aria-hidden="true">+</span>
-      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Travaux</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">77 268 €</p></div>
-      <span class="op" aria-hidden="true">+</span>
-      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Frais de notaire</p><p class="cond" style="margin: 0; font-size: 28px; font-weight: 700">27 357 €</p></div>
-      <span class="op" aria-hidden="true">=</span>
-      <div><p style="margin: 0; font-size: 14px; color: var(--muted)">Coût total</p><p class="cond" style="margin: 0; font-size: 38px; font-weight: 800; line-height: 1.15; color: var(--butter)">446 590 €</p></div>
-    </div>
-  </section>
-
-  <section style="display: flex; flex-direction: column; gap: 16px">
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 20px">
-      <h2>Quand vendre</h2>
-      <p style="margin: 0; font-weight: 600" id="threshold">—</p>
-    </div>
-    <div class="panel" style="padding: 24px">
-      <div style="display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); margin-bottom: 12px">
-        <span><span aria-hidden="true" style="display: inline-block; width: 18px; height: 3px; background: var(--text); vertical-align: middle; margin-right: 8px"></span><span id="lineMainLabel">—</span></span>
-        <span><span aria-hidden="true" style="display: inline-block; width: 18px; height: 0; border-top: 2px dashed var(--muted); vertical-align: middle; margin-right: 8px"></span><span id="lineAltLabel">—</span></span>
-        <span><span aria-hidden="true" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--butter); vertical-align: 0; margin-right: 8px"></span>Mois sélectionné</span>
-      </div>
-      <svg id="chart" viewBox="0 0 720 260" role="img" style="width: 100%; height: auto; display: block; overflow: visible"></svg>
-    </div>
-  </section>
+  <aside class="panel side" aria-live="polite">
+    <p class="muted" id="sideVersus">—</p>
+    <dl id="sideLines"></dl>
+    <p id="sideTaxNote" style="margin: 16px 0 0; font-size: 13px; color: var(--muted)">—</p>
+  </aside>
 
   <section style="display: flex; flex-direction: column; gap: 16px">
     <h2>Mois par mois</h2>
-    <div class="panel" style="max-height: 420px; overflow: auto" tabindex="0" aria-label="Tableau mois par mois">
+    <p class="muted noprint" style="margin: -8px 0 0; font-size: 13px">Cliquez sur une ligne pour choisir le mois de mise en vente.</p>
+    <div class="panel months-box" id="monthsBox" style="max-height: 420px; overflow: auto" tabindex="0" aria-label="Tableau mois par mois">
       <table class="months">
         <thead>
-          <tr><th scope="col">Mois</th><th scope="col">Prêt restant</th><th scope="col">Marge brute</th><th scope="col" id="netColLabel">Marge nette</th></tr>
+          <tr><th scope="col">Mise en vente</th><th scope="col">Acte</th><th scope="col">Prêt restant à l’acte</th><th scope="col">Marge brute</th><th scope="col" id="netColLabel">Apport récupéré</th></tr>
         </thead>
         <tbody id="monthsBody"></tbody>
       </table>
     </div>
   </section>
 
+  <section class="grid-section" style="display: flex; flex-direction: column; gap: 16px">
+    <h2>Selon le prix et le mois</h2>
+    <div class="gridbox">
+      <table class="heat" id="heatTable"></table>
+      <div class="legend">
+        <span><span class="sw" aria-hidden="true" style="background: #4A2A2A"></span>Marge brute négative</span>
+        <span><span class="sw" aria-hidden="true" style="background: #1E474C"></span>Moins de 50 k€</span>
+        <span><span class="sw" aria-hidden="true" style="background: #245C5E"></span>50 à 100 k€</span>
+        <span><span class="sw" aria-hidden="true" style="background: #2C7270"></span>Plus de 100 k€</span>
+        <span><strong style="color: var(--text)">Gros chiffre</strong> : marge brute. Dessous, l’apport : <strong style="color: var(--ok)">✓ récupéré en totalité</strong> · <strong style="color: var(--part)">% en partie</strong> · <strong style="color: var(--zero)">0 % rien</strong></span>
+        <span id="gridActeNote">—</span>
+        <span class="noprint">Cliquez sur une case ou un mois pour le choisir.</span>
+      </div>
+    </div>
+  </section>
+
   <footer style="border-top: 1px solid var(--line); padding-top: 20px; font-size: 13px; color: var(--muted); max-width: 72ch">
-    Marge nette = prix net vendeur − prêt restant − frais de notaire, moins l'impôt sur la plus-value si le bien est loué (36,2 % : 19 % d'IR + 17,2 % de prélèvements sociaux). Fiscalité à confirmer avec le notaire.
+    Les calculs se font à la date de l’acte chez le notaire, c’est-à-dire au mois de mise en vente plus le délai choisi (recherche d’acheteur, puis environ 3 mois entre compromis et acte). Marge brute = prix net vendeur − prêt restant à l’acte. Apport = frais de notaire payés à l’achat : il est récupéré à hauteur de la marge brute, moins l'impôt sur la plus-value si le bien est loué (36,2 % : 19 % d'IR + 17,2 % de prélèvements sociaux). Prêt restant : tableaux d’amortissement Crédit Agricole des deux prêts, édités le 09/11/2026. Fiscalité à confirmer avec le notaire. Pas d’indemnités de remboursement anticipé (IRA) : le prêt est soldé à l’acte sans pénalité. Estimation de marché (330–370 k€) : ventes réelles DVF à moins de 400 m, appartements de 40 à 70 m², juillet 2024 à décembre 2025 (médiane 6 031 €/m²), recoupées avec RealAdvisor et Solvimo ; à confirmer par une estimation d’agence.
   </footer>
 
 </div>
 
 <script>
 var MONTHS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
-var COST = 446590, NOTAIRE = 27357, ACQUIS = COST - NOTAIRE, CAP0 = 341384, TAX = 0.362;
+// Estimation de marché pour 54 m² : ventes DVF à moins de 400 m (2024-2025), RealAdvisor et Solvimo (2026)
+var MARKET_LO = 330000, MARKET_HI = 370000;
+var COST = 447625, NOTAIRE = 27357, ACQUIS = COST - NOTAIRE, TAX = 0.362;
+var MAX_MONTH = 36;
 function monthLabel(m){ var i = 10 + m; return MONTHS[i % 12] + ' ' + (26 + Math.floor(i / 12)); }
-function capital(m){ return CAP0 - (1371.2 * m + 0.826 * m * m); }
+// m = mois de mise en vente ; l'acte (et le remboursement du prêt) a lieu state.delay mois plus tard
+function acte(m){ return m + state.delay; }
+// Capital restant dû des deux prêts Crédit Agricole (tableaux d'amortissement édités le 09/11/2026),
+// index 0 = 09/11/2026, puis après chaque échéance du 5 du mois (déc. 2026 → mai 2030)
+var CRD = [341383.69, 340012.43, 338639.41, 337264.61, 335888.03, 334509.67, 333129.54, 331747.63, 330363.93, 328978.44, 327591.16, 326202.09, 324811.23, 323418.57, 322024.10, 320627.83, 319229.76, 317829.89, 316428.21, 315024.72, 313619.42, 312212.30, 310803.37, 309392.61, 307980.04, 306565.64, 305149.41, 303731.36, 302311.47, 300889.75, 299466.19, 298040.79, 296613.55, 295184.46, 293753.53, 292320.75, 290886.12, 289449.64, 288011.30, 286571.11, 285129.05, 283685.13, 282239.35];
+function capital(m){ var a = Math.max(0, Math.min(CRD.length - 1, acte(m))); return CRD[a]; }
 function plusValue(p){ return Math.max(0, p - ACQUIS); }
 function tax(p){ return plusValue(p) * TAX; }
 function marge(p, m, sc){ return p - capital(m) - (sc === 'location' ? tax(p) : 0); }
 function net(p, m, sc){ return marge(p, m, sc) - NOTAIRE; }
+function breakEven(m, sc){ var lo = 0, hi = 2000000; for (var i = 0; i < 60; i++) { var mid = (lo + hi) / 2; if (net(mid, m, sc) >= 0) hi = mid; else lo = mid; } return hi; }
 function eur(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; }
 function signed(n){ var r = Math.round(n); return (r < 0 ? '−' : '+') + Math.abs(r).toLocaleString('fr-FR') + ' €'; }
 function kSigned(n){ var k = Math.round(n / 1000); return (k < 0 ? '−' : '+') + Math.abs(k) + ' k'; }
 function kEur(x){ var k = Math.round(x / 1000); return (k < 0 ? '−' : '') + Math.abs(k) + ' k€'; }
+var MARKET_TXT = (MARKET_LO / 1000) + '–' + kEur(MARKET_HI);
 
-var CHIPS = [];
-for (var cv = 320000; cv <= 420000; cv += 10000) CHIPS.push(cv);
-var MONTH_COLS = [0, 6, 12, 18, 24, 30, 36];
+// Apport = frais de notaire payés à l'achat. Récupéré en totalité (+ surplus), en partie (%) ou pas du tout.
+function apportPct(p, m, sc){ return Math.max(0, Math.min(1, marge(p, m, sc) / NOTAIRE)); }
+function apportLevel(p, m, sc){ var mg = marge(p, m, sc); return mg >= NOTAIRE ? 'ok' : mg <= 0 ? 'zero' : 'part'; }
+function apportColor(p, m, sc){ return 'var(--' + apportLevel(p, m, sc) + ')'; }
+function apportShort(p, m, sc){ var n = net(p, m, sc); return n >= 0 ? 'apport ✓ ' + kSigned(n) : 'apport ' + Math.round(apportPct(p, m, sc) * 100) + ' %'; }
+function apportLong(p, m, sc){
+  var mg = marge(p, m, sc), n = mg - NOTAIRE;
+  if (n >= 0) return 'Apport récupéré en totalité, + ' + eur(n) + ' en plus';
+  if (mg <= 0) return 'Apport non récupéré (0 %)';
+  return 'Apport récupéré à ' + Math.round(mg / NOTAIRE * 100) + ' % : ' + eur(mg) + ' sur ' + eur(NOTAIRE);
+}
 
-var state = { scenario: 'habite', price: 480000, month: 0 };
+var MONTH_COLS = [0, 2, 4, 6, 8, 10, 12];
+var state = { scenario: 'habite', price: 350000, month: 0, delay: 4 };
 
 var sRange = document.getElementById('sRange');
 var sExact = document.getElementById('sExact');
-var chipsEl = document.getElementById('chips');
+var sMonth = document.getElementById('sMonth');
+var sDelay = document.getElementById('sDelay');
+sDelay.addEventListener('change', function () { setState({ delay: +sDelay.value }); });
+var miniMonth = document.getElementById('miniMonth');
 var btnHabite = document.getElementById('btnHabite');
 var btnLocation = document.getElementById('btnLocation');
 var heatTable = document.getElementById('heatTable');
+var monthsBox = document.getElementById('monthsBox');
 
 function setState(patch){ Object.assign(state, patch); render(); }
-function setPrice(p){ p = Math.round(p); setState({ price: p }); }
+function setPrice(p){ setState({ price: Math.max(100000, Math.min(900000, Math.round(p))) }); }
+function stepPrice(d){ setPrice(state.price + d); }
 
+// Cases de prix rapides
+var chipsEl = document.getElementById('chips'), CHIPS = [];
+for (var cv = 320000; cv <= 420000; cv += 10000) CHIPS.push(cv);
 CHIPS.forEach(function (v) {
   var b = document.createElement('button');
   b.type = 'button'; b.className = 'chip'; b.textContent = (v / 1000) + ' k€';
   b.addEventListener('click', function () { setPrice(v); });
   chipsEl.appendChild(b);
 });
+
+// Sélecteurs de mois (bloc prix + barre réduite)
+[sMonth, miniMonth].forEach(function (sel) {
+  for (var k = 0; k <= MAX_MONTH; k++) {
+    var o = document.createElement('option');
+    o.value = k;
+    o.textContent = k === 0 ? 'Aujourd’hui (' + monthLabel(0) + ')' : monthLabel(k) + ' (dans ' + k + ' mois)';
+    sel.appendChild(o);
+  }
+  sel.addEventListener('change', function () { setState({ month: +sel.value }); });
+});
+
+document.getElementById('btnMinus').addEventListener('click', function () { stepPrice(-5000); });
+document.getElementById('btnPlus').addEventListener('click', function () { stepPrice(5000); });
+document.getElementById('miniMinus').addEventListener('click', function () { stepPrice(-5000); });
+document.getElementById('miniPlus').addEventListener('click', function () { stepPrice(5000); });
+
+// Repères sous le curseur : coût total et estimation de marché
+(function () {
+  var min = Number(sRange.min), span = Number(sRange.max) - min;
+  var pct = (COST - min) / span * 100;
+  var lo = (MARKET_LO - min) / span * 100, hi = (MARKET_HI - min) / span * 100;
+  var band = document.getElementById('marketBand');
+  band.style.left = lo + '%'; band.style.width = (hi - lo) + '%';
+  var ml = document.getElementById('marketLabel');
+  ml.style.left = ((lo + hi) / 2) + '%';
+  ml.textContent = 'Marché ' + MARKET_TXT;
+  document.getElementById('costMark').style.left = pct + '%';
+  var lab = document.getElementById('costLabel');
+  lab.style.left = pct + '%';
+  lab.textContent = 'Coût total ' + kEur(COST);
+})();
+
 btnHabite.addEventListener('click', function () { setState({ scenario: 'habite' }); });
 btnLocation.addEventListener('click', function () { setState({ scenario: 'location' }); });
 sRange.addEventListener('input', function (e) { setPrice(Number(e.target.value)); });
 sExact.addEventListener('input', function (e) {
-  var rv = e.target.value, val = Number(rv);
+  var rv = e.target.value.replace(/\D/g, ''), val = Number(rv);
   if (rv !== '' && val >= 100000 && val <= 900000) setState({ price: Math.round(val) });
 });
-sExact.addEventListener('blur', function () { sExact.value = state.price; });
+sExact.addEventListener('focus', function () { sExact.value = state.price; sExact.select(); });
+sExact.addEventListener('blur', function () { sExact.value = eur(state.price); });
+sExact.addEventListener('keydown', function (e) { if (e.key === 'Enter') sExact.blur(); });
+
+// Barre réduite : visible quand le bloc prix est sorti de l'écran par le haut
+(function () {
+  var mini = document.getElementById('mini'), ctl = document.getElementById('controls');
+  if (!('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    var e = entries[0], show = !e.isIntersecting && e.boundingClientRect.top < 0;
+    mini.classList.toggle('show', show);
+    mini.setAttribute('aria-hidden', show ? 'false' : 'true');
+    mini.querySelectorAll('button,select').forEach(function (el) { el.tabIndex = show ? 0 : -1; });
+  }).observe(ctl);
+})();
 
 function render() {
   var sc = state.scenario, p = state.price, mo = state.month, habite = sc === 'habite';
-  var other = habite ? 'location' : 'habite';
 
-  document.getElementById('priceText').textContent = eur(p);
   sRange.value = p;
-  if (document.activeElement !== sExact) sExact.value = p;
+  if (document.activeElement !== sExact) sExact.value = eur(p);
+  sMonth.value = mo; miniMonth.value = mo; sDelay.value = state.delay;
+  var acteTxt = state.delay === 0 ? 'acte immédiat' : 'acte vers ' + monthLabel(acte(mo));
+  document.getElementById('acteNote').innerHTML = state.delay === 0
+    ? 'Calcul comme si l’acte était signé en ' + monthLabel(mo) + '.'
+    : 'Acte chez le notaire vers <strong>' + monthLabel(acte(mo)) + '</strong> : le prêt est remboursé à cette date.';
+  document.getElementById('miniActe').textContent = acteTxt;
+  document.getElementById('gridActeNote').textContent = 'Colonnes = mois de mise en vente' + (state.delay ? ' ; acte ' + state.delay + ' mois plus tard.' : '.');
+
+  var gap = p - COST, gapEl = document.getElementById('gapNote');
+  gapEl.textContent = signed(gap) + (gap < 0 ? ' sous le coût total' : ' au-dessus du coût total');
+  gapEl.style.color = gap < 0 ? 'var(--part)' : 'var(--ok)';
+
+  var m2 = mo === 0 ? 12 : mo;
+  document.getElementById('floorNote').innerHTML = 'Apport récupéré en totalité dès <strong>' + kEur(Math.ceil(breakEven(0, sc) / 1000) * 1000) + '</strong> en vendant aujourd’hui, <strong>' + kEur(Math.ceil(breakEven(m2, sc) / 1000) * 1000) + '</strong> en ' + monthLabel(m2) + (state.delay ? ' (dates de mise en vente)' : '');
+
+  var mk = document.getElementById('marketNote');
+  mk.textContent = (p < MARKET_LO ? 'Sous' : p > MARKET_HI ? 'Au-dessus de' : 'Dans') + ' l’estimation du marché (' + MARKET_TXT + ')';
+  mk.style.color = p > MARKET_HI ? 'var(--part)' : p < MARKET_LO ? 'var(--muted)' : 'var(--ok)';
 
   chipsEl.querySelectorAll('.chip').forEach(function (b, i) {
     var on = CHIPS[i] === p;
@@ -256,31 +455,42 @@ function render() {
   btnHabite.setAttribute('aria-pressed', habite ? 'true' : 'false');
   btnLocation.setAttribute('aria-pressed', !habite ? 'true' : 'false');
 
+  // Barre réduite
+  document.getElementById('miniPrice').textContent = eur(p);
+  document.getElementById('miniScen').textContent = habite ? 'J’y habite' : 'Je le loue';
+  var ms = document.getElementById('miniStatus');
+  ms.textContent = apportLong(p, mo, sc);
+  ms.style.color = apportColor(p, mo, sc);
+
   renderHeat(p, mo, sc);
   renderSide(p, mo, sc, habite);
-  renderCascade(p, mo, sc, habite);
-  renderChart(p, mo, sc, other);
   renderMonths(p, mo, sc, habite);
+  syncUrl();
 }
 
 function renderHeat(p, mo, sc) {
   var prices = [];
-  for (var v = 450000; v >= 300000; v -= 10000) prices.push(v);
+  for (var v = CHIPS[CHIPS.length - 1]; v >= CHIPS[0]; v -= 10000) prices.push(v);
   if (prices.indexOf(p) < 0) { prices.push(p); prices.sort(function (a, b) { return b - a; }); }
+  var cols = MONTH_COLS.slice();
+  if (cols.indexOf(mo) < 0) { cols.push(mo); cols.sort(function (a, b) { return a - b; }); }
 
-  var html = '<thead><tr><th scope="col" style="text-align:right">Prix \\ Vente en</th>';
-  MONTH_COLS.forEach(function (m) { html += '<th scope="col">' + (m === 0 ? 'Aujourd’hui' : monthLabel(m)) + '</th>'; });
+  var html = '<thead><tr><th scope="col" style="text-align:right">Prix \\ Mise en vente</th>';
+  cols.forEach(function (m) {
+    html += '<th scope="col" data-month="' + m + '" class="' + (m === mo ? 'on' : '') + '" title="Choisir ce mois">' + (m === 0 ? 'Aujourd’hui' : monthLabel(m)) + '</th>';
+  });
   html += '</tr></thead><tbody>';
 
   prices.forEach(function (pr) {
     var cur = pr === p;
-    html += '<tr><th scope="row" style="color:' + (cur ? '#F2D27A' : '#9DB5B0') + '; font-weight:' + (cur ? '700' : '500') + '" data-price="' + pr + '">' + eur(pr) + '</th>';
-    MONTH_COLS.forEach(function (m) {
-      var n = net(pr, m, sc), on = cur && m === mo;
-      var bg = n < 0 ? '#4A2A2A' : n < 50000 ? '#1E474C' : n < 120000 ? '#2C7270' : '#8FD0C2';
-      var fg = n < 0 ? '#FFB3A1' : n < 120000 ? '#E6EFEC' : '#0F2A2E';
+    html += '<tr><th scope="row" class="' + (cur ? 'on' : '') + '" data-price="' + pr + '">' + eur(pr) + '</th>';
+    cols.forEach(function (m) {
+      var g = pr - capital(m), on = cur && m === mo, cross = !on && (cur || m === mo);
+      var bg = g < 0 ? '#4A2A2A' : g < 50000 ? '#1E474C' : g < 100000 ? '#245C5E' : '#2C7270';
+      var fg = g < 0 ? '#FFB3A1' : '#E6EFEC';
       var ring = on ? 'outline:3px solid #F2D27A; outline-offset:-3px;' : '';
-      html += '<td style="padding:0"><button type="button" class="cell cond" data-price="' + pr + '" data-month="' + m + '" aria-pressed="' + on + '" aria-label="' + eur(pr) + ', vente en ' + monthLabel(m) + ' : ' + signed(n) + '" style="background:' + bg + '; color:' + fg + '; font-weight:' + (on ? '800' : '500') + '; ' + ring + '">' + kSigned(n) + '</button></td>';
+      var lvl = apportLevel(pr, m, sc);
+      html += '<td style="padding:0"><button type="button" class="cell cond' + (cross ? ' cross' : '') + '" data-price="' + pr + '" data-month="' + m + '" aria-pressed="' + on + '" aria-label="' + eur(pr) + ', mise en vente ' + monthLabel(m) + ', acte ' + monthLabel(acte(m)) + ' : marge brute ' + signed(g) + ', ' + apportLong(pr, m, sc) + '" style="background:' + bg + '; color:' + fg + '; font-weight:' + (on ? '800' : '600') + '; ' + ring + '"><span style="font-size:16px">' + kSigned(g) + '</span><span class="net' + (lvl === 'ok' ? '' : ' ' + lvl) + '">' + apportShort(pr, m, sc) + '</span></button></td>';
     });
     html += '</tr>';
   });
@@ -290,6 +500,9 @@ function renderHeat(p, mo, sc) {
   heatTable.querySelectorAll('th[data-price]').forEach(function (el) {
     el.addEventListener('click', function () { setPrice(+el.dataset.price); });
   });
+  heatTable.querySelectorAll('thead th[data-month]').forEach(function (el) {
+    el.addEventListener('click', function () { setState({ month: +el.dataset.month }); });
+  });
   heatTable.querySelectorAll('.cell').forEach(function (el) {
     el.addEventListener('click', function () { setState({ price: +el.dataset.price, month: +el.dataset.month }); });
   });
@@ -297,128 +510,76 @@ function renderHeat(p, mo, sc) {
 
 function renderSide(p, mo, sc, habite) {
   var n = net(p, mo, sc), n0 = net(p, 0, sc), t = habite ? 0 : tax(p), mg = marge(p, mo, sc);
-  var apportPct = Math.max(0, Math.min(1, mg / NOTAIRE));
-  var apportRecovered = Math.max(0, Math.min(mg, NOTAIRE));
+  var pct = apportPct(p, mo, sc), gross = p - capital(mo);
 
-  var gross = p - capital(mo);
-  var grossApportPct = Math.max(0, Math.min(1, gross / NOTAIRE));
-  var grossApportRecovered = Math.max(0, Math.min(gross, NOTAIRE));
-
-  document.getElementById('sideIntro').textContent = 'Vendu ' + eur(p) + ' en ' + monthLabel(mo) + ', il vous reste';
+  document.getElementById('sideIntro').textContent = 'Vendu ' + eur(p) + (state.delay ? ', mis en vente en ' + monthLabel(mo) + ', acte en ' + monthLabel(acte(mo)) : ' en ' + monthLabel(mo)) + ' : marge brute (avant frais de notaire)';
   var hero = document.getElementById('sideHero');
   hero.textContent = signed(gross);
-  hero.style.color = gross < 0 ? 'var(--coral)' : 'var(--text)';
-  document.getElementById('heroApport').textContent = Math.round(grossApportPct * 100) + '% de l’apport récupéré (' + eur(grossApportRecovered) + ' / ' + eur(NOTAIRE) + ')';
-  document.getElementById('sideVersus').textContent = mo === 0 ? 'En vendant maintenant.' : signed(n - n0) + ' par rapport à une vente aujourd’hui.';
+  hero.style.color = gross < 0 ? 'var(--zero)' : 'var(--text)';
+  var hn = document.getElementById('heroNet');
+  hn.textContent = apportLong(p, mo, sc);
+  hn.style.color = apportColor(p, mo, sc);
+
+  var fill = document.getElementById('gaugeFill');
+  fill.style.width = (pct * 100) + '%';
+  fill.style.background = apportColor(p, mo, sc);
+  var gauge = document.getElementById('gauge');
+  gauge.setAttribute('aria-valuenow', Math.round(pct * 100));
+  gauge.setAttribute('aria-valuetext', apportLong(p, mo, sc));
+  document.getElementById('gaugeMid').textContent = 'Apport ' + eur(NOTAIRE);
+
+  document.getElementById('heroApport').textContent = (habite ? '' : 'Après impôt sur la plus-value. ') + 'Apport = frais de notaire payés à l’achat.';
+  document.getElementById('sideVersus').textContent = mo === 0 ? (state.delay ? 'En mettant en vente maintenant (acte vers ' + monthLabel(acte(0)) + ').' : 'En vendant maintenant.') : signed(n - n0) + ' par rapport à une mise en vente aujourd’hui.';
 
   var lines = [
     { label: 'Prix de vente', value: eur(p) },
-    { label: 'Prêt restant en ' + monthLabel(mo), value: '−' + eur(capital(mo)) }
+    { label: 'Prêt restant à l’acte (' + monthLabel(acte(mo)) + ')', value: '−' + eur(capital(mo)) }
   ];
   if (!habite) lines.push({ label: 'Impôt sur la plus-value', value: '−' + eur(t) });
-  lines.push({ label: 'Acompte (frais de notaire) récupéré à ' + Math.round(apportPct * 100) + '%', value: eur(apportRecovered) + ' / ' + eur(NOTAIRE) });
-  lines.push({ label: 'Résultat net', value: signed(n) });
+  lines.push({ label: 'Apport récupéré (' + Math.round(pct * 100) + ' %)', value: eur(Math.max(0, Math.min(mg, NOTAIRE))) + ' / ' + eur(NOTAIRE), color: apportColor(p, mo, sc) });
+  lines.push(n >= 0 ? { label: 'En plus de l’apport', value: signed(n), color: 'var(--ok)' } : { label: 'Part de l’apport non récupérée', value: eur(-n) });
   document.getElementById('sideLines').innerHTML = lines.map(function (l) {
-    return '<div><dt>' + l.label + '</dt><dd>' + l.value + '</dd></div>';
+    return '<div><dt>' + l.label + '</dt><dd' + (l.color ? ' style="color:' + l.color + '"' : '') + '>' + l.value + '</dd></div>';
   }).join('');
 
   var pv = plusValue(p);
   document.getElementById('sideTaxNote').textContent = habite
     ? 'Résidence principale au moment de la vente : plus-value exonérée.'
     : (pv > 0 ? 'Bien loué : plus-value de ' + eur(pv) + ' taxée à 36,2 %.' : 'Bien loué : pas de plus-value, donc pas d’impôt.');
-
-  document.getElementById('apportLabel').textContent = 'Acompte (frais de notaire) récupéré à ' + Math.round(apportPct * 100) + '%';
-  document.getElementById('apportValue').textContent = eur(apportRecovered) + ' / ' + eur(NOTAIRE);
-  var rn = document.getElementById('resultNet');
-  rn.textContent = signed(n);
-  rn.style.color = n < 0 ? 'var(--coral)' : 'var(--text)';
 }
 
-function renderCascade(p, mo, sc, habite) {
-  document.getElementById('cascadeTitle').textContent = 'Où partent les ' + eur(p);
-  document.getElementById('cascadeMonth').textContent = 'Vente en ' + monthLabel(mo);
-
-  var t = habite ? 0 : tax(p);
-  var mg = marge(p, mo, sc);
-  var top = Math.max(p, capital(mo) + t, NOTAIRE);
-  function pct(x) { return (x / top * 100).toFixed(2) + '%'; }
-
-  var raw = [{ label: 'Prix de vente', from: 0, to: p, color: '#8FD0C2', text: kEur(p) }];
-  var level = p;
-  var outs = [['Prêt restant', capital(mo)]];
-  if (!habite) outs.push(['Impôt', t]);
-  outs.forEach(function (o) {
-    var nl = level - o[1];
-    raw.push({ label: o[0], from: Math.max(0, nl), to: level, color: '#4E7479', text: '−' + kEur(o[1]) });
-    level = nl;
-  });
-  if (mg >= 0) raw.push({ label: 'Marge avant acompte', from: 0, to: mg, color: '#F2D27A', text: kEur(mg) });
-  else raw.push({ label: 'Marge avant acompte', from: 0, to: -mg, color: '#FFB3A1', text: kEur(mg) });
-
-  document.getElementById('cascadeCols').innerHTML = raw.map(function (s) {
-    return '<div class="col"><div class="bar" style="bottom:' + pct(s.from) + '; height:' + pct(Math.max(s.to - s.from, top * 0.004)) + '; background:' + s.color + '"></div><p class="val cond" style="bottom:calc(' + pct(s.to) + ' + 8px)">' + s.text + '</p></div>';
-  }).join('');
-  document.getElementById('cascadeLabels').innerHTML = raw.map(function (s) {
-    return '<p style="margin:0; text-align:center; font-size:14px; color:var(--muted)">' + s.label + '</p>';
-  }).join('');
-}
-
-function renderChart(p, mo, sc, other) {
-  var first = -1;
-  for (var m = 0; m <= 36; m++) { if (net(p, m, sc) >= 0) { first = m; break; } }
-  document.getElementById('threshold').textContent = first === 0 ? 'Rentable dès aujourd’hui' : first > 0 ? 'Rentable à partir de ' + monthLabel(first) : 'Pas rentable avant ' + monthLabel(36);
-
-  document.getElementById('lineMainLabel').textContent = sc === 'habite' ? 'J’y habite' : 'Je le loue';
-  document.getElementById('lineAltLabel').textContent = sc === 'habite' ? 'Je le loue' : 'J’y habite';
-
-  var W = 720, topY = 28, bottom = 222, main = [], alt = [];
-  for (var i = 0; i <= 36; i++) { main.push(net(p, i, sc)); alt.push(net(p, i, other)); }
-  var all = main.concat(alt);
-  var lo = Math.min(0, Math.min.apply(null, all)), hi = Math.max(1, Math.max.apply(null, all)) * 1.12;
-  function X(k) { return 6 + k / 36 * (W - 12); }
-  function Y(val) { return bottom - (val - lo) / (hi - lo) * (bottom - topY); }
-  function pts(arr) { return arr.map(function (val, k) { return X(k).toFixed(1) + ',' + Y(val).toFixed(1); }).join(' '); }
-
-  var y0 = Y(0).toFixed(1), y0Label = (Y(0) - 6).toFixed(1);
-  var selX = X(mo).toFixed(1), selY = Y(main[mo]).toFixed(1);
-  var selAnchor = mo > 30 ? 'end' : 'start';
-  var selLabelX = (X(mo) + (mo > 30 ? -10 : 10)).toFixed(1), selLabelY = (Y(main[mo]) - 12).toFixed(1);
-  var endX = X(36).toFixed(1), endY = Y(main[36]).toFixed(1), endLabelY = (Y(main[36]) + 22).toFixed(1);
-
-  var ticks = [0, 12, 24, 36].map(function (k) { return { x: X(k).toFixed(1), label: k === 0 ? 'Aujourd’hui' : monthLabel(k), anchor: k === 0 ? 'start' : k === 36 ? 'end' : 'middle' }; });
-
-  var svg = '';
-  svg += '<line x1="0" x2="720" y1="' + y0 + '" y2="' + y0 + '" stroke="#2A5056" stroke-width="1"></line>';
-  svg += '<text x="0" y="' + y0Label + '" font-size="12" fill="#9DB5B0" font-family="Sofia Sans, sans-serif">0 €</text>';
-  svg += '<line x1="' + selX + '" x2="' + selX + '" y1="20" y2="222" stroke="#F2D27A" stroke-width="1" stroke-dasharray="3 4"></line>';
-  svg += '<polyline points="' + pts(alt) + '" fill="none" stroke="#9DB5B0" stroke-width="2" stroke-dasharray="5 6" stroke-linecap="round"></polyline>';
-  svg += '<polyline points="' + pts(main) + '" fill="none" stroke="#E6EFEC" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></polyline>';
-  svg += '<circle cx="' + endX + '" cy="' + endY + '" r="4" fill="#E6EFEC"></circle>';
-  svg += '<circle cx="' + selX + '" cy="' + selY + '" r="6" fill="#F2D27A"></circle>';
-  svg += '<text x="' + selLabelX + '" y="' + selLabelY + '" text-anchor="' + selAnchor + '" font-size="14" font-weight="700" fill="#F2D27A" font-family="Sofia Sans Condensed, sans-serif">' + kSigned(main[mo]) + '€</text>';
-  svg += '<text x="' + endX + '" y="' + endLabelY + '" text-anchor="end" font-size="14" font-weight="700" fill="#E6EFEC" font-family="Sofia Sans Condensed, sans-serif">' + kSigned(main[36]) + '€</text>';
-  ticks.forEach(function (t) { svg += '<text x="' + t.x + '" y="252" text-anchor="' + t.anchor + '" font-size="12" fill="#9DB5B0" font-family="Sofia Sans, sans-serif">' + t.label + '</text>'; });
-
-  document.getElementById('chart').innerHTML = svg;
-  document.getElementById('chart').setAttribute('aria-label', 'Marge nette de ' + monthLabel(0) + ' à ' + monthLabel(36) + ' : de ' + signed(main[0]) + ' à ' + signed(main[36]));
-}
-
+var lastScrolledMonth = null;
 function renderMonths(p, mo, sc, habite) {
-  document.getElementById('netColLabel').textContent = habite ? 'Marge nette (j’y habite)' : 'Marge nette (je le loue)';
+  document.getElementById('netColLabel').textContent = habite ? 'Apport récupéré (j’y habite)' : 'Apport récupéré (je le loue)';
   var html = '';
-  for (var k = 0; k <= 36; k++) {
+  for (var k = 0; k <= MAX_MONTH; k++) {
     var nv = net(p, k, sc), sel = k === mo;
-    html += '<tr style="background:' + (sel ? '#245B5F' : 'transparent') + '"><td style="color:' + (sel ? '#F2D27A' : '#E6EFEC') + '; font-weight:' + (sel ? '700' : '400') + '">' + monthLabel(k) + '</td><td>' + eur(capital(k)) + '</td><td style="color:var(--muted)">' + eur(p - capital(k)) + '</td><td style="font-weight:600; color:' + (nv < 0 ? '#FFB3A1' : '#E6EFEC') + '">' + signed(nv) + '</td></tr>';
+    html += '<tr data-month="' + k + '" tabindex="0" aria-selected="' + sel + '" class="' + (sel ? 'sel' : '') + '"><td>' + monthLabel(k) + '</td><td style="color:var(--muted)">' + monthLabel(acte(k)) + '</td><td>' + eur(capital(k)) + '</td><td style="color:var(--muted)">' + eur(p - capital(k)) + '</td><td style="font-weight:600; color:' + apportColor(p, k, sc) + '">' + (nv >= 0 ? '100 % + ' + eur(nv) : Math.round(apportPct(p, k, sc) * 100) + ' %') + '</td></tr>';
   }
-  document.getElementById('monthsBody').innerHTML = html;
+  var body = document.getElementById('monthsBody');
+  body.innerHTML = html;
+  body.querySelectorAll('tr').forEach(function (tr) {
+    var pick = function (fromKey) {
+      setState({ month: +tr.dataset.month });
+      if (fromKey) { var r = body.querySelector('tr[data-month="' + tr.dataset.month + '"]'); if (r) r.focus({ preventScroll: true }); }
+    };
+    tr.addEventListener('click', function () { pick(false); });
+    tr.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(true); } });
+  });
+  // Faire défiler le tableau (et lui seul) jusqu'au mois choisi
+  if (mo !== lastScrolledMonth) {
+    var row = body.querySelector('tr.sel');
+    if (row) monthsBox.scrollTop = Math.max(0, row.offsetTop - monthsBox.clientHeight / 2 + row.offsetHeight / 2);
+    lastScrolledMonth = mo;
+  }
 }
 
 function exportCSV() {
   var p = state.price, sc = state.scenario;
   var dec = function (n) { return n.toFixed(2).replace('.', ','); };
-  var csv = 'Mois;Prêt restant;Marge brute;Marge nette\n';
-  for (var k = 0; k <= 36; k++) {
-    csv += monthLabel(k) + ';' + dec(capital(k)) + ';' + dec(p - capital(k)) + ';' + dec(net(p, k, sc)) + '\n';
+  var csv = 'Mise en vente;Acte;Prêt restant à l’acte;Marge brute;Apport récupéré (%);Surplus au-delà de l’apport\n';
+  for (var k = 0; k <= MAX_MONTH; k++) {
+    csv += monthLabel(k) + ';' + monthLabel(acte(k)) + ';' + dec(capital(k)) + ';' + dec(p - capital(k)) + ';' + Math.round(apportPct(p, k, sc) * 100) + ';' + dec(Math.max(0, net(p, k, sc))) + '\n';
   }
   var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
   var url = URL.createObjectURL(blob);
@@ -427,19 +588,32 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
-function copyLink() {
+// Le lien de la page reflète toujours prix, mois et usage
+function currentUrl() {
   var url = new URL(location.href);
   url.searchParams.set('prix', state.price);
-  navigator.clipboard.writeText(url.toString()).then(function () {
-    var btn = document.querySelector('.noprint .ghost:nth-child(2)');
-    var old = btn.textContent;
+  url.searchParams.set('mois', state.month);
+  url.searchParams.set('delai', state.delay);
+  url.searchParams.set('usage', state.scenario === 'habite' ? 'habite' : 'loue');
+  return url.toString();
+}
+function syncUrl() { try { history.replaceState(null, '', currentUrl()); } catch (e) {} }
+function copyLink() {
+  navigator.clipboard.writeText(currentUrl()).then(function () {
+    var btn = document.getElementById('btnCopy'), old = btn.textContent;
     btn.textContent = '✓ Lien copié !';
     setTimeout(function () { btn.textContent = old; }, 2000);
   });
 }
 
-var startPrix = Number(new URLSearchParams(location.search).get('prix')) || 480000;
-state.price = Math.max(100000, Math.min(900000, startPrix));
+(function () {
+  var q = new URLSearchParams(location.search);
+  var pr = Number(q.get('prix')), mo = Number(q.get('mois'));
+  if (pr) state.price = Math.max(100000, Math.min(900000, Math.round(pr)));
+  if (q.get('mois') !== null && mo >= 0 && mo <= MAX_MONTH) state.month = Math.round(mo);
+  if (q.get('usage') === 'loue') state.scenario = 'location';
+  var dl = q.get('delai'); if (dl !== null && [0, 2, 3, 4, 5, 6].indexOf(+dl) >= 0) state.delay = +dl;
+})();
 render();
 </script>
 </body>
